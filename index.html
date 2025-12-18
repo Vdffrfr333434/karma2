@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Кармолог-нумеролог</title>
+  <style>
+    /* MOBILE FIRST */
+   :root{
+      --bg1:#922358;
+      --bg2:#f0a410;
+      --bg3:#6b7280;
+      --glass:rgba(255,255,255,0.18);
+      --border:rgba(255,255,255,0.35);
+      --text:#ffffff;
+      --muted:rgba(255,255,255,0.75);
+    }
+
+    *{box-sizing:border-box}
+ body {
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont,Inter,system-ui,sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+
+  background:
+    radial-gradient(600px 600px at 10% 10%, var(--bg1), transparent 60%),
+    radial-gradient(700px 700px at 90% 20%, var(--bg2), transparent 60%),
+    radial-gradient(800px 800px at 50% 90%, var(--bg3), transparent 60%),
+    #0b0b10;
+  background-size: 200% 200%;
+  animation: bgMove 40s ease-in-out infinite;
+}
+
+@keyframes bgMove {
+  0% {
+    background-position: 5% 10%, 95% 15%, 50% 90%, 0 0;
+  }
+  25% {
+    background-position: 15% 20%, 90% 25%, 55% 80%, 0 0;
+  }
+  50% {
+    background-position: 10% 5%, 85% 30%, 45% 95%, 0 0;
+  }
+  75% {
+    background-position: 20% 15%, 92% 18%, 50% 85%, 0 0;
+  }
+  100% {
+    background-position: 5% 10%, 95% 15%, 50% 90%, 0 0;
+  }
+}
+
+
+    h1,h2,h3,p{margin:0; line-height:1.35}
+    h2{font-size:20px}
+    h3{font-size:16px}
+    p{font-size:14px}
+    .muted{font-size:8px}
+    section{padding:20px 16px}
+
+    /* glass */
+    .glass{
+      background:var(--glass);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border:1px solid var(--border);
+      border-radius:10px;
+    }
+
+    /* animations */
+    .reveal{opacity:0; transform:translateY(32px); transition:.8s ease}
+    .reveal.show{opacity:1; transform:none}
+
+    /* about */
+    .about{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .about .img-container{
+      position:relative;
+      width:100%;
+      height:100%;
+      min-height:200px;
+      overflow:hidden;
+      border-radius:10px;
+    }
+    .about img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      position:absolute;
+      top:0;
+      left:0;
+    }
+
+    /* grids */
+    .grid-3, .grid-2, .grid-4{
+      display:grid;
+      gap:12px;
+    }
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+
+    /* cards */
+    .card{
+      padding:14px;
+      min-height:auto;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    /* service cards */
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;        /* общий отступ со всех сторон */
+  border-radius: 10px;
+  gap: 12px;
+  box-sizing: border-box; /* чтобы padding учитывался в ширине блока */
+}
+
+/* заголовок и иконка по центру */
+.service-card h3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* иконка + заголовок по центру */
+  font-size: 12px;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+/* текст описания растягивается по ширине блока с учётом padding карточки */
+.service-card p {
+  font-size: 10px;
+  line-height: 1.4;
+  margin: 0;           /* убираем лишние отступы */
+  text-align: left;
+}
+
+/* текст "Для кого" тоже растянут по ширине блока */
+.service-card .for-who {
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 4px;
+  text-align: left;
+}
+
+
+    
+
+    /* price */
+    .price{font-size:22px; font-weight:600; margin:8px 0}
+    .price-card ul{
+      margin:0;
+      padding-left:18px;
+      font-size:12px;
+      line-height:1.5;
+    }
+    .price-card ul li{
+      margin-bottom:4px;
+    }
+
+
+    
+.btn {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text);
+  padding: 10px 20px;
+
+  /* базовый фон кнопки */
+  background: rgba(255, 255, 255, 0.1);
+
+  /* градиент для плавающего эффекта */
+  background-image: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.2),
+    rgba(255,255,255,0.5),
+    rgba(255,255,255,0.2)
+  );
+  background-size: 300% 300%; /* больше, чтобы было движение */
+  animation: floatGradient 4s ease-in-out infinite;
+}
+
+/* ключевые кадры для движения градиента */
+@keyframes floatGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+    
+
+
+    /* mobile overflow rows */
+    .grid-3,.grid-4{
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      padding-bottom:8px;
+    }
+    .grid-3 > div,.grid-4 > div{
+      scroll-snap-align:start;
+      min-width:70%;
+    }
+    .grid-2 > div{min-width:100%}
+
+    /* reviews slider */
+    .reviews-container{
+      position:relative;
+      overflow:hidden;
+      padding:20px;
+    }
+    .reviews-track{
+      display:flex;
+      gap:16px;
+      transition:transform 0.6s ease;
+      align-items:stretch;
+    }
+    .review-card{
+      min-width:100%;
+      max-width:100%;
+      flex-shrink:0;
+      background:rgba(255,255,255,0.1);
+      border-radius:6px;
+    }
+    .review-dots{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:16px;
+    }
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.3);
+      cursor:pointer;
+      transition:.3s;
+    }
+    .dot.active{
+      background:rgba(255,255,255,0.9);
+      width:24px;
+      border-radius:4px;
+    }
+
+    @media(min-width:640px){
+      .review-card{
+        min-width:calc(50% - 8px);
+        max-width:calc(50% - 8px);
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ABOUT -->
+<section class="about reveal">
+  <div class="grid-2">
+    <div class="glass card">
+      <h2>Марьяна</h2>
+      <p class="muted">кармолог ∙ регрессолог ∙ нумеролог</p>
+      <p>Помогаю людям понять свой путь, найти ответы на важные вопросы и освободиться от кармических блоков.</p>
+    </div>
+    <div class="glass card img-container">
+      <img src="https://github.com/HuntersNetPlus/karma/blob/main/Gemini_Generated_Image_qm750aqm750aqm75%20(1)%20(1).png?raw=true" alt="Фото">
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="reveal">
+  <div class="grid-3">
+    <div class="glass card service-card">
+      <h3><img src="https://github.com/HuntersNetPlus/karma/blob/main/K1.png?raw=true" alt="" width="55"><br>Кармология</h3>
+      <p>Исследуем опыт прошлых воплощений, находим корни проблем и блоков в текущей жизни</p>
+      <p class="for-who">Для тех, кто хочет понять причины повторяющихся ситуаций</p>
+    </div>
+    <div class="glass card service-card">
+      <h3><img src="https://github.com/HuntersNetPlus/karma/blob/main/K2.png?raw=true" alt="" width="55"><br>Регрессия</h3>
+      <p>Глубинная работа с подсознанием через возвращение к прошлому опыту для исцеления</p>
+      <p class="for-who">Для проработки страхов, фобий и блоков</p>
+    </div>
+    <div class="glass card service-card">
+      <h3><img src="https://github.com/HuntersNetPlus/karma/blob/main/K3.png?raw=true" alt="" width="55"><br>Нумерология</h3>
+      <p>Расчёт матрицы судьбы, анализ жизненных циклов и персональных кодов успеха</p>
+      <p class="for-who">Для понимания своего предназначения и потенциала</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEEDBACK SLIDER -->
+<section class="reveal">
+  <div class="glass reviews-container">
+    <h3 style="text-align:center; margin-bottom:12px">Отзывы моих клиентов</h3>
+    <div class="reviews-track" id="reviewsTrack">
+      <div class="card review-card">
+        <strong>Анна, 34 года</strong>
+        <p>После сеанса регрессии я наконец поняла причины своих страхов. Елена очень деликатно провела меня через процесс. Благодарю! 🙏</p>
+      </div>
+      <div class="card review-card">
+        <strong>Игорь, 41 год</strong>
+        <p>Нумерологический разбор показал мои сильные стороны и точки роста. Теперь понимаю, почему в жизни происходили те или иные события.</p>
+      </div>
+      <div class="card review-card">
+        <strong>Мария, 28 лет</strong>
+        <p>Кармическая диагностика помогла мне разобраться в отношениях с мамой. Столько лет носила обиду, а теперь чувствую освобождение ✨</p>
+      </div>
+      <div class="card review-card">
+        <strong>Дмитрий, 45 лет</strong>
+        <p>Скептически относился к эзотерике, но решил попробовать. Сеанс открыл глаза на многие вещи. Рекомендую!</p>
+      </div>
+    </div>
+    <div class="review-dots" id="reviewDots"></div>
+  </div>
+</section>
+
+<!-- PRICES -->
+<section class="reveal">
+  <div class="grid-2">
+    <div class="glass card price-card">
+      <h3>Консультация</h3>
+      <div class="price">$3 500</div>
+      <ul>
+        <li>1 час личного времени</li>
+        <li>Разбор вашей ситуации</li>
+        <li>Рекомендации и практики</li>
+        <li>Ответы на вопросы</li>
+      </ul>
+      <button class="btn">Заказать</button>
+    </div>
+    
+    <div class="glass card price-card">
+      <h3>Регрессия</h3>
+      <div class="price">$7 000</div>
+      <ul>
+        <li>2 часа глубинной работы</li>
+        <li>Безопасное погружение</li>
+        <li>Проработка травм и блоков</li>
+        <li>Запись сеанса</li>
+      </ul>
+      <button class="btn">Заказать</button>
+    </div>
+    
+    <div class="glass card price-card">
+      <h3>Матрица судьбы</h3>
+      <div class="price">$5 000</div>
+      <ul>
+        <li>Полный нумерологический расчёт</li>
+        <li>Разбор всех энергий</li>
+        <li>Прогноз на год</li>
+        <li>Калькулятор удачи</li>
+        <li>PDF-отчёт</li>
+      </ul>
+      <button class="btn">Заказать</button>
+    </div>
+    
+    <div class="glass card price-card">
+      <h3>Трансформация</h3>
+      <div class="price">$18 000</div>
+      <ul>
+        <li>3 сеанса по выбору</li>
+        <li>Комплексная работа</li>
+        <li>Поддержка в чате 24/7</li>
+        <li>Персональные практики</li>
+        <li>Экономия 3 500$</li>
+      </ul>
+      <button class="btn">Заказать</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section class="reveal">
+  <div class="glass card" style="align-items:center; gap:12px">
+    <h3>Как со мной связаться</h3>
+    <div class="grid-4">
+      <a class="glass card" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/HuntersNetPlus/karma/blob/main/I1.png?raw=true" alt="" width="25"></a>
+      <a class="glass card" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/HuntersNetPlus/karma/blob/main/I2.png?raw=true" alt="" width="25"></a>
+      <a class="glass card" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/HuntersNetPlus/karma/blob/main/I3.png?raw=true" alt="" width="25"></a>
+      <a class="glass card" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/HuntersNetPlus/karma/blob/main/I4.png?raw=true" alt="" width="25"></a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Reveal animation
+  const items=document.querySelectorAll('.reveal');
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+      }
+    });
+  },{threshold:0.4});
+  items.forEach(el=>io.observe(el));
+
+  // Reviews auto-slider
+  const track = document.getElementById('reviewsTrack');
+  const dotsContainer = document.getElementById('reviewDots');
+  const reviews = track.querySelectorAll('.review-card');
+  let currentIndex = 0;
+  let autoSlideInterval;
+
+  // Create dots
+  reviews.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = dotsContainer.querySelectorAll('.dot');
+
+  function goToSlide(index) {
+    currentIndex = index;
+    const reviewWidth = reviews[0].offsetWidth;
+    const gap = 16;
+    const offset = (reviewWidth + gap) * currentIndex;
+    track.style.transform = `translateX(-${offset}px)`;
+    
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % reviews.length;
+    goToSlide(currentIndex);
+  }
+
+  function startAutoSlide() {
+    autoSlideInterval = setInterval(nextSlide, 4000);
+  }
+
+  function stopAutoSlide() {
+    clearInterval(autoSlideInterval);
+  }
+
+  // Start auto-slide
+  startAutoSlide();
+
+  // Pause on hover
+  track.addEventListener('mouseenter', stopAutoSlide);
+  track.addEventListener('mouseleave', startAutoSlide);
+
+  // Touch support
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+
+  track.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+    stopAutoSlide();
+  });
+
+  track.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    currentX = e.touches[0].clientX;
+  });
+
+  track.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    const diff = startX - currentX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && currentIndex < reviews.length - 1) {
+        currentIndex++;
+      } else if (diff < 0 && currentIndex > 0) {
+        currentIndex--;
+      }
+      goToSlide(currentIndex);
+    }
+    isDragging = false;
+    startAutoSlide();
+  });
+
+  // Recalculate on window resize
+  window.addEventListener('resize', () => {
+    goToSlide(currentIndex);
+  });
+</script>
+
+</body>
+</html>
