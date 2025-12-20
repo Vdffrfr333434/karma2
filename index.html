@@ -202,8 +202,7 @@ body > * {
 
 .btn {
   position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 2px solid transparent;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
@@ -211,35 +210,25 @@ body > * {
   text-align: center;
   color: var(--text);
   padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.15);
-  transition: all 0.3s ease;
+  background: linear-gradient(rgba(40, 40, 45, 0.9), rgba(40, 40, 45, 0.9)) padding-box,
+              linear-gradient(120deg, rgba(255,255,255,0.3), rgba(255,255,255,0.6), rgba(255,255,255,0.3)) border-box;
+  background-size: 100% 100%, 300% 300%;
+  animation: borderGradient 4s ease-in-out infinite;
+  transition: transform 0.2s;
 }
 
 .btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
+  transform: scale(1.02);
 }
 
-.btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255,255,255,0.3),
-    transparent
-  );
-  animation: shimmer 3s infinite;
+@keyframes borderGradient {
+  0%, 100% { background-position: 0% 0%, 0% 50%; }
+  50% { background-position: 0% 0%, 100% 50%; }
 }
 
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
+
+
+    
 
     /* mobile overflow rows */
     .grid-3,.grid-4{
