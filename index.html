@@ -456,7 +456,10 @@ body > * {
   ];
 
   function drawNoise() {
-    const imageData = noiseCtx.createImageData(width, height);
+    // Создаем шум в 2 раза меньшего разрешения для крупного зерна
+    const noiseWidth = Math.floor(width / 2);
+    const noiseHeight = Math.floor(height / 2);
+    const imageData = noiseCtx.createImageData(noiseWidth, noiseHeight);
     const data = imageData.data;
     
     for (let i = 0; i < data.length; i += 4) {
@@ -467,10 +470,21 @@ body > * {
       data[i + 3] = 255;
     }
     
-    noiseCtx.putImageData(imageData, 0, 0);
+    // Очищаем canvas и масштабируем шум на весь экран
+    noiseCtx.clearRect(0, 0, width, height);
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = noiseWidth;
+    tempCanvas.height = noiseHeight;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.putImageData(imageData, 0, 0);
+    
+    // Отрисовываем увеличенное изображение
+    noiseCtx.imageSmoothingEnabled = false;
+    noiseCtx.drawImage(tempCanvas, 0, 0, noiseWidth, noiseHeight, 0, 0, width, height);
   }
 
   let time = 0;
+  let noiseFrame = 0;
 
   function animate() {
     ctx.fillStyle = 'rgba(10, 10, 10, 1)';
@@ -484,6 +498,12 @@ body > * {
     });
 
     ctx.globalCompositeOperation = 'source-over';
+
+    // Обновляем шум каждые 3 кадра для плавной анимации
+    noiseFrame++;
+    if (noiseFrame % 15 === 0) {
+      drawNoise();
+    }
 
     time++;
     requestAnimationFrame(animate);
