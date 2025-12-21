@@ -1087,43 +1087,39 @@
 
 
 
+// ГАЛЕРЕЯ - замените весь блок галереи на этот код
 
- var galleryImages = [
-            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=800&fit=crop'
-        ];
+var galleryImages = [
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=800&fit=crop'
+];
 
-        var galleryCurrentIndex = 0;
+var galleryCurrentIndex = 0;
 
-        function createStack() {
-            var stack = document.getElementById('photoStack');
-            stack.innerHTML = '';
-            
-            // Показываем только первые 3 карточки в стопке
-            var visibleCards = Math.min(3, galleryImages.length);
-            
-            for (var i = visibleCards - 1; i >= 0; i--) {
-                var item = document.createElement('div');
-                item.className = 'photo-stack-item';
-                
-                var img = document.createElement('img');
-                img.src = galleryImages[i];
-                img.alt = 'Photo ' + (i + 1);
-                
-                item.appendChild(img);
-                stack.appendChild(item);
-            }
-        }
+function createStack() {
+    var stack = document.getElementById('photoStack');
+    stack.innerHTML = '';
+    
+    var visibleCards = Math.min(3, galleryImages.length);
+    
+    for (var i = visibleCards - 1; i >= 0; i--) {
+        var item = document.createElement('div');
+        item.className = 'photo-stack-item';
+        
+        var img = document.createElement('img');
+        img.src = galleryImages[i];
+        img.alt = 'Photo ' + (i + 1);
+        
+        item.appendChild(img);
+        stack.appendChild(item);
+    }
+}
 
-        function createIndicators() {
-            // Индикаторы больше не нужны
-        }
-
-      function openLightbox(index) {
+function openLightbox(index) {
     galleryCurrentIndex = index;
     
     var stack = document.getElementById('photoStack');
@@ -1136,7 +1132,28 @@
     }, 200);
 }
 
-// Закрытие по клику на фон (замените существующий обработчик)
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+    
+    setTimeout(function() {
+        var stack = document.getElementById('photoStack');
+        stack.classList.remove('opening');
+    }, 300);
+}
+
+function changeImage(direction) {
+    galleryCurrentIndex += direction;
+    if (galleryCurrentIndex < 0) galleryCurrentIndex = galleryImages.length - 1;
+    if (galleryCurrentIndex >= galleryImages.length) galleryCurrentIndex = 0;
+    updateLightbox();
+}
+
+function updateLightbox() {
+    document.getElementById('lightboxImage').src = galleryImages[galleryCurrentIndex];
+}
+
+// Закрытие по клику на фон
 document.getElementById('lightbox').addEventListener('click', function(e) {
     if (e.target === this) {
         closeLightbox();
@@ -1147,40 +1164,17 @@ document.getElementById('lightbox').addEventListener('click', function(e) {
 document.getElementById('lightboxImage').addEventListener('click', function(e) {
     e.stopPropagation();
 });
+
+// Навигация клавиатурой
+document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
     
-    // Убираем класс анимации после закрытия
-    setTimeout(function() {
-        var stack = document.getElementById('photoStack');
-        stack.classList.remove('opening');
-    }, 300);
-}
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') changeImage(-1);
+    if (e.key === 'ArrowRight') changeImage(1);
+});
 
-        function changeImage(direction) {
-            galleryCurrentIndex += direction;
-            if (galleryCurrentIndex < 0) galleryCurrentIndex = galleryImages.length - 1;
-            if (galleryCurrentIndex >= galleryImages.length) galleryCurrentIndex = 0;
-            updateLightbox();
-        }
-
-        function updateLightbox() {
-            document.getElementById('lightboxImage').src = galleryImages[galleryCurrentIndex];
-        }
-
-        document.getElementById('lightbox').onclick = function(e) {
-            if (e.target === this) {
-                closeLightbox();
-            }
-        };
-
-        document.addEventListener('keydown', function(e) {
-            if (!document.getElementById('lightbox').classList.contains('active')) return;
-            
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') changeImage(-1);
-            if (e.key === 'ArrowRight') changeImage(1);
-        });
-
-        createStack();
+createStack();
      
 
 
