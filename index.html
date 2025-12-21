@@ -71,6 +71,11 @@
   opacity: 0.02;
   z-index: 1;
 }
+    .gallery-img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain; /* 🔥 пропорционально, без обрезки */
+}
 
  
 
@@ -1090,12 +1095,12 @@
 // ГАЛЕРЕЯ - замените весь блок галереи на этот код
 
 var galleryImages = [
-    'https://github.com/Vdffrfr333434/karma2/blob/main/G1I.png?raw=true?w=500&h=750&fit=crop',
-   'https://github.com/Vdffrfr333434/karma2/blob/main/G2.png?raw=true?w=500&h=750&fit=crop',
-     'https://github.com/Vdffrfr333434/karma2/blob/main/G3.png?raw=true?w=500&h=750&fit=crop',
- 'https://github.com/Vdffrfr333434/karma2/blob/main/G4.png?raw=true?w=500&h=750&fit=crop',
- 'https://github.com/Vdffrfr333434/karma2/blob/main/G5.png?raw=true?w=500&h=750&fit=crop',
-     'https://github.com/Vdffrfr333434/karma2/blob/main/G6.png?raw=true?w=500&h=750&fit=crop'
+  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G1I.png',
+  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G2.png',
+  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G3.png',
+  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G4.png',
+  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G5.png',
+  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G6.png'
 ];
 
 var galleryCurrentIndex = 0;
