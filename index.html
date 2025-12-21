@@ -518,7 +518,6 @@
   }
 }
 
-    
 
 
 
@@ -528,70 +527,89 @@
 
 
 
-
-
-
- .gallery-container {
+.gallery-container {
             max-width: 600px;
             margin: 0 auto;
         }
 
-        .gallery-grid {
-            display: grid;
-            gap: 2px;
-            background: white;
-            border: 1px solid #dbdbdb;
-            border-radius: 8px;
-            overflow: hidden;
+        /* === НАСТРОЙКИ СТОПКИ (измените эти значения) === */
+        :root {
+            --card-width: 300px;           /* Ширина карточки */
+            --card-aspect: 1.5;            /* Соотношение высоты к ширине (1.5 = высота в 1.5 раза больше) */
+            --card-rotation-1: -3deg;      /* Угол наклона первой карточки */
+            --card-rotation-2: 2deg;       /* Угол наклона второй карточки */
+            --card-rotation-3: -1.5deg;    /* Угол наклона третьей карточки */
+            --card-offset-x: 10px;         /* Смещение по горизонтали */
+            --card-offset-y: 10px;         /* Смещение по вертикали */
+            --card-border: 4px;            /* Толщина белой рамки */
+            --card-radius: 12px;           /* Скругление углов */
         }
 
-        .gallery-grid.count-1 { grid-template-columns: 1fr; }
-        .gallery-grid.count-2 { grid-template-columns: repeat(2, 1fr); }
-        .gallery-grid.count-3 { grid-template-columns: repeat(3, 1fr); }
-        .gallery-grid.count-4 { grid-template-columns: repeat(2, 1fr); }
-        .gallery-grid.count-5,
-        .gallery-grid.count-6 { 
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .gallery-item {
+        /* Стопка карточек */
+        .photo-stack {
             position: relative;
-            overflow: hidden;
+            width: 100%;
+            max-width: var(--card-width);
+            height: calc(var(--card-width) * var(--card-aspect));
+            margin: 0 auto;
             cursor: pointer;
-            aspect-ratio: 1;
+            transition: transform 0.2s ease;
         }
 
-        .gallery-grid.count-5 .gallery-item:nth-child(1),
-        .gallery-grid.count-5 .gallery-item:nth-child(2),
-        .gallery-grid.count-6 .gallery-item:nth-child(1),
-        .gallery-grid.count-6 .gallery-item:nth-child(2) {
-            grid-column: span 2;
-            grid-row: span 2;
+        .photo-stack:hover {
+            transform: scale(1.02);
         }
 
-        .gallery-item img {
+        .photo-stack-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            background: white;
+            border: var(--card-border) solid white;
+        }
+
+        .photo-stack-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
         }
 
-        .gallery-item:hover img {
-            transform: scale(1.1);
+        /* Позиционирование карточек в стопке */
+        .photo-stack-item:nth-child(1) {
+            z-index: 3;
+            transform: rotate(var(--card-rotation-1)) translate(calc(var(--card-offset-x) * -0.8), calc(var(--card-offset-y) * -0.8));
         }
 
-        .gallery-item .overlay {
+        .photo-stack-item:nth-child(2) {
+            z-index: 2;
+            transform: rotate(var(--card-rotation-2)) translate(calc(var(--card-offset-x) * 0.4), calc(var(--card-offset-y) * 0.4));
+        }
+
+        .photo-stack-item:nth-child(3) {
+            z-index: 1;
+            transform: rotate(var(--card-rotation-3)) translate(var(--card-offset-x), var(--card-offset-y));
+            opacity: 0.9;
+        }
+
+        /* Счетчик фото */
+        .photo-count {
             position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.75);
             color: white;
-            font-size: 32px;
-            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 10;
         }
 
+        /* Lightbox с анимацией */
         .lightbox {
             display: none;
             position: fixed;
@@ -599,14 +617,60 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0);
             z-index: 9999;
             align-items: center;
             justify-content: center;
+            transition: background 0.3s ease;
         }
 
         .lightbox.active {
             display: flex;
+            animation: fadeInBg 0.3s ease forwards;
+        }
+
+        @keyframes fadeInBg {
+            to {
+                background: rgba(0, 0, 0, 0.95);
+            }
+        }
+
+        /* Анимация появления изображения */
+        .lightbox-image-container {
+            max-width: 90%;
+            max-height: 90vh;
+            padding: 0 80px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .lightbox.active .lightbox-image-container {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .lightbox-image-container img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        /* Анимация кнопок и элементов управления */
+        .lightbox-close,
+        .lightbox-counter,
+        .lightbox-arrow,
+        .lightbox-indicators {
+            opacity: 0;
+            transition: opacity 0.3s ease 0.2s;
+        }
+
+        .lightbox.active .lightbox-close,
+        .lightbox.active .lightbox-counter,
+        .lightbox.active .lightbox-arrow,
+        .lightbox.active .lightbox-indicators {
+            opacity: 1;
         }
 
         .lightbox-close {
@@ -720,7 +784,11 @@
         }
 
 
+
+
     
+    
+
 
   </style>
 </head>
@@ -731,7 +799,6 @@
 <canvas id="noise-overlay"></canvas>
 
 <div class="content-wrapper">
-<br><br>
 
 <section class="about reveal hero-section">
   <div class="hero-video-container">
@@ -772,13 +839,16 @@
       </div>
     </div>
   </div>
-</section>
+
+
 
 <div class="gallery-container">
-        <div class="gallery-grid" id="gallery">
+        <div class="photo-stack" id="photoStack" onclick="openLightbox(0)">
+            <!-- Карточки будут добавлены через JavaScript -->
         </div>
     </div>
 
+    <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
         <button class="lightbox-close" onclick="closeLightbox()">×</button>
         <div class="lightbox-counter" id="counter"></div>
@@ -790,10 +860,13 @@
         <div class="lightbox-indicators" id="indicators"></div>
     </div>
 
+
   
+</section>
+
 <!-- FEEDBACK SLIDER -->
 <section class="reveal">
-  <div class="glass card reviews-container no-diamond">
+  <div class="glass card reviews-container">
     <h3 style="text-align:center; margin-bottom:12px">Отзывы моих клиентов</h3>
     <div class="reviews-track" id="reviewsTrack">
       <div class="card review-card">
@@ -1120,114 +1193,114 @@
 
 
 
+ var galleryImages = [
+            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=800&fit=crop'
+        ];
 
+        var galleryCurrentIndex = 0;
 
-// ГАЛЕРЕЯ - замените старый код галереи на этот
-var galleryImages = [
-    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop',
-    'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&h=800&fit=crop',
-    'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&h=800&fit=crop',
-    'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&h=800&fit=crop',
-    'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&h=800&fit=crop',
-    'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=800&fit=crop'
-];
-
-var galleryCurrentIndex = 0;
-
-function createGallery() {
-    var gallery = document.getElementById('gallery');
-    var count = Math.min(galleryImages.length, 6);
-    gallery.className = 'gallery-grid count-' + count;
-    
-    galleryImages.slice(0, 6).forEach(function(img, index) {
-        var item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.onclick = function() {
-            openLightbox(index);
-        };
-        
-        var image = document.createElement('img');
-        image.src = img;
-        image.alt = 'Photo ' + (index + 1);
-        item.appendChild(image);
-        
-        if (index === 5 && galleryImages.length > 6) {
-            var overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            overlay.textContent = '+' + (galleryImages.length - 6);
-            item.appendChild(overlay);
+        function createStack() {
+            var stack = document.getElementById('photoStack');
+            stack.innerHTML = '';
+            
+            // Показываем только первые 3 карточки в стопке
+            var visibleCards = Math.min(3, galleryImages.length);
+            
+            for (var i = visibleCards - 1; i >= 0; i--) {
+                var item = document.createElement('div');
+                item.className = 'photo-stack-item';
+                
+                var img = document.createElement('img');
+                img.src = galleryImages[i];
+                img.alt = 'Photo ' + (i + 1);
+                
+                item.appendChild(img);
+                stack.appendChild(item);
+            }
+            
+            // Добавляем счетчик если фото больше 1
+            if (galleryImages.length > 1) {
+                var counter = document.createElement('div');
+                counter.className = 'photo-count';
+                counter.textContent = galleryImages.length;
+                stack.appendChild(counter);
+            }
+            
+            createIndicators();
         }
-        
-        gallery.appendChild(item);
-    });
-    
-    createIndicators();
-}
 
-function createIndicators() {
-    var indicators = document.getElementById('indicators');
-    indicators.innerHTML = '';
-    
-    galleryImages.forEach(function(img, index) {
-        var indicator = document.createElement('button');
-        indicator.className = 'indicator';
-        indicator.onclick = function(e) {
-            e.stopPropagation();
+        function createIndicators() {
+            var indicators = document.getElementById('indicators');
+            indicators.innerHTML = '';
+            
+            galleryImages.forEach(function(img, index) {
+                var indicator = document.createElement('button');
+                indicator.className = 'indicator';
+                indicator.onclick = function(e) {
+                    e.stopPropagation();
+                    galleryCurrentIndex = index;
+                    updateLightbox();
+                };
+                indicators.appendChild(indicator);
+            });
+        }
+
+        function openLightbox(index) {
             galleryCurrentIndex = index;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
             updateLightbox();
-        };
-        indicators.appendChild(indicator);
-    });
-}
-
-function openLightbox(index) {
-    galleryCurrentIndex = index;
-    document.getElementById('lightbox').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    updateLightbox();
-}
-
-function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function changeImage(direction) {
-    galleryCurrentIndex += direction;
-    if (galleryCurrentIndex < 0) galleryCurrentIndex = galleryImages.length - 1;
-    if (galleryCurrentIndex >= galleryImages.length) galleryCurrentIndex = 0;
-    updateLightbox();
-}
-
-function updateLightbox() {
-    document.getElementById('lightboxImage').src = galleryImages[galleryCurrentIndex];
-    document.getElementById('counter').textContent = (galleryCurrentIndex + 1) + ' / ' + galleryImages.length;
-    
-    var indicators = document.querySelectorAll('.indicator');
-    indicators.forEach(function(indicator, index) {
-        if (index === galleryCurrentIndex) {
-            indicator.classList.add('active');
-        } else {
-            indicator.classList.remove('active');
         }
-    });
-}
 
-document.getElementById('lightbox').onclick = function(e) {
-    if (e.target === this) {
-        closeLightbox();
-    }
-};
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
 
-document.addEventListener('keydown', function(e) {
-    if (!document.getElementById('lightbox').classList.contains('active')) return;
-    
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') changeImage(-1);
-    if (e.key === 'ArrowRight') changeImage(1);
-});
+        function changeImage(direction) {
+            galleryCurrentIndex += direction;
+            if (galleryCurrentIndex < 0) galleryCurrentIndex = galleryImages.length - 1;
+            if (galleryCurrentIndex >= galleryImages.length) galleryCurrentIndex = 0;
+            updateLightbox();
+        }
 
-createGallery();
+        function updateLightbox() {
+            document.getElementById('lightboxImage').src = galleryImages[galleryCurrentIndex];
+            document.getElementById('counter').textContent = (galleryCurrentIndex + 1) + ' / ' + galleryImages.length;
+            
+            var indicators = document.querySelectorAll('.indicator');
+            indicators.forEach(function(indicator, index) {
+                if (index === galleryCurrentIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        document.getElementById('lightbox').onclick = function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') changeImage(-1);
+            if (e.key === 'ArrowRight') changeImage(1);
+        });
+
+        createStack();
+     
+
+
 
   
 </script>
