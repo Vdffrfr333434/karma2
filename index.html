@@ -847,9 +847,22 @@
 </section>
 
 <!-- Lightbox -->
-<div class="lightbox-image-container">
+<div class="lightbox" id="lightbox">
 
-  <img id="lightboxImage" src="" alt="">
+  <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
+
+  <div class="lightbox-image-container">
+    <img id="lightboxImage" src="" alt="">
+
+    <div class="lightbox-header">
+      <img id="lightboxIcon" class="lightbox-icon" src="" alt="">
+      <img id="lightboxTitle" class="lightbox-title" src="" alt="">
+    </div>
+  </div>
+
+  <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
+
+</div>
 
   <!-- ОВЕРЛЕЙ -->
   <div class="lightbox-header">
@@ -1271,8 +1284,14 @@ function closeLightbox() {
 
 function changeImage(direction) {
     galleryCurrentIndex += direction;
-    if (galleryCurrentIndex < 0) galleryCurrentIndex = galleryImages.length - 1;
-    if (galleryCurrentIndex >= galleryImages.length) galleryCurrentIndex = 0;
+
+    if (galleryCurrentIndex < 0) {
+        galleryCurrentIndex = gallerySlides.length - 1;
+    }
+    if (galleryCurrentIndex >= gallerySlides.length) {
+        galleryCurrentIndex = 0;
+    }
+
     updateLightbox();
 }
 
