@@ -643,7 +643,7 @@
 
 .lightbox-image-container {
     position: relative;
-
+    margin: 0 auto;
     width: 65%;
     max-width: 400px;
     aspect-ratio: 1 / 1.5;
@@ -767,21 +767,30 @@
 
  /* ===== LIGHTBOX HEADER (CENTER, NO BACKGROUND) ===== */
 
-.lightbox-header {
+m.lightbox-header {
     position: absolute;
     top: 18px;
     left: 50%;
-    transform: translateX(-50%) translateY(-8px);
+    transform: translateX(-50%);
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 
     pointer-events: none;
+}
+    .lightbox-text {
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
 
-    opacity: 0;
-    transition: all 0.4s ease;
+    color: white;
+    text-align: center;
+
+    text-shadow:
+      0 2px 8px rgba(0,0,0,0.6),
+      0 0 20px rgba(0,0,0,0.4);
 }
 
 .lightbox.active .lightbox-header {
@@ -872,9 +881,10 @@
 
     <!-- HEADER OVERLAY -->
     <div class="lightbox-header">
-      <img id="lightboxIcon" class="lightbox-icon" src="" alt="">
-      <img id="lightboxTitle" class="lightbox-title" src="" alt="">
-    </div>
+  <img id="lightboxIcon" class="lightbox-icon" src="" alt="">
+  <div id="lightboxText" class="lightbox-text"></div>
+</div>
+
 
   </div>
 
@@ -1307,11 +1317,12 @@ function changeImage(direction) {
 }
 
 function updateLightbox() {
-    var slide = gallerySlides[galleryCurrentIndex];
+    const slide = gallerySlides[galleryCurrentIndex];
 
     document.getElementById('lightboxImage').src = slide.image;
-    document.getElementById('lightboxIcon').src  = slide.icon;
-    document.getElementById('lightboxTitle').src = slide.title;
+    document.getElementById('lightboxIcon').src = slide.icon;
+
+    document.getElementById('lightboxText').textContent = slide.title;
 }
 
 // ===== EVENTS =====
