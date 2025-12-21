@@ -599,23 +599,23 @@
     opacity: 1;
     transition: all 0.4s ease;
 }
-/* Карточки собираются обратно */
+/* Карточки собираются обратно (зеркало анимации открытия) */
 .photo-stack.closing .photo-stack-item:nth-child(1) {
-    transform: rotate(var(--card-rotation-3)) translate(var(--card-offset-x), var(--card-offset-y));
-    opacity: 0.9;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: rotate(-5deg) translate(calc(var(--card-offset-x) * 6), calc(var(--card-offset-y) * -0.5));
+    opacity: 1;
+    transition: all 0.4s ease;
 }
 
 .photo-stack.closing .photo-stack-item:nth-child(2) {
-    transform: rotate(var(--card-rotation-2)) translate(calc(var(--card-offset-x) * 0.4), calc(var(--card-offset-y) * 0.4));
+    transform: rotate(3deg) translate(calc(var(--card-offset-x) * -7), calc(var(--card-offset-y) * -0.3));
     opacity: 1;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s ease;
 }
 
 .photo-stack.closing .photo-stack-item:nth-child(3) {
-    transform: rotate(var(--card-rotation-1)) translate(calc(var(--card-offset-x) * -0.8), calc(var(--card-offset-y) * -0.8));
+    transform: rotate(-2deg) translate(0, calc(var(--card-offset-y) * -0.7));
     opacity: 1;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s ease;
 }
 
         .photo-stack-item img {
@@ -1319,7 +1319,7 @@ function openLightbox(index) {
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
         updateLightbox();
-    }, 350);  // было 400 - уменьшили задержку
+    }, 300);  // было 400 - уменьшили задержку
 }
 
 function closeLightbox() {
