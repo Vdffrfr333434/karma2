@@ -1202,7 +1202,8 @@
 // ===============================
 // ===== GALLERY DATA (6 slides)
 // ===============================
-
+// URL для превью (верхней картинки в стопке)
+var previewImage = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/preview.png';
 var gallerySlides = [
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G1.png',
@@ -1255,14 +1256,20 @@ function createStack() {
     var stack = document.getElementById('photoStack');
     stack.innerHTML = '';
 
-    var visibleCards = Math.min(3, gallerySlides.length);
+    // Создаем 3 карточки для стопки
+    var stackImages = [
+        previewImage,                    // Верхняя (кастомная превью)
+        gallerySlides[1].image,          // Вторая (из галереи)
+        gallerySlides[2].image           // Третья (из галереи)
+    ];
 
-    for (var i = visibleCards - 1; i >= 0; i--) {
+    // Добавляем карточки в обратном порядке
+    for (var i = stackImages.length - 1; i >= 0; i--) {
         var item = document.createElement('div');
         item.className = 'photo-stack-item';
 
         var img = document.createElement('img');
-        img.src = gallerySlides[i].image;
+        img.src = stackImages[i];
         img.alt = '';
 
         item.appendChild(img);
