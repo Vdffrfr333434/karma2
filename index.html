@@ -137,6 +137,73 @@
       gap:16px;
     }
 
+    /* Hero section */
+.hero-section {
+  padding: 0;
+  margin: 0;
+}
+
+.hero-video-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin: 16px;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.hero-content .muted {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.hero-content p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
 .img-container {
   position: relative;
   min-height: 200px;
@@ -445,21 +512,23 @@
 
 <div class="content-wrapper">
 
-<!-- ABOUT -->
-<section class="about reveal">
-  <div class="grid-2">
-    <div class="glass clean">
+<section class="about reveal hero-section">
+  <div class="hero-video-container">
+    <video autoplay muted loop playsinline class="hero-video">
+      <source src="https://github.com/Vdffrfr333434/karma2/blob/main/Gen-4%20Turbo%20very%20subtle%20movement%2C%20almost%20static%2C%20cinematic%20still%2C%20slight%20ambient%20motion%2C%20little%20bit%20posingNO%20EYE%20BLINKING%20litte%20bit%20pose%20change%204244670775.mp4?raw=true" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
       <h2>Марьяна</h2>
       <p class="muted">кармолог ∙ регрессолог ∙ нумеролог</p>
       <p>Помогаю людям понять свой путь, найти ответы на важные вопросы и освободиться от кармических блоков.</p>
     </div>
-    <div class="glass card img-container">
-      <video autoplay muted loop playsinline>
-        <source src="https://github.com/Vdffrfr333434/karma2/blob/main/Gen-4%20Turbo%20very%20subtle%20movement%2C%20almost%20static%2C%20cinematic%20still%2C%20slight%20ambient%20motion%2C%20little%20bit%20posingNO%20EYE%20BLINKING%20litte%20bit%20pose%20change%204244670775.mp4?raw=true" type="video/mp4">
-      </video>
-    </div>
   </div>
 </section>
+
+
+
+  
 
 <!-- SERVICES -->
 <section class="reveal">
