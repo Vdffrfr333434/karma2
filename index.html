@@ -50,6 +50,12 @@
   filter: blur(80px);
 }
 
+    .diamond-bottom::before {
+  top: auto;
+  bottom: 0;
+  -webkit-mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%);
+}
 #noise-overlay {
   position: fixed;
   top: 50%;
@@ -647,7 +653,7 @@
 
 <!-- CONTACTS -->
 <section class="reveal">
-  <div class="glass card" style="align-items:center; gap:12px; padding:20px">
+ <div class="glass card diamond-bottom" style="align-items:center; gap:12px; padding:20px">
     <h3>Как со мной связаться</h3>
     <div class="grid-4">
       <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I1.png?raw=true" alt="" width="25"></a>
