@@ -36,49 +36,6 @@
   z-index: 2;
 }
 
-
-
-
-
-.gallery-viewer {
-    position: relative;
-    width: 80vw;
-    height: 80vh;
-}
-
-#galleryImage {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-}
-
-/* 🔥 Оверлей */
-.slide-header {
-    position: absolute;
-    top: 24px;
-    left: 24px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    pointer-events: none; /* чтобы клики проходили */
-}
-
-/* Иконка */
-.slide-icon {
-    width: 42px;
-    height: 42px;
-}
-
-/* Картинка-заголовок */
-.slide-title {
-    height: 40px;
-    width: auto;
-}
-
-
-    
-
 /* Morphing gradient background */
 #gradient-canvas {
   position: fixed;
@@ -750,20 +707,19 @@
 }
 
 
-    /* ===== LIGHTBOX OVERLAY ===== */
+    /* ===== LIGHTBOX HEADER ===== */
 
 .lightbox-image-container {
     position: relative;
 }
 
-/* контейнер заголовка */
 .lightbox-header {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 14px;
+    left: 14px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 
     padding: 10px 14px;
     border-radius: 14px;
@@ -771,10 +727,11 @@
     background: linear-gradient(
       to right,
       rgba(0,0,0,0.55),
-      rgba(0,0,0,0.2)
+      rgba(0,0,0,0.25)
     );
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
     pointer-events: none;
 
@@ -783,21 +740,18 @@
     transition: .4s ease;
 }
 
-/* появление */
 .lightbox.active .lightbox-header {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* иконка */
 .lightbox-icon {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
 }
 
-/* картинка-заголовок */
 .lightbox-title {
-    height: 34px;
+    height: 30px;
     width: auto;
 }
 
@@ -848,29 +802,23 @@
 
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
-
   <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
 
   <div class="lightbox-image-container">
+
     <img id="lightboxImage" src="" alt="">
 
+    <!-- HEADER OVERLAY -->
     <div class="lightbox-header">
       <img id="lightboxIcon" class="lightbox-icon" src="" alt="">
       <img id="lightboxTitle" class="lightbox-title" src="" alt="">
     </div>
+
   </div>
 
   <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
-
 </div>
 
-  <!-- ОВЕРЛЕЙ -->
-  <div class="lightbox-header">
-    <img id="lightboxIcon" class="lightbox-icon" src="" alt="">
-    <img id="lightboxTitle" class="lightbox-title" src="" alt="">
-  </div>
-
-</div>
   
 </section>
 
@@ -1203,69 +1151,71 @@
 
 
 // ГАЛЕРЕЯ - замените весь блок галереи на этот код
+// ===== GALLERY DATA =====
 
 var gallerySlides = [
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G1.png',
-    icon: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I1.png',
-    title: 'https://dummyimage.com/260x60/ffffff/000000&text=КАРМОЛОГИЯ'
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I1.png',
+    title: 'https://dummyimage.com/220x50/ffffff/000000&text=КАРМОЛОГИЯ'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G2.png',
-    icon: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I2.png',
-    title: 'https://dummyimage.com/260x60/ffffff/000000&text=РЕГРЕССИЯ'
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I2.png',
+    title: 'https://dummyimage.com/220x50/ffffff/000000&text=РЕГРЕССИЯ'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G3.png',
-    icon: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I3.png',
-    title: 'https://dummyimage.com/260x60/ffffff/000000&text=НУМЕРОЛОГИЯ'
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I3.png',
+    title: 'https://dummyimage.com/220x50/ffffff/000000&text=НУМЕРОЛОГИЯ'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G4.png',
-    icon: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I4.png',
-    title: 'https://dummyimage.com/260x60/ffffff/000000&text=МАТРИЦА'
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I4.png',
+    title: 'https://dummyimage.com/220x50/ffffff/000000&text=МАТРИЦА'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G5.png',
-    icon: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I1.png',
-    title: 'https://dummyimage.com/260x60/ffffff/000000&text=ПРАКТИКИ'
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I1.png',
+    title: 'https://dummyimage.com/220x50/ffffff/000000&text=ПРАКТИКИ'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G6.png',
-    icon: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I2.png',
-    title: 'https://dummyimage.com/260x60/ffffff/000000&text=РАБОТА'
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I2.png',
+    title: 'https://dummyimage.com/220x50/ffffff/000000&text=РАБОТА'
   }
 ];
 
-
 var galleryCurrentIndex = 0;
+
+// ===== STACK =====
 
 function createStack() {
     var stack = document.getElementById('photoStack');
     stack.innerHTML = '';
-    
+
     var visibleCards = Math.min(3, gallerySlides.length);
-    
+
     for (var i = visibleCards - 1; i >= 0; i--) {
         var item = document.createElement('div');
         item.className = 'photo-stack-item';
-        
+
         var img = document.createElement('img');
         img.src = gallerySlides[i].image;
-        img.alt = 'Photo ' + (i + 1);
-        
+
         item.appendChild(img);
         stack.appendChild(item);
     }
 }
 
+// ===== LIGHTBOX =====
+
 function openLightbox(index) {
     galleryCurrentIndex = index;
-    
-    var stack = document.getElementById('photoStack');
-    stack.classList.add('opening');
-    
-    setTimeout(function() {
+
+    document.getElementById('photoStack').classList.add('opening');
+
+    setTimeout(() => {
         document.getElementById('lightbox').classList.add('active');
         document.body.style.overflow = 'hidden';
         updateLightbox();
@@ -1275,10 +1225,9 @@ function openLightbox(index) {
 function closeLightbox() {
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
-    
-    setTimeout(function() {
-        var stack = document.getElementById('photoStack');
-        stack.classList.remove('opening');
+
+    setTimeout(() => {
+        document.getElementById('photoStack').classList.remove('opening');
     }, 300);
 }
 
@@ -1299,32 +1248,26 @@ function updateLightbox() {
     var slide = gallerySlides[galleryCurrentIndex];
 
     document.getElementById('lightboxImage').src = slide.image;
-    document.getElementById('lightboxIcon').src = slide.icon;
+    document.getElementById('lightboxIcon').src  = slide.icon;
     document.getElementById('lightboxTitle').src = slide.title;
 }
 
-// Закрытие по клику на фон
-document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeLightbox();
-    }
+// ===== EVENTS =====
+
+document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target.id === 'lightbox') closeLightbox();
 });
 
-// Предотвращаем закрытие при клике на изображение
-document.getElementById('lightboxImage').addEventListener('click', function(e) {
-    e.stopPropagation();
-});
-
-// Навигация клавиатурой
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', e => {
     if (!document.getElementById('lightbox').classList.contains('active')) return;
-    
+
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') changeImage(-1);
     if (e.key === 'ArrowRight') changeImage(1);
 });
 
 createStack();
+
      
 
 
