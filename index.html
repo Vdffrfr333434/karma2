@@ -1319,7 +1319,7 @@ function openLightbox(index) {
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
         updateLightbox();
-    }, 300);  // было 400 - уменьшили задержку
+    }, 200);  // было 400 - уменьшили задержку
 }
 
 function closeLightbox() {
@@ -1337,7 +1337,7 @@ function closeLightbox() {
     setTimeout(function() {
         // Убираем класс анимации
         stack.classList.remove('closing');
-    }, 500);
+    }, 50);
 }
 function changeImage(direction) {
     galleryCurrentIndex += direction;
