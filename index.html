@@ -614,29 +614,29 @@
 
         /* Lightbox с анимацией */
         .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s ease;
-        }
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
 
-        .lightbox.active {
-            display: flex;
-            animation: fadeInBg 0.3s ease forwards;
-        }
+.lightbox.active {
+    display: flex;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
 
-        @keyframes fadeInBg {
-            to {
-                background: rgba(0, 0, 0, 0.95);
-            }
-        }
+    
 
         /* Анимация появления изображения */
       .lightbox-image-container {
@@ -1183,9 +1183,18 @@
     }, 200);
 }
 
-function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.body.style.overflow = '';
+// Закрытие по клику на фон (вне изображения)
+document.getElementById('lightbox').addEventListener('click', function(e) {
+    // Закрываем только если кликнули именно на lightbox, а не на его содержимое
+    if (e.target === this || e.target.classList.contains('lightbox-image-container')) {
+        closeLightbox();
+    }
+});
+
+  // Предотвращаем закрытие при клике на изображение
+document.getElementById('lightboxImage').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
     
     // Убираем класс анимации после закрытия
     setTimeout(function() {
