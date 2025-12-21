@@ -782,45 +782,28 @@
   
 
 <!-- SERVICES -->
+<!-- SERVICES -->
 <section class="reveal">
   <div class="glass-clean" style="padding: 20px;">
-    <div class="grid-3">
-      <div class="service-card">
-        <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K1.png?raw=true" alt="" width="55"><br>Кармология</h3>
-        <p>Исследуем опыт прошлых воплощений, находим корни проблем и блоков в текущей жизни</p>
-        <p class="for-who">Для тех, кто хочет понять причины повторяющихся ситуаций</p>
-      </div>
-      <div class="service-card">
-        <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K2.png?raw=true" alt="" width="55"><br>Регрессия</h3>
-        <p>Глубинная работа с подсознанием, возвращение к прошлому опыту для исцеления</p>
-        <p class="for-who">Для проработки страхов, фобий и психологических блоков</p>
-      </div>
-      <div class="service-card">
-        <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K3.png?raw=true" alt="" width="55"><br>Нумерология</h3>
-        <p>Расчёт матрицы судьбы, анализ жизненных циклов и персональных кодов успеха</p>
-        <p class="for-who">Для понимания своего предназначения и потенциала</p>
+    <h3 style="text-align:center; margin-bottom:20px">Какие методы я использую</h3>
+    
+    <div class="gallery-container">
+      <div class="photo-stack" id="photoStack" onclick="openLightbox(0)">
+        <!-- Карточки будут добавлены через JavaScript -->
       </div>
     </div>
   </div>
+</section>
 
-
-
- <div class="gallery-container">
-        <div class="photo-stack" id="photoStack" onclick="openLightbox(0)">
-            <!-- Карточки будут добавлены через JavaScript -->
-        </div>
-    </div>
-
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox">
-        <button class="lightbox-close" onclick="closeLightbox()">×</button>
-        <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
-        <div class="lightbox-image-container">
-            <img id="lightboxImage" src="" alt="">
-        </div>
-        <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
-    </div>
-
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
+  <div class="lightbox-image-container">
+    <img id="lightboxImage" src="" alt="">
+  </div>
+  <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
+</div>
 
   
 </section>
