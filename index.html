@@ -580,21 +580,22 @@
 /* Анимация раздвигания карточек при клике */
 /* Анимация раздвигания карточек при клике */
 /* Анимация раздвигания карточек при клике */
+/* Анимация раздвигания карточек при клике */
 .photo-stack.opening .photo-stack-item:nth-child(1) {
-    transform: rotate(0deg) translate(calc(var(--card-offset-x) * 4), calc(var(--card-offset-y) * -2));
-    opacity: 1;  /* было 0.8 */
+    transform: rotate(-5deg) translate(calc(var(--card-offset-x) * 6), calc(var(--card-offset-y) * -3));
+    opacity: 1;
     transition: all 0.4s ease;
 }
 
 .photo-stack.opening .photo-stack-item:nth-child(2) {
-    transform: rotate(0deg) translate(calc(var(--card-offset-x) * -4), calc(var(--card-offset-y) * -2));
-    opacity: 1;  /* было 0.8 */
+    transform: rotate(3deg) translate(calc(var(--card-offset-x) * -7), calc(var(--card-offset-y) * -2));
+    opacity: 1;
     transition: all 0.4s ease;
 }
 
 .photo-stack.opening .photo-stack-item:nth-child(3) {
-    transform: rotate(0deg) translate(0, calc(var(--card-offset-y) * -1));
-    opacity: 1;  /* было 0.8 */
+    transform: rotate(-2deg) translate(0, calc(var(--card-offset-y) * -4));
+    opacity: 1;
     transition: all 0.4s ease;
 }
 
@@ -1318,7 +1319,7 @@ function openLightbox(index) {
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
         updateLightbox();
-    }, 50);  // было 400 - уменьшили задержку
+    }, 350);  // было 400 - уменьшили задержку
 }
 
 function closeLightbox() {
