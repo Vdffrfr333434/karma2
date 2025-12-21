@@ -1256,11 +1256,11 @@ function createStack() {
     var stack = document.getElementById('photoStack');
     stack.innerHTML = '';
 
-    // Создаем 3 карточки для стопки
+    // Создаем 3 карточки для стопки (в обратном порядке!)
     var stackImages = [
-        previewImage,                    // Верхняя (кастомная превью)
-        gallerySlides[1].image,          // Вторая (из галереи)
-        gallerySlides[2].image           // Третья (из галереи)
+        gallerySlides[2].image,          // Нижняя (из галереи)
+        gallerySlides[1].image,          // Средняя (из галереи)
+        previewImage                     // Верхняя (кастомная превью)
     ];
 
     // Добавляем карточки в обратном порядке
@@ -1276,7 +1276,6 @@ function createStack() {
         stack.appendChild(item);
     }
 }
-
 
 // ===============================
 // ===== LIGHTBOX CONTROL
