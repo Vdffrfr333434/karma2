@@ -50,12 +50,14 @@
   filter: blur(80px);
 }
 
-    .diamond-bottom::before {
+  .diamond-bottom::before {
   top: auto;
   bottom: 0;
+  background-position: 110px 130px, 85px 115px, 75px 140px, 55px 125px, 95px 100px, 65px 95px;
   -webkit-mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%);
   mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%);
 }
+    
 #noise-overlay {
   position: fixed;
   top: 50%;
@@ -572,7 +574,7 @@
 
 <!-- FEEDBACK SLIDER -->
 <section class="reveal">
-  <div class="glass card reviews-container">
+  <div class="glass card reviews-container diamond-bottom">
     <h3 style="text-align:center; margin-bottom:12px">Отзывы моих клиентов</h3>
     <div class="reviews-track" id="reviewsTrack">
       <div class="card review-card">
