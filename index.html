@@ -571,73 +571,45 @@
             background: white;
             border: var(--card-border) solid white;
         }
-  /* Анимация раздвигания карточек при клике */
+    /* Анимация раздвигания карточек при клике */
 .photo-stack.opening .photo-stack-item:nth-child(1) {
-    transform: rotate(0deg) translate(0, 0) scale(1.5);
-    opacity: 1;
-    z-index: 10;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: rotate(var(--card-rotation-1)) translate(calc(var(--card-offset-x) * -3), calc(var(--card-offset-y) * -3)) scale(1.1);
+    opacity: 0;
 }
 
 .photo-stack.opening .photo-stack-item:nth-child(2) {
-    transform: rotate(0deg) translate(calc(var(--card-offset-x) * 3), calc(var(--card-offset-y) * -2)) scale(0.9);
-    opacity: 0.5;
-    transition: all 0.4s ease;
+    transform: rotate(var(--card-rotation-2)) translate(calc(var(--card-offset-x) * 2), calc(var(--card-offset-y) * 2)) scale(1.1);
+    opacity: 0;
 }
 
 .photo-stack.opening .photo-stack-item:nth-child(3) {
-    transform: rotate(0deg) translate(calc(var(--card-offset-x) * -3), calc(var(--card-offset-y) * -2)) scale(0.9);
-    opacity: 0.5;
-    transition: all 0.4s ease;
-}
-
-/* Первая карточка вылетает на полный экран */
-.photo-stack.flying .photo-stack-item:nth-child(1) {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(0deg) scale(3);
+    transform: rotate(var(--card-rotation-3)) translate(calc(var(--card-offset-x) * 4), calc(var(--card-offset-y) * 4)) scale(1.1);
     opacity: 0;
-    z-index: 9998;
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Остальные карточки исчезают */
-.photo-stack.flying .photo-stack-item:nth-child(2),
-.photo-stack.flying .photo-stack-item:nth-child(3) {
-    opacity: 0;
-    transition: all 0.3s ease;
-}
+        .photo-stack-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-/* Анимация закрытия - карточка возвращается */
-.photo-stack.closing .photo-stack-item:nth-child(1) {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(0deg) scale(3);
-    opacity: 0;
-    z-index: 9998;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
+        /* Позиционирование карточек в стопке */
+        .photo-stack-item:nth-child(1) {
+            z-index: 3;
+            transform: rotate(var(--card-rotation-1)) translate(calc(var(--card-offset-x) * -0.8), calc(var(--card-offset-y) * -0.8));
+        }
 
-/* Карточки возвращаются на место */
-.photo-stack.returning .photo-stack-item:nth-child(1) {
-    transform: rotate(var(--card-rotation-1)) translate(calc(var(--card-offset-x) * -0.8), calc(var(--card-offset-y) * -0.8)) scale(1);
-    opacity: 1;
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+        .photo-stack-item:nth-child(2) {
+            z-index: 2;
+            transform: rotate(var(--card-rotation-2)) translate(calc(var(--card-offset-x) * 0.4), calc(var(--card-offset-y) * 0.4));
+        }
 
-.photo-stack.returning .photo-stack-item:nth-child(2) {
-    transform: rotate(var(--card-rotation-2)) translate(calc(var(--card-offset-x) * 0.4), calc(var(--card-offset-y) * 0.4)) scale(1);
-    opacity: 1;
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
-}
+        .photo-stack-item:nth-child(3) {
+            z-index: 1;
+            transform: rotate(var(--card-rotation-3)) translate(var(--card-offset-x), var(--card-offset-y));
+            opacity: 0.9;
+        }
 
-.photo-stack.returning .photo-stack-item:nth-child(3) {
-    transform: rotate(var(--card-rotation-3)) translate(var(--card-offset-x), var(--card-offset-y)) scale(1);
-    opacity: 0.9;
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
-}
 
 
       /* Lightbox с блюром */
@@ -1115,7 +1087,7 @@
 
 
 
-// ГАЛЕРЕЯ с синхронизированной анимацией
+// ГАЛЕРЕЯ - замените весь блок галереи на этот код
 
 var galleryImages = [
     'https://github.com/Vdffrfr333434/karma2/blob/main/G1.png?raw=true?w=500&h=750&fit=crop',
@@ -1149,49 +1121,25 @@ function createStack() {
 
 function openLightbox(index) {
     galleryCurrentIndex = index;
-    var stack = document.getElementById('photoStack');
     
-    // Фаза 1: Карточки раздвигаются (300ms)
+    var stack = document.getElementById('photoStack');
     stack.classList.add('opening');
     
     setTimeout(function() {
-        // Фаза 2: Первая карточка вылетает (600ms)
-        stack.classList.remove('opening');
-        stack.classList.add('flying');
-        
-        setTimeout(function() {
-            // Фаза 3: Открываем lightbox
-            document.getElementById('lightbox').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            updateLightbox();
-        }, 600);
-    }, 300);
+        document.getElementById('lightbox').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        updateLightbox();
+    }, 200);
 }
 
 function closeLightbox() {
-    var stack = document.getElementById('photoStack');
-    var lightbox = document.getElementById('lightbox');
-    
-    // Фаза 1: Закрываем lightbox и начинаем возврат карточки
-    lightbox.classList.remove('active');
-    stack.classList.remove('flying');
-    stack.classList.add('closing');
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
     
     setTimeout(function() {
-        // Фаза 2: Карточка вернулась на место кучи (невидимая)
-        stack.classList.remove('closing');
-        document.body.style.overflow = '';
-        
-        setTimeout(function() {
-            // Фаза 3: Карточки появляются и сползаются
-            stack.classList.add('returning');
-            
-            setTimeout(function() {
-                // Финал: Убираем все классы
-                stack.classList.remove('returning');
-            }, 800);
-        }, 100);
-    }, 500);
+        var stack = document.getElementById('photoStack');
+        stack.classList.remove('opening');
+    }, 300);
 }
 
 function changeImage(direction) {
