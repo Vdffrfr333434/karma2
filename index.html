@@ -806,7 +806,7 @@
 
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
-    <button class="lightbox-arrow prev" onclick="prevSlide()">‹</button>
+    <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
 
     <div class="lightbox-image-container">
         <div class="lightbox-header">
@@ -817,15 +817,11 @@
         <img id="lightboxImage" src="" alt="">
     </div>
 
-    <button class="lightbox-arrow next" onclick="nextSlide()">›</button>
+    <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
 </div>
 
 
 
-  </div>
-
-  <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
-</div>
 
   
 </section>
