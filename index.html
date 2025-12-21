@@ -616,19 +616,17 @@
         }
 
 
+/* ================= LIGHTBOX ================= */
 
-      /* Lightbox с блюром */
 .lightbox {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: rgba(0, 0, 0, 0);
     backdrop-filter: blur(0px);
     -webkit-backdrop-filter: blur(0px);
     z-index: 9999;
+
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
@@ -641,12 +639,16 @@
     -webkit-backdrop-filter: blur(20px);
 }
 
-/* Контейнер изображения */
+/* ================= IMAGE CONTAINER ================= */
+
 .lightbox-image-container {
+    position: relative;
+
     width: 65%;
     max-width: 400px;
     aspect-ratio: 1 / 1.5;
     max-height: 90vh;
+
     opacity: 0;
     transform: scale(0.8);
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -666,17 +668,57 @@
     pointer-events: auto;
 }
 
-/* Стрелки */
+/* ================= HEADER (ICON + TITLE) ================= */
+
+.lightbox-header {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    pointer-events: none;
+
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.lightbox.active .lightbox-header {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.lightbox-icon {
+    width: 42px;
+    height: 42px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+}
+
+.lightbox-title {
+    height: 34px;
+    width: auto;
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.5));
+}
+
+/* ================= ARROWS ================= */
+
 .lightbox-arrow {
     position: absolute;
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
+
     width: 48px;
     height: 48px;
     border-radius: 8px;
+
     cursor: pointer;
     font-size: 24px;
+
     opacity: 0;
     transition: all 0.3s ease;
     z-index: 10;
@@ -698,13 +740,29 @@
     right: 20px;
 }
 
+/* ================= MOBILE ================= */
+
 @media (max-width: 768px) {
+    .lightbox-image-container {
+        width: 85%;
+    }
+
+    .lightbox-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .lightbox-title {
+        height: 28px;
+    }
+
     .lightbox-arrow {
         width: 40px;
         height: 40px;
         font-size: 20px;
     }
 }
+
 
 
     /* ===== LIGHTBOX HEADER ===== */
