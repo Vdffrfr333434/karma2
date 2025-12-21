@@ -688,9 +688,11 @@
     align-items: center;
     gap: 8px;
 
+    width: 90%;
+    max-width: 420px;
+
     opacity: 0;
     pointer-events: none;
-
     transition: all 0.4s ease;
 }
 
@@ -700,16 +702,16 @@
 }
 
 .lightbox-icon {
+    display: block;
     width: 25px;
     height: 25px;
+    object-fit: contain;
 
     background: none !important;
     padding: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     filter: none !important;
-
-    object-fit: contain;
 }
 
 .lightbox-text {
