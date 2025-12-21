@@ -846,13 +846,17 @@
   <div class="lightbox-image-container">
 
     <!-- ИКОНКА + ТЕКСТ СВЕРХУ -->
-    <div class="lightbox-header">
-      <div class="lightbox-icon-wrap">
-        <img id="lightboxIcon" class="lightbox-icon" alt="">
-      </div>
+ <div class="lightbox-header">
 
-      <div id="lightboxText" class="lightbox-text"></div>
-    </div>
+  <div class="lightbox-icon-wrap">
+    <img id="lightboxIcon" class="lightbox-icon" alt="">
+  </div>
+
+  <div id="lightboxTitle" class="lightbox-text"></div>
+
+  <div id="lightboxDescription" class="lightbox-description"></div>
+
+</div>
 
     <!-- ОСНОВНОЕ ИЗОБРАЖЕНИЕ -->
     <img id="lightboxImage" alt="">
@@ -1315,8 +1319,11 @@ function updateLightbox() {
 
     document.getElementById('lightboxImage').src = slide.image;
     document.getElementById('lightboxIcon').src  = slide.icon;
+
+    document.getElementById('lightboxTitle').textContent = 'МЕТОД';
     document.getElementById('lightboxDescription').textContent = slide.description;
 }
+
 
 
 // ===============================
