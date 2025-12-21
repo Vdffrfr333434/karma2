@@ -1229,6 +1229,7 @@
 // ===============================
 // URL для превью (верхней картинки в стопке)
 var previewImage = 'https://github.com/Vdffrfr333434/karma2/blob/main/ezgif-6201c6fa8b88192d.webp?raw=true';
+var previewImage2 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Clock-ezgif.com-video-to-webp-converter.webp?raw=true';  // добавьте эту строку
 var gallerySlides = [
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G1.png',
@@ -1281,11 +1282,11 @@ function createStack() {
     var stack = document.getElementById('photoStack');
     stack.innerHTML = '';
 
-    // Создаем 3 карточки для стопки (в обратном порядке!)
+    // Создаем 3 карточки для стопки
     var stackImages = [
         gallerySlides[2].image,          // Нижняя (из галереи)
-        gallerySlides[1].image,          // Средняя (из галереи)
-        previewImage                     // Верхняя (кастомная превью)
+        previewImage2,                   // Средняя (второе превью)
+        previewImage                     // Верхняя (первое превью)
     ];
 
     // Добавляем карточки в обратном порядке
