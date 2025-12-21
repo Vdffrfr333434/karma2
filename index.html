@@ -521,6 +521,207 @@
     
 
 
+
+
+
+
+
+
+
+
+
+
+ .gallery-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .gallery-grid {
+            display: grid;
+            gap: 2px;
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .gallery-grid.count-1 { grid-template-columns: 1fr; }
+        .gallery-grid.count-2 { grid-template-columns: repeat(2, 1fr); }
+        .gallery-grid.count-3 { grid-template-columns: repeat(3, 1fr); }
+        .gallery-grid.count-4 { grid-template-columns: repeat(2, 1fr); }
+        .gallery-grid.count-5,
+        .gallery-grid.count-6 { 
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1;
+        }
+
+        .gallery-grid.count-5 .gallery-item:nth-child(1),
+        .gallery-grid.count-5 .gallery-item:nth-child(2),
+        .gallery-grid.count-6 .gallery-item:nth-child(1),
+        .gallery-grid.count-6 .gallery-item:nth-child(2) {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 18px;
+            z-index: 10;
+        }
+
+        .lightbox-arrow {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+
+        .lightbox-arrow:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-arrow.prev {
+            left: 20px;
+        }
+
+        .lightbox-arrow.next {
+            right: 20px;
+        }
+
+        .lightbox-image-container {
+            max-width: 90%;
+            max-height: 90vh;
+            padding: 0 80px;
+        }
+
+        .lightbox-image-container img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .lightbox-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            width: 32px;
+            background: white;
+        }
+
+        .indicator:hover {
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-image-container {
+                padding: 0 60px;
+            }
+
+            .lightbox-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+        }
+
+
+    
+
   </style>
 </head>
 <body>
@@ -573,6 +774,23 @@
   </div>
 </section>
 
+<div class="gallery-container">
+        <div class="gallery-grid" id="gallery">
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <div class="lightbox-counter" id="counter"></div>
+        <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
+        <div class="lightbox-image-container">
+            <img id="lightboxImage" src="" alt="">
+        </div>
+        <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
+        <div class="lightbox-indicators" id="indicators"></div>
+    </div>
+
+  
 <!-- FEEDBACK SLIDER -->
 <section class="reveal">
   <div class="glass card reviews-container no-diamond">
@@ -896,6 +1114,123 @@
   window.addEventListener('resize', () => {
     goToSlide(currentIndex);
   });
+
+
+
+
+
+
+
+
+
+  var images = [
+            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=800&fit=crop'
+        ];
+
+        var currentIndex = 0;
+
+        function createGallery() {
+            var gallery = document.getElementById('gallery');
+            var count = Math.min(images.length, 6);
+            gallery.className = 'gallery-grid count-' + count;
+            
+            images.slice(0, 6).forEach(function(img, index) {
+                var item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.onclick = function() {
+                    openLightbox(index);
+                };
+                
+                var image = document.createElement('img');
+                image.src = img;
+                image.alt = 'Photo ' + (index + 1);
+                item.appendChild(image);
+                
+                if (index === 5 && images.length > 6) {
+                    var overlay = document.createElement('div');
+                    overlay.className = 'overlay';
+                    overlay.textContent = '+' + (images.length - 6);
+                    item.appendChild(overlay);
+                }
+                
+                gallery.appendChild(item);
+            });
+            
+            createIndicators();
+        }
+
+        function createIndicators() {
+            var indicators = document.getElementById('indicators');
+            indicators.innerHTML = '';
+            
+            images.forEach(function(img, index) {
+                var indicator = document.createElement('button');
+                indicator.className = 'indicator';
+                indicator.onclick = function(e) {
+                    e.stopPropagation();
+                    currentIndex = index;
+                    updateLightbox();
+                };
+                indicators.appendChild(indicator);
+            });
+        }
+
+        function openLightbox(index) {
+            currentIndex = index;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            updateLightbox();
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function changeImage(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = images.length - 1;
+            if (currentIndex >= images.length) currentIndex = 0;
+            updateLightbox();
+        }
+
+        function updateLightbox() {
+            document.getElementById('lightboxImage').src = images[currentIndex];
+            document.getElementById('counter').textContent = (currentIndex + 1) + ' / ' + images.length;
+            
+            var indicators = document.querySelectorAll('.indicator');
+            indicators.forEach(function(indicator, index) {
+                if (index === currentIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        document.getElementById('lightbox').onclick = function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') changeImage(-1);
+            if (e.key === 'ArrowRight') changeImage(1);
+        });
+
+        createGallery();
+
+
+  
 </script>
 
 
