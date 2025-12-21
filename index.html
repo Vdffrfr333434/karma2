@@ -76,11 +76,10 @@ body > * {
 }
 
 /* Паттерн бриллиантов с fade-out градиентом */
-.glass::before,
-.prism-bg::before {
+.glass::before {
   content: '';
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
   width: 140px;
   height: 140px;
@@ -96,16 +95,24 @@ body > * {
     url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif");
 
   background-size: 24px 24px, 18px 18px, 20px 20px, 16px 16px, 22px 22px, 19px 19px;
-  background-position: 110px 110px, 85px 95px, 75px 120px, 55px 105px, 95px 80px, 65px 75px;
+  background-position: 110px 10px, 85px 25px, 75px 0px, 55px 15px, 95px 40px, 65px 45px;
   background-repeat: no-repeat;
 
   mix-blend-mode: overlay;
   pointer-events: none;
 
-  -webkit-mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%);
-  mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 120px 120px at top right, black 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 120px 120px at top right, black 0%, transparent 100%);
 
   opacity: 0.8;
+}
+
+.prism-bg::before {
+  content: none;
+}
+
+.no-diamond::before {
+  content: none !important;
 }
 
 
@@ -386,24 +393,6 @@ body > * {
 }
 
 /* ===============================
-   OPTIONAL: EXTRA DEPTH
-   =============================== */
-
-.prism-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(255,255,255,0.06),
-    transparent 70%
-  );
-  mix-blend-mode: soft-light;
-  pointer-events: none;
-}
-
-/* ===============================
    ANIMATION
    =============================== */
 
@@ -454,21 +443,23 @@ body > * {
 
 <!-- SERVICES -->
 <section class="reveal">
-  <div class="grid-3">
-    <div class="glass card service-card prism-bg">
-      <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K1.png?raw=true" alt="" width="55"><br>Кармология</h3>
-      <p>Исследуем опыт прошлых воплощений, находим корни проблем и блоков в текущей жизни</p>
-      <p class="for-who">Для тех, кто хочет понять причины повторяющихся ситуаций</p>
-    </div>
-    <div class="glass card service-card prism-bg">
-      <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K2.png?raw=true" alt="" width="55"><br>Регрессия</h3>
-      <p>Глубинная работа с подсознанием через возвращение к прошлому опыту для исцеления</p>
-      <p class="for-who">Для проработки страхов, фобий и блоков</p>
-    </div>
-    <div class="glass card service-card prism-bg">
-      <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K3.png?raw=true" alt="" width="55"><br>Нумерология</h3>
-      <p>Расчёт матрицы судьбы, анализ жизненных циклов и персональных кодов успеха</p>
-      <p class="for-who">Для понимания своего предназначения и потенциала</p>
+  <div class="glass prism-bg" style="padding: 20px;">
+    <div class="grid-3">
+      <div class="service-card">
+        <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K1.png?raw=true" alt="" width="55"><br>Кармология</h3>
+        <p>Исследуем опыт прошлых воплощений, находим корни проблем и блоков в текущей жизни</p>
+        <p class="for-who">Для тех, кто хочет понять причины повторяющихся ситуаций</p>
+      </div>
+      <div class="service-card">
+        <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K2.png?raw=true" alt="" width="55"><br>Регрессия</h3>
+        <p>Глубинная работа с подсознанием через возвращение к прошлому опыту для исцеления</p>
+        <p class="for-who">Для проработки страхов, фобий и блоков</p>
+      </div>
+      <div class="service-card">
+        <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K3.png?raw=true" alt="" width="55"><br>Нумерология</h3>
+        <p>Расчёт матрицы судьбы, анализ жизненных циклов и персональных кодов успеха</p>
+        <p class="for-who">Для понимания своего предназначения и потенциала</p>
+      </div>
     </div>
   </div>
 </section>
@@ -556,13 +547,13 @@ body > * {
 
 <!-- CONTACTS -->
 <section class="reveal">
-  <div class="glass card service-card" style="align-items:center; gap:12px">
+  <div class="glass card service-card no-diamond" style="align-items:center; gap:12px">
     <h3>Как со мной связаться</h3>
     <div class="grid-4">
-      <a class="glass card" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I1.png?raw=true" alt="" width="25"></a>
-      <a class="glass card" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I2.png?raw=true" alt="" width="25"></a>
-      <a class="glass card" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I3.png?raw=true" alt="" width="25"></a>
-      <a class="glass card" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I4.png?raw=true" alt="" width="25"></a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I1.png?raw=true" alt="" width="25"></a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I2.png?raw=true" alt="" width="25"></a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I3.png?raw=true" alt="" width="25"></a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none; font-size:24px" href="#"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I4.png?raw=true" alt="" width="25"></a>
     </div>
   </div>
 </section>
@@ -580,11 +571,11 @@ body > * {
   noiseCanvas.height = height;
 
   const colorPalette = [
-    [72, 58, 160],    // тёмный ультрафиолет
-  [58, 142, 180],   // приглушённый циан
-  [92, 180, 150],   // мягкий спектральный зелёный
-  [210, 190, 110],  // рассеянный жёлтый
-  [190, 90, 150],   // приглушённая магента
+    [72, 58, 160],
+  [58, 142, 180],
+  [92, 180, 150],
+  [210, 190, 110],
+  [190, 90, 150],
 ];
 
   class ColorBlob {
@@ -631,7 +622,6 @@ body > * {
   ];
 
   function drawNoise() {
-    // Создаем шум в 2 раза меньшего разрешения для крупного зерна
     const noiseWidth = Math.floor(width / 2);
     const noiseHeight = Math.floor(height / 2);
     const imageData = noiseCtx.createImageData(noiseWidth, noiseHeight);
@@ -645,7 +635,6 @@ body > * {
       data[i + 3] = 255;
     }
     
-    // Очищаем canvas и масштабируем шум на весь экран
     noiseCtx.clearRect(0, 0, width, height);
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = noiseWidth;
@@ -653,7 +642,6 @@ body > * {
     const tempCtx = tempCanvas.getContext('2d');
     tempCtx.putImageData(imageData, 0, 0);
     
-    // Отрисовываем увеличенное изображение
     noiseCtx.imageSmoothingEnabled = false;
     noiseCtx.drawImage(tempCanvas, 0, 0, noiseWidth, noiseHeight, 0, 0, width, height);
   }
@@ -674,7 +662,6 @@ body > * {
 
     ctx.globalCompositeOperation = 'source-over';
 
-    // Обновляем шум каждые 3 кадра для плавной анимации
     noiseFrame++;
     if (noiseFrame % 10 === 0) {
       drawNoise();
