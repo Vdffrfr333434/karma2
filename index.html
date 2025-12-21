@@ -527,7 +527,7 @@
 
 
 
-.gallery-container {
+  .gallery-container {
             max-width: 600px;
             margin: 0 auto;
         }
@@ -595,19 +595,7 @@
             opacity: 0.9;
         }
 
-        /* Счетчик фото */
-        .photo-count {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.75);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            z-index: 10;
-        }
+
 
         /* Lightbox с анимацией */
         .lightbox {
@@ -637,7 +625,9 @@
 
         /* Анимация появления изображения */
         .lightbox-image-container {
-            max-width: 90%;
+            width: 90%;
+            max-width: 500px;
+            height: calc(500px * var(--card-aspect));
             max-height: 90vh;
             padding: 0 80px;
             opacity: 0;
@@ -651,25 +641,21 @@
         }
 
         .lightbox-image-container img {
-            max-width: 100%;
-            max-height: 90vh;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             border-radius: 8px;
         }
 
         /* Анимация кнопок и элементов управления */
         .lightbox-close,
-        .lightbox-counter,
-        .lightbox-arrow,
-        .lightbox-indicators {
+        .lightbox-arrow {
             opacity: 0;
             transition: opacity 0.3s ease 0.2s;
         }
 
         .lightbox.active .lightbox-close,
-        .lightbox.active .lightbox-counter,
-        .lightbox.active .lightbox-arrow,
-        .lightbox.active .lightbox-indicators {
+        .lightbox.active .lightbox-arrow {
             opacity: 1;
         }
 
@@ -682,7 +668,7 @@
             color: white;
             width: 48px;
             height: 48px;
-            border-radius: 50%;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 24px;
             transition: background 0.3s;
@@ -693,16 +679,6 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .lightbox-counter {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 18px;
-            z-index: 10;
-        }
-
         .lightbox-arrow {
             position: absolute;
             background: rgba(255, 255, 255, 0.1);
@@ -710,7 +686,7 @@
             color: white;
             width: 48px;
             height: 48px;
-            border-radius: 50%;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 24px;
             transition: background 0.3s;
@@ -742,34 +718,7 @@
             border-radius: 8px;
         }
 
-        .lightbox-indicators {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
 
-        .indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .indicator.active {
-            width: 32px;
-            background: white;
-        }
-
-        .indicator:hover {
-            background: rgba(255, 255, 255, 0.75);
-        }
 
         @media (max-width: 768px) {
             .lightbox-image-container {
@@ -782,7 +731,6 @@
                 font-size: 20px;
             }
         }
-
 
 
 
@@ -842,7 +790,7 @@
 
 
 
-<div class="gallery-container">
+ <div class="gallery-container">
         <div class="photo-stack" id="photoStack" onclick="openLightbox(0)">
             <!-- Карточки будут добавлены через JavaScript -->
         </div>
@@ -851,13 +799,11 @@
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
         <button class="lightbox-close" onclick="closeLightbox()">×</button>
-        <div class="lightbox-counter" id="counter"></div>
         <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
         <div class="lightbox-image-container">
             <img id="lightboxImage" src="" alt="">
         </div>
         <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
-        <div class="lightbox-indicators" id="indicators"></div>
     </div>
 
 
@@ -1222,32 +1168,10 @@
                 item.appendChild(img);
                 stack.appendChild(item);
             }
-            
-            // Добавляем счетчик если фото больше 1
-            if (galleryImages.length > 1) {
-                var counter = document.createElement('div');
-                counter.className = 'photo-count';
-                counter.textContent = galleryImages.length;
-                stack.appendChild(counter);
-            }
-            
-            createIndicators();
         }
 
         function createIndicators() {
-            var indicators = document.getElementById('indicators');
-            indicators.innerHTML = '';
-            
-            galleryImages.forEach(function(img, index) {
-                var indicator = document.createElement('button');
-                indicator.className = 'indicator';
-                indicator.onclick = function(e) {
-                    e.stopPropagation();
-                    galleryCurrentIndex = index;
-                    updateLightbox();
-                };
-                indicators.appendChild(indicator);
-            });
+            // Индикаторы больше не нужны
         }
 
         function openLightbox(index) {
@@ -1271,16 +1195,6 @@
 
         function updateLightbox() {
             document.getElementById('lightboxImage').src = galleryImages[galleryCurrentIndex];
-            document.getElementById('counter').textContent = (galleryCurrentIndex + 1) + ' / ' + galleryImages.length;
-            
-            var indicators = document.querySelectorAll('.indicator');
-            indicators.forEach(function(indicator, index) {
-                if (index === galleryCurrentIndex) {
-                    indicator.classList.add('active');
-                } else {
-                    indicator.classList.remove('active');
-                }
-            });
         }
 
         document.getElementById('lightbox').onclick = function(e) {
