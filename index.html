@@ -1122,113 +1122,112 @@
 
 
 
+// ГАЛЕРЕЯ - замените старый код галереи на этот
+var galleryImages = [
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=800&fit=crop'
+];
 
-  var images = [
-            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&h=800&fit=crop',
-            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=800&fit=crop'
-        ];
+var galleryCurrentIndex = 0;
 
-        var currentIndex = 0;
-
-        function createGallery() {
-            var gallery = document.getElementById('gallery');
-            var count = Math.min(images.length, 6);
-            gallery.className = 'gallery-grid count-' + count;
-            
-            images.slice(0, 6).forEach(function(img, index) {
-                var item = document.createElement('div');
-                item.className = 'gallery-item';
-                item.onclick = function() {
-                    openLightbox(index);
-                };
-                
-                var image = document.createElement('img');
-                image.src = img;
-                image.alt = 'Photo ' + (index + 1);
-                item.appendChild(image);
-                
-                if (index === 5 && images.length > 6) {
-                    var overlay = document.createElement('div');
-                    overlay.className = 'overlay';
-                    overlay.textContent = '+' + (images.length - 6);
-                    item.appendChild(overlay);
-                }
-                
-                gallery.appendChild(item);
-            });
-            
-            createIndicators();
-        }
-
-        function createIndicators() {
-            var indicators = document.getElementById('indicators');
-            indicators.innerHTML = '';
-            
-            images.forEach(function(img, index) {
-                var indicator = document.createElement('button');
-                indicator.className = 'indicator';
-                indicator.onclick = function(e) {
-                    e.stopPropagation();
-                    currentIndex = index;
-                    updateLightbox();
-                };
-                indicators.appendChild(indicator);
-            });
-        }
-
-        function openLightbox(index) {
-            currentIndex = index;
-            document.getElementById('lightbox').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            updateLightbox();
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function changeImage(direction) {
-            currentIndex += direction;
-            if (currentIndex < 0) currentIndex = images.length - 1;
-            if (currentIndex >= images.length) currentIndex = 0;
-            updateLightbox();
-        }
-
-        function updateLightbox() {
-            document.getElementById('lightboxImage').src = images[currentIndex];
-            document.getElementById('counter').textContent = (currentIndex + 1) + ' / ' + images.length;
-            
-            var indicators = document.querySelectorAll('.indicator');
-            indicators.forEach(function(indicator, index) {
-                if (index === currentIndex) {
-                    indicator.classList.add('active');
-                } else {
-                    indicator.classList.remove('active');
-                }
-            });
-        }
-
-        document.getElementById('lightbox').onclick = function(e) {
-            if (e.target === this) {
-                closeLightbox();
-            }
+function createGallery() {
+    var gallery = document.getElementById('gallery');
+    var count = Math.min(galleryImages.length, 6);
+    gallery.className = 'gallery-grid count-' + count;
+    
+    galleryImages.slice(0, 6).forEach(function(img, index) {
+        var item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.onclick = function() {
+            openLightbox(index);
         };
+        
+        var image = document.createElement('img');
+        image.src = img;
+        image.alt = 'Photo ' + (index + 1);
+        item.appendChild(image);
+        
+        if (index === 5 && galleryImages.length > 6) {
+            var overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            overlay.textContent = '+' + (galleryImages.length - 6);
+            item.appendChild(overlay);
+        }
+        
+        gallery.appendChild(item);
+    });
+    
+    createIndicators();
+}
 
-        document.addEventListener('keydown', function(e) {
-            if (!document.getElementById('lightbox').classList.contains('active')) return;
-            
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') changeImage(-1);
-            if (e.key === 'ArrowRight') changeImage(1);
-        });
+function createIndicators() {
+    var indicators = document.getElementById('indicators');
+    indicators.innerHTML = '';
+    
+    galleryImages.forEach(function(img, index) {
+        var indicator = document.createElement('button');
+        indicator.className = 'indicator';
+        indicator.onclick = function(e) {
+            e.stopPropagation();
+            galleryCurrentIndex = index;
+            updateLightbox();
+        };
+        indicators.appendChild(indicator);
+    });
+}
 
-        createGallery();
+function openLightbox(index) {
+    galleryCurrentIndex = index;
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateLightbox();
+}
 
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function changeImage(direction) {
+    galleryCurrentIndex += direction;
+    if (galleryCurrentIndex < 0) galleryCurrentIndex = galleryImages.length - 1;
+    if (galleryCurrentIndex >= galleryImages.length) galleryCurrentIndex = 0;
+    updateLightbox();
+}
+
+function updateLightbox() {
+    document.getElementById('lightboxImage').src = galleryImages[galleryCurrentIndex];
+    document.getElementById('counter').textContent = (galleryCurrentIndex + 1) + ' / ' + galleryImages.length;
+    
+    var indicators = document.querySelectorAll('.indicator');
+    indicators.forEach(function(indicator, index) {
+        if (index === galleryCurrentIndex) {
+            indicator.classList.add('active');
+        } else {
+            indicator.classList.remove('active');
+        }
+    });
+}
+
+document.getElementById('lightbox').onclick = function(e) {
+    if (e.target === this) {
+        closeLightbox();
+    }
+};
+
+document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') changeImage(-1);
+    if (e.key === 'ArrowRight') changeImage(1);
+});
+
+createGallery();
 
   
 </script>
