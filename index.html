@@ -264,7 +264,21 @@ body > * {
 }
 
 
+/* Чистый стеклянный эффект без узоров */
+.glass-clean {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  overflow: hidden;
+}
 
+.glass-clean::before {
+  content: none !important;
+}
     
 
     /* mobile overflow rows */
@@ -443,7 +457,7 @@ body > * {
 
 <!-- SERVICES -->
 <section class="reveal">
-  <div class="glass prism-bg" style="padding: 20px;">
+  <div class="glass-clean" style="padding: 20px;">
     <div class="grid-3">
       <div class="service-card">
         <h3><img src="https://github.com/Vdffrfr333434/karma2/blob/main/K1.png?raw=true" alt="" width="55"><br>Кармология</h3>
