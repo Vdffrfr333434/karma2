@@ -700,9 +700,16 @@
 }
 
 .lightbox-icon {
-    width: 16px;          /* было 32 */
-    height: 16px;         /* было 32 */
-    filter: none;         /* убрали тень */
+    width: 32px;
+    height: 32px;
+
+    display: block;
+    object-fit: contain;
+
+    max-width: 16px;
+    max-height: 16px;
+
+    filter: none;
 }
 
 .lightbox-text {
@@ -748,6 +755,19 @@
 .lightbox-arrow:hover {
     background: rgba(255,255,255,0.2);
 }
+
+    .lightbox-description {
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    text-align: center;
+
+    color: rgba(255,255,255,0.9);
+
+    text-shadow:
+        0 2px 8px rgba(0,0,0,0.4);
+}
+
 
 .lightbox-arrow.prev { left: 20px; }
 .lightbox-arrow.next { right: 20px; }
@@ -809,10 +829,12 @@
     <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
 
     <div class="lightbox-image-container">
-        <div class="lightbox-header">
-            <img id="lightboxIcon" class="lightbox-icon" alt="">
-            <div id="lightboxText" class="lightbox-text"></div>
-        </div>
+
+      
+    <div class="lightbox-header">
+    <img id="lightboxIcon" class="lightbox-icon" alt="">
+    <div id="lightboxDescription" class="lightbox-description"></div>
+</div>
 
         <img id="lightboxImage" src="" alt="">
     </div>
@@ -1161,35 +1183,36 @@
 var gallerySlides = [
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G1.png',
-    icon:  'https://github.com/Vdffrfr333434/karma2/blob/main/K1.png?raw=true',
-    title: 'Кармология в работе с ментальным здоровьем. В контексте ментального благополучия кармология применяется как инструмент глубокого психоанализа и поиска первопричин внутренних конфликтов. Она дополняет традиционные подходы, предлагая взгляд на ментальное состояние через призму личной ответственности и системных связей'
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I1.png',
+    description: 'Кармический анализ жизненных сценариев, причин повторяющихся событий и внутренних блоков'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G2.png',
     icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I2.png',
-    title: 'РЕГРЕССИЯ'
+    description: 'Регрессивные практики для работы с прошлым опытом, подсознанием и глубинными установками'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G3.png',
     icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I3.png',
-    title: 'НУМЕРОЛОГИЯ'
+    description: 'Нумерологический разбор личности, предназначения, периодов жизни и ключевых энергий'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G4.png',
     icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I4.png',
-    title: 'МАТРИЦА'
+    description: 'Матрица судьбы: анализ потенциала, сильных сторон, задач души и точек роста'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G5.png',
     icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I1.png',
-    title: 'ПРАКТИКИ'
+    description: 'Энергетические и трансформационные практики для гармонизации состояния и баланса'
   },
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G6.png',
     icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I2.png',
-    title: 'РАБОТА'
+    description: 'Индивидуальная работа под запрос: жизненные ситуации, отношения, предназначение'
   }
 ];
+
 
 var galleryCurrentIndex = 0;
 
@@ -1269,13 +1292,9 @@ function changeImage(direction) {
 function updateLightbox() {
     var slide = gallerySlides[galleryCurrentIndex];
 
-    var imageEl = document.getElementById('lightboxImage');
-    var iconEl  = document.getElementById('lightboxIcon');
-    var textEl  = document.getElementById('lightboxText');
-
-    imageEl.src = slide.image;
-    iconEl.src  = slide.icon;
-    textEl.textContent = slide.title;
+    document.getElementById('lightboxImage').src = slide.image;
+    document.getElementById('lightboxIcon').src  = slide.icon;
+    document.getElementById('lightboxDescription').textContent = slide.description;
 }
 
 
