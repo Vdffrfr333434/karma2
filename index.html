@@ -534,8 +534,8 @@
 
   .gallery-container {
             max-width: 600px;
-            margin: 0 auto;
-        }
+           margin: 0 auto 20px auto;  /* добавили 20px снизу */
+}
 
         /* === НАСТРОЙКИ СТОПКИ (измените эти значения) === */
     :root {
@@ -566,16 +566,18 @@
         }
 
             .photo-stack-item {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: var(--card-radius);
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            background: white;
-            border: var(--card-border) solid white;
-        }
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: white;
+    border: none;  /* убираем белую рамку полностью */
+    /* или если хотите тёмно-серую полупрозрачную: */
+    /* border: var(--card-border) solid rgba(50, 50, 50, 0.3); */
+}
     /* Анимация раздвигания карточек при клике */
 .photo-stack.opening .photo-stack-item:nth-child(1) {
     transform: rotate(var(--card-rotation-1)) translate(calc(var(--card-offset-x) * -3), calc(var(--card-offset-y) * -3)) scale(1.1);
@@ -649,8 +651,8 @@
 .lightbox-image-container {
     position: relative;
 
-    width: 65%;
-    max-width: 300px;
+    width: 50%;  /* было 65% - уменьшаем для мобилок */
+    max-width: 280px;  /* было 300px */
     aspect-ratio: 2 / 3;
     max-height: 90vh;
 
@@ -661,7 +663,6 @@
 
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .lightbox.active .lightbox-image-container {
     opacity: 1;
     transform: scale(1);
@@ -679,7 +680,7 @@
 
 .lightbox-header {
     position: absolute;
-    top: 18px;
+    top: 40px;  /* было 18px - увеличиваем отступ */
     left: 50%;
     transform: translateX(-50%) translateY(-8px);
 
