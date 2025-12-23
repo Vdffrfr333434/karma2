@@ -100,6 +100,7 @@
 }
 
 /* Паттерн бриллиантов */
+/* Паттерн бриллиантов с fade-out градиентом */
 .glass::before {
   content: '';
   position: absolute;
@@ -108,7 +109,7 @@
   width: 140px;
   height: 140px;
 
-  filter: grayscale(0.3) brightness(1.2) contrast(1.5);
+  filter: grayscale(1) brightness(2) contrast(3) invert(1); /* ← ДОБАВЛЕН invert(1) */
 
   background-image: 
     url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
@@ -122,13 +123,13 @@
   background-position: 110px 10px, 85px 25px, 75px 0px, 55px 15px, 95px 40px, 65px 45px;
   background-repeat: no-repeat;
 
-  mix-blend-mode: multiply;
+  mix-blend-mode: overlay;
   pointer-events: none;
 
   -webkit-mask-image: radial-gradient(ellipse 120px 120px at top right, black 0%, transparent 100%);
   mask-image: radial-gradient(ellipse 120px 120px at top right, black 0%, transparent 100%);
 
-  opacity: 0.15;
+  opacity: 0.8;
 }
 
 .prism-bg::before {
@@ -151,6 +152,7 @@
     }
 
     /* Hero section */
+/* Hero section */
 .hero-section {
   padding: 0 16px;
   margin: 0;
@@ -162,7 +164,6 @@
   height: 400px;
   overflow: hidden;
   border-radius: 10px;
-  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.15);
 }
 
 .hero-video {
@@ -182,7 +183,8 @@
   height: 60%;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  background: linear-gradient(to top, rgba(250, 248, 245, 0.95), transparent);
+  mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -319,15 +321,15 @@
 .btn {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(139, 115, 85, 0.3);
+  border: 1px solid rgba(255,255,255,0.8);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
   text-align: center;
-  color: var(--text);
+  color: white; /* ← ДОБАВЬТЕ ЭТУ СТРОКУ */
   padding: 10px 20px;
-  background: rgba(212, 175, 55, 0.15);
+  background: rgba(255, 255, 255, 0.15);
   transition: all 0.3s ease;
 }
 
@@ -462,6 +464,10 @@
         max-width:calc(50% - 8px);
       }
     }
+     /* Инверсия иконок контактов для светлой темы */
+.grid-4 img {
+  filter: invert(1);
+}
 
 /* Стеклянный эффект для контактов */
 .glass.service-card {
