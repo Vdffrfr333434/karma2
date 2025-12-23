@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Марьяна | Кармолог | Нумеролог | Регрессолог</title>
+   <style>
+    /* MOBILE FIRST - LIGHT THEME */
+   :root{
+      --bg1:#d4af37;
+      --bg2:#c9a0dc;
+      --bg3:#8b7355;
+      --glass:rgba(139, 115, 85, 0.08);
+      --border:rgba(139, 115, 85, 0.2);
+      --text:#6b4423;
+      --text-muted:#8b7355;
+      --gold:#d4af37;
+      --lavender:#c9a0dc;
+     }
+
+    *{box-sizing:border-box}
+ body {
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont,Inter,system-ui,sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  position: relative;
+  background: #faf8f5;
+  display: flex;
+  justify-content: center;
+}
+
+/* Wrapper для всего контента */
+.content-wrapper {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Morphing gradient background */
+#gradient-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  z-index: 0;
+  filter: blur(80px);
+  opacity: 0.4;
+}
+
+.glass.diamond-bottom::before {
+  top: auto !important;
+  bottom: 0 !important;
+  background-position: 110px 130px, 85px 115px, 75px 140px, 55px 125px, 95px 100px, 65px 95px !important;
+  -webkit-mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%) !important;
+}
+    
+#noise-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  pointer-events: none;
+  opacity: 0.015;
+  z-index: 1;
+}
+    .gallery-img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+    h1,h2,h3,p{margin:0; line-height:1.35}
+    h2{font-size:20px}
+    h3{font-size:16px}
+    p{font-size:14px}
+    .muted{font-size:8px; color: var(--text-muted)}
+    section{padding:20px 16px}
+
+    /* glass */
+.glass{
+  position: relative;
+  background: rgba(255, 250, 245, 0.65);
+  border: 1px solid rgba(139, 115, 85, 0.15);
+  border-radius: 10px;
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.08);
+}
+
+/* Паттерн бриллиантов */
+.glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 140px;
+  height: 140px;
+
+  filter: grayscale(0.3) brightness(1.2) contrast(1.5);
+
+  background-image: 
+    url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+    url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+    url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+    url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+    url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+    url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif");
+
+  background-size: 24px 24px, 18px 18px, 20px 20px, 16px 16px, 22px 22px, 19px 19px;
+  background-position: 110px 10px, 85px 25px, 75px 0px, 55px 15px, 95px 40px, 65px 45px;
+  background-repeat: no-repeat;
+
+  mix-blend-mode: multiply;
+  pointer-events: none;
+
+  -webkit-mask-image: radial-gradient(ellipse 120px 120px at top right, black 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 120px 120px at top right, black 0%, transparent 100%);
+
+  opacity: 0.15;
+}
+
+.prism-bg::before {
+  content: none;
+}
+
+.no-diamond::before {
+  content: none !important;
+}
+
+    /* animations */
+    .reveal{opacity:0; transform:translateY(32px); transition:.8s ease}
+    .reveal.show{opacity:1; transform:none}
+
+    /* about */
+    .about{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    /* Hero section */
+.hero-section {
+  padding: 0 16px;
+  margin: 0;
+}
+
+.hero-video-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.15);
+}
+
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: linear-gradient(to top, rgba(250, 248, 245, 0.95), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+.hero-content .muted {
+  font-size: 12px;
+  opacity: 0.7;
+  color: var(--text-muted);
+}
+
+.hero-content p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  color: var(--text);
+}
+
+.img-container {
+  position: relative;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.img-container video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+    
+    .about .img-container{
+      position:relative;
+      width:100%;
+      height:100%;
+      min-height:200px;
+      overflow:hidden;
+      border-radius:10px;
+    }
+    .about img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      position:absolute;
+      top:0;
+      left:0;
+    }
+
+    /* grids */
+    .grid-3, .grid-2, .grid-4{
+      display:grid;
+      gap:12px;
+    }
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+
+    /* cards */
+    .card{
+      padding:14px;
+      min-height:auto;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    /* service cards */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.service-card h3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 6px;
+  text-align: center;
+  color: var(--text);
+}
+
+.service-card p {
+  font-size: 10px;
+  line-height: 1.4;
+  margin: 0;
+  text-align: left;
+  color: var(--text);
+}
+
+.service-card .for-who {
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-align: left;
+}
+
+    /* price */
+    .price{font-size:22px; font-weight:600; margin:8px 0; color: var(--gold)}
+    .price-card ul{
+      margin:0;
+      padding-left:18px;
+      font-size:12px;
+      line-height:1.5;
+      color: var(--text);
+    }
+    .price-card ul li{
+      margin-bottom:4px;
+    }
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(139, 115, 85, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text);
+  padding: 10px 20px;
+  background: rgba(212, 175, 55, 0.15);
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: rgba(212, 175, 55, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(139, 115, 85, 0.15);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.3),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+    /* Instagram gradient button */
+.instagram-gradient {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+
+.instagram-gradient::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+}
+
+.instagram-gradient:hover {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+/* Чистый стеклянный эффект */
+.glass-clean {
+  position: relative;
+  background: rgba(255, 250, 245, 0.7);
+  border: 1px solid rgba(139, 115, 85, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.1);
+  overflow: hidden;
+}
+
+.glass-clean::before {
+  content: none !important;
+}
+
+    /* mobile overflow rows */
+    .grid-3,.grid-4{
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      padding-bottom:8px;
+    }
+    .grid-3 > div,.grid-4 > div{
+      scroll-snap-align:start;
+      min-width:70%;
+    }
+    .grid-2 > div{min-width:100%}
+
+    /* reviews slider */
+    .reviews-container{
+      position:relative;
+      overflow:hidden;
+      padding:20px;
+    }
+    .reviews-track{
+      display:flex;
+      gap:16px;
+      transition:transform 0.6s ease;
+      align-items:stretch;
+    }
+    .glass.reviews-container {
+  background: rgba(255, 250, 245, 0.75);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}
+    
+    .review-card{
+      min-width:100%;
+      max-width:100%;
+      flex-shrink:0;
+      background:rgba(212, 175, 55, 0.08);
+      border-radius:6px;
+      color: var(--text);
+    }
+    .review-dots{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:16px;
+    }
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:rgba(139, 115, 85, 0.3);
+      cursor:pointer;
+      transition:.3s;
+    }
+    .dot.active{
+      background:rgba(212, 175, 55, 0.9);
+      width:24px;
+      border-radius:4px;
+    }
+
+    @media(min-width:640px){
+      .review-card{
+        min-width:calc(50% - 8px);
+        max-width:calc(50% - 8px);
+      }
+    }
+
+/* Стеклянный эффект для контактов */
+.glass.service-card {
+  background: rgba(255, 250, 245, 0.7);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  padding: 20px;
+}
+
+ /* PRISMATIC GRAIN BACKGROUND - LIGHT */
+.prism-bg {
+  position: relative;
+  width: 100%;
+  border-radius: 10px;
+  height: 100%;
+  background-clip: padding-box;
+  background-color: #fdfbf8;
+
+  background-image:
+    radial-gradient(
+      at 15% 25%,
+      rgba(212, 175, 55, 0.15),
+      transparent 55%
+    ),
+    radial-gradient(
+      at 85% 20%,
+      rgba(201, 160, 220, 0.15),
+      transparent 60%
+    ),
+    radial-gradient(
+      at 70% 80%,
+      rgba(212, 175, 55, 0.2),
+      transparent 55%
+    ),
+    radial-gradient(
+      at 30% 75%,
+      rgba(201, 160, 220, 0.18),
+      transparent 60%
+    ),
+    radial-gradient(
+      at 55% 55%,
+      rgba(139, 115, 85, 0.1),
+      transparent 65%
+    );
+
+  background-size: 200% 200%;
+  animation: prism-drift 45s ease-in-out infinite;
+
+  filter: saturate(1.1) contrast(1.02);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.12);
+}
+
+.prism-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+@keyframes prism-drift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+  .gallery-container {
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+  }
+
+  :root {
+    --card-width: 150px;
+    --card-aspect: 1.5;
+    --card-rotation-1: -3deg;
+    --card-rotation-2: 2deg;
+    --card-rotation-3: -1.5deg;
+    --card-offset-x: 15px;
+    --card-offset-y: 15px;
+    --card-border: 2px;
+    --card-radius: 6px;
+  }
+
+  .photo-stack {
+    position: relative;
+    width: 100%;
+    max-width: var(--card-width);
+    height: calc(var(--card-width) * var(--card-aspect));
+    margin: 0 auto;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .photo-stack:hover {
+    transform: scale(1.02);
+  }
+
+  .photo-stack-item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(139, 115, 85, 0.2);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: transparent;
+    border: none;
+  }
+
+  .photo-stack.opening .photo-stack-item:nth-child(1) {
+    transform: rotate(-5deg) translate(calc(var(--card-offset-x) * 6), calc(var(--card-offset-y) * -0.5));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.opening .photo-stack-item:nth-child(2) {
+    transform: rotate(3deg) translate(calc(var(--card-offset-x) * -7), calc(var(--card-offset-y) * -0.3));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.opening .photo-stack-item:nth-child(3) {
+    transform: rotate(-2deg) translate(0, calc(var(--card-offset-y) * -0.7));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.closing .photo-stack-item:nth-child(1) {
+    transform: rotate(-5deg) translate(calc(var(--card-offset-x) * 6), calc(var(--card-offset-y) * -0.5));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.closing .photo-stack-item:nth-child(2) {
+    transform: rotate(3deg) translate(calc(var(--card-offset-x) * -7), calc(var(--card-offset-y) * -0.3));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.closing .photo-stack-item:nth-child(3) {
+    transform: rotate(-2deg) translate(0, calc(var(--card-offset-y) * -0.7));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-stack-item:nth-child(1) {
+    z-index: 3;
+    transform: rotate(var(--card-rotation-1)) translate(calc(var(--card-offset-x) * -0.8), calc(var(--card-offset-y) * -0.8));
+  }
+
+  .photo-stack-item:nth-child(2) {
+    z-index: 2;
+    transform: rotate(var(--card-rotation-2)) translate(calc(var(--card-offset-x) * 0.4), calc(var(--card-offset-y) * 0.4));
+  }
+
+  .photo-stack-item:nth-child(3) {
+    z-index: 1;
+    transform: rotate(var(--card-rotation-3)) translate(var(--card-offset-x), var(--card-offset-y));
+    opacity: 0.9;
+  }
+
+/* LIGHTBOX - LIGHT THEME */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(250, 248, 245, 0);
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.lightbox.active {
+  display: flex;
+  background: rgba(250, 248, 245, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.lightbox-image-container {
+  position: relative;
+  width: 50%;
+  max-width: 280px;
+  aspect-ratio: 2 / 3;
+  max-height: 90vh;
+  margin: 0 auto;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lightbox.active .lightbox-image-container {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.lightbox-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.25);
+}
+
+.lightbox-header {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 90%;
+  max-width: 420px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.lightbox.active .lightbox-header {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.lightbox-icon {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.lightbox-text {
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(255,255,255,0.8);
+}
+
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(139, 115, 85, 0.2);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 26px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.lightbox.active .lightbox-arrow {
+  opacity: 1;
+}
+
+.lightbox-arrow:hover {
+  background: rgba(212, 175, 55, 0.25);
+  box-shadow: 0 4px 16px rgba(139, 115, 85, 0.15);
+}
+
+.lightbox-description {
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--text);
+  text-shadow: 0 2px 8px rgba(255,255,255,0.8);
+}
+
+.lightbox-arrow.prev { left: 20px; }
+.lightbox-arrow.next { right: 20px; }
+
+@media (max-width: 768px) {
+  .lightbox-image-container {
+    width: 85%;
+  }
+}
+
+.lightbox-icon-wrap {
+  width: 75px;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 75px;
+}
+
+  </style>
+</head>
+<body>
+
+<!-- Morphing gradient canvases -->
+<canvas id="gradient-canvas"></canvas>
+<canvas id="noise-overlay"></canvas>
+<br><br>
+<div class="content-wrapper">
+ <br><br>  <!-- добавьте ещё один или два <br> здесь -->
+ 
+<section class="about reveal hero-section">
+  <div class="hero-video-container">
+    <video autoplay muted loop playsinline class="hero-video" preload="auto" poster="https://github.com/Vdffrfr333434/karma2/blob/main/Poster.png?raw=true">
+  <source src="https://github.com/Vdffrfr333434/karma2/blob/main/Pose_1.mp4?raw=true" type="video/mp4">
+</video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h2>Марьяна</h2>
+      <p class="muted">кармолог ∙ регрессолог ∙ нумеролог</p>
+      <p>Помогаю людям понять свой путь, найти ответы на важные вопросы и освободиться от кармических блоков.</p>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<!-- SERVICES -->
+<!-- SERVICES -->
+<section class="reveal">
+  <div class="prism-bg  diamond-bottom" style="padding: 20px;">
+    <h3 style="text-align:center; margin-bottom:20px">Какие методы я использую </h3> <br>
+    
+    <div class="gallery-container">
+      <div class="photo-stack" id="photoStack" onclick="openLightbox(0)">
+        <!-- Карточки будут добавлены через JavaScript -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+
+  <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
+
+  <div class="lightbox-image-container">
+<br>  
+    <!-- ИКОНКА + ТЕКСТ СВЕРХУ -->
+ <div class="lightbox-header">
+<br> <br>  
+  <div class="lightbox-icon-wrap">
+    <img id="lightboxIcon" class="lightbox-icon" alt="">
+  </div>
+
+  <div id="lightboxTitle" class="lightbox-text"></div>
+
+  <div id="lightboxDescription" class="lightbox-description"></div>
+
+</div>
+
+    <!-- ОСНОВНОЕ ИЗОБРАЖЕНИЕ -->
+    <img id="lightboxImage" alt="">
+  </div>
+
+  <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
+
+</div>
+
+
+ 
+</section>
+
+<!-- О ПРАКТИКЕ -->
+<section class="reveal">
+  <div class="glass card reviews-container" style="padding: 24px;">
+    <h3 style="text-align:center; margin-bottom:16px">О моей практике</h3>
+    <p style="margin-bottom: 12px; line-height: 1.6;">
+      Я помогаю людям находить ответы на самые важные вопросы: о смысле жизни, предназначении, отношениях и внутренней гармонии. В моей работе сочетаются глубокие знания кармологии, нумерологии и современной психологии.
+    </p>
+    <p style="margin-bottom: 16px; line-height: 1.6;">
+      Каждая консультация — это индивидуальный подход, где я учитываю вашу уникальную историю и помогаю раскрыть внутренний потенциал.
+    </p>
+    <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTA3MDAyMDc5MTYxNzc4/?story_media_id=3440164543306763721#" target="_blank" style="text-decoration: none;">
+  <button class="btn instagram-gradient" style="width: 100%;">Больше в моих сторис</button>
+</a>
+  </div>
+</section>
+
+<!-- СТАТИСТИКА -->
+<section class="reveal">
+  <div class="glass-clean" style="padding: 24px;">
+    <h3 style="text-align:center; margin-bottom:20px">Немного статистики в цифрах</h3>
+    <div class="grid-2" style="gap: 16px;">
+      <div class="glass card" style="padding: 20px; text-align: center; min-height: auto;">
+        <div class="stat-number" data-target="92" style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">0</div>
+        <p style="font-size: 12px; margin: 0;">клиентов оставляют положительные отзывы</p>
+      </div>
+      
+      <div class="glass card" style="padding: 20px; text-align: center; min-height: auto;">
+        <div class="stat-number" data-target="85" style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">0</div>
+        <p style="font-size: 12px; margin: 0;">отмечают улучшения уже после первого сеанса</p>
+      </div>
+      
+      <div class="glass card" style="padding: 20px; text-align: center; min-height: auto;">
+        <div class="stat-number" data-target="500" style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">0</div>
+        <p style="font-size: 12px; margin: 0;">проведённых консультаций и сессий</p>
+      </div>
+      
+      <div class="glass card" style="padding: 20px; text-align: center; min-height: auto;">
+        <div class="stat-number" data-target="7" style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">0</div>
+        <p style="font-size: 12px; margin: 0;">лет теории и практики</p>
+      </div>
+    </div>
+  </div>
+</section>
+  
+<!-- FEEDBACK SLIDER -->
+<section class="reveal">
+  <div class="glass card reviews-container">
+    <h3 style="text-align:center; margin-bottom:12px">Отзывы моих клиентов</h3>
+    <div class="reviews-track" id="reviewsTrack">
+      <div class="card review-card">
+        <strong>Анна, 34 года</strong>
+        <p>После сеанса регрессии я наконец поняла причины своих страхов. Елена очень деликатно провела меня через процесс. Благодарю! 🙏</p>
+      </div>
+      <div class="card review-card">
+        <strong>Игорь, 41 год</strong>
+        <p>Нумерологический разбор показал мои сильные стороны и точки роста. Теперь понимаю, почему в жизни происходили те или иные события.</p>
+      </div>
+      <div class="card review-card">
+        <strong>Мария, 28 лет</strong>
+        <p>Кармическая диагностика помогла мне разобраться в отношениях с мамой. Столько лет носила обиду, а теперь чувствую освобождение ✨</p>
+      </div>
+      <div class="card review-card">
+        <strong>Дмитрий, 45 лет</strong>
+        <p>Скептически относился к эзотерике, но решил попробовать. Сеанс открыл глаза на многие вещи. Рекомендую!</p>
+      </div>
+    </div>
+    <div class="review-dots" id="reviewDots"></div>
+  </div>
+</section>
+
+  <!-- ПОДАРОЧНАЯ КАРТА -->
+<section class="reveal">
+  <div class="glass card reviews-container no-diamond" style="padding: 24px;">
+    <h3 style="text-align:center; margin-bottom:20px">ПОДАРОЧНЫЙ СЕРТИФИКАТ</h3>
+    
+    <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
+      <!-- Изображение карты -->
+      <img src="https://github.com/Vdffrfr333434/karma2/blob/main/GCRender_1-ezgif.com-video-to-webp-converter.webp?raw=true" 
+           alt="Gift Card" 
+           style="width: 100%; border-radius: 12px; display: block;">
+      
+      <!-- Кнопки номиналов поверх карты -->
+      <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; display: flex; gap: 7px; justify-content: center;">
+        
+        <a href="https://your-payment-link.com/2500" target="_blank" style="text-decoration: none;">
+          <button class="btn" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$2500</button>
+        </a>
+        
+        <a href="https://your-payment-link.com/5000" target="_blank" style="text-decoration: none;">
+          <button class="btn" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$5000</button>
+        </a>
+        
+        <a href="https://your-payment-link.com/7500" target="_blank" style="text-decoration: none;">
+          <button class="btn" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$7500</button>
+        </a>
+        
+        <a href="https://your-payment-link.com/10000" target="_blank" style="text-decoration: none;">
+          <button class="btn" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$10000</button>
+        </a>
+        
+      </div>
+    </div>
+    
+    <p style="text-align: center; margin-top: 16px; font-size: 12px; opacity: 0.8;">
+      Внутренний баланс и равновесие идеальный подарок для близких на любой праздник.
+    </p>
+  </div>
+</section>
+
+<!-- PRICES -->
+<section class="reveal">
+  <div class="grid-2">
+    <div class="glass card price-card">
+      <h3>Консультация</h3>
+     <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+  <div class="price">$3 500</div>
+  <div style="font-size: 16px; color: rgba(255,255,255,0.5); text-decoration: line-through;">$5 000</div>
+</div>
+      <ul>
+        <li>1 час личного времени</li>
+        <li>Разбор вашей ситуации</li>
+        <li>Рекомендации и практики</li>
+        <li>Ответы на вопросы</li>
+      </ul>
+      <button class="btn">Записаться</button>
+    </div>
+    
+    <div class="glass card price-card">
+      <h3>Регрессия</h3>
+  <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+  <div class="price">$5 000</div>
+  <div style="font-size: 16px; color: rgba(255,255,255,0.5); text-decoration: line-through;">$8 000</div>
+</div>
+      <ul>
+        <li>2 часа глубинной работы</li>
+        <li>Безопасное погружение</li>
+        <li>Проработка травм и блоков</li>
+        <li>Запись сеанса</li>
+      </ul>
+      <button class="btn">Записаться</button>
+    </div>
+    
+    <div class="glass card price-card">
+      <h3>Матрица судьбы</h3>
+   <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+  <div class="price">$7 500</div>
+  <div style="font-size: 16px; color: rgba(255,255,255,0.5); text-decoration: line-through;">$16 500</div>
+</div>
+      <ul>
+        <li>Полный нумерологический расчёт</li>
+        <li>Разбор всех энергий</li>
+        <li>Прогноз на год</li>
+        <li>Калькулятор удачи</li>
+        <li>PDF-отчёт</li>
+        </ul>
+      <button class="btn">Записаться</button>
+    </div>
+    
+    <div class="glass card price-card">
+      <h3>Трансформация</h3>
+    <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+  <div class="price">$18 000</div>
+  <div style="font-size: 16px; color: rgba(255,255,255,0.5); text-decoration: line-through;">$22 500</div>
+</div>
+      <ul>
+        <li>3 сеанса по выбору</li>
+        <li>Комплексная работа</li>
+        <li>Поддержка в чате 24/7</li>
+        <li>Персональные практики</li>
+        <li>Экономия 3 500$</li>
+      </ul>
+      <button class="btn">Записаться</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section class="reveal">
+ <div class="glass card no-diamond" style="align-items:center; gap:12px; padding:20px">
+    <h3>Как со мной связаться:</h3>
+    <div class="grid-4">
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://www.instagram.com/karmolog_mariana"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I1.png?raw=true" alt="" width="25"></a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://www.threads.com/@karmolog_mariana"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I2.png?raw=true" alt="" width="25"></a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://t.me/Maryasha777"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I3.png?raw=true" alt="" width="25"></a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="@mail"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I4.png?raw=true" alt="" width="25"></a>
+    </div>
+  </div> 
+</section>
+
+</div>
+
+</body>
+<script>
+  // ===== MORPHING GRADIENT =====
+  const canvas = document.getElementById('gradient-canvas');
+  const ctx = canvas.getContext('2d');
+  const noiseCanvas = document.getElementById('noise-overlay');
+  const noiseCtx = noiseCanvas.getContext('2d');
+
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+  noiseCanvas.width = width;
+  noiseCanvas.height = height;
+
+  const colorPalette = [
+    [72, 58, 160],
+  [20, 50, 65],
+  [92, 180, 150],
+  [57, 63, 29],
+  [90, 30, 70],
+];
+
+  class ColorBlob {
+    constructor(x, y, colorIndex) {
+      this.x = x;
+      this.y = y;
+      this.baseRadius = 200 + Math.random() * 150;
+      this.color = colorPalette[colorIndex];
+      this.offset = Math.random() * Math.PI * 2;
+      this.speed = 0.0003 + Math.random() * 0.0002;
+    }
+
+    update(time) {
+      this.x += Math.sin(time * this.speed + this.offset) * 0.2;
+      this.y += Math.cos(time * this.speed * 1.3 + this.offset) * 0.2;
+      this.radius = this.baseRadius + Math.sin(time * 0.001 + this.offset) * 30;
+    }
+
+    draw(time) {
+      const gradient = ctx.createRadialGradient(
+        this.x, this.y, 0,
+        this.x, this.y, this.radius
+      );
+
+      const brightness = 0.9 + Math.sin(time * 0.002 + this.offset) * 0.1;
+      
+      gradient.addColorStop(0, `rgba(${this.color[0] * brightness}, ${this.color[1] * brightness}, ${this.color[2] * brightness}, 1)`);
+      gradient.addColorStop(0.4, `rgba(${this.color[0] * brightness}, ${this.color[1] * brightness}, ${this.color[2] * brightness}, 0.6)`);
+      gradient.addColorStop(1, `rgba(${this.color[0] * brightness}, ${this.color[1] * brightness}, ${this.color[2] * brightness}, 0)`);
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+    }
+  }
+
+  const blobs = [
+    new ColorBlob(width * 0.2, height * 0.3, 0),
+    new ColorBlob(width * 0.8, height * 0.2, 1),
+    new ColorBlob(width * 0.5, height * 0.7, 2),
+    new ColorBlob(width * 0.1, height * 0.8, 3),
+    new ColorBlob(width * 0.9, height * 0.6, 4),
+    new ColorBlob(width * 0.6, height * 0.4, 1),
+    new ColorBlob(width * 0.3, height * 0.6, 2)
+  ];
+
+  function drawNoise() {
+    const noiseWidth = Math.floor(width / 2);
+    const noiseHeight = Math.floor(height / 2);
+    const imageData = noiseCtx.createImageData(noiseWidth, noiseHeight);
+    const data = imageData.data;
+    
+    for (let i = 0; i < data.length; i += 4) {
+      const noise = Math.random() * 255;
+      data[i] = noise;
+      data[i + 1] = noise;
+      data[i + 2] = noise;
+      data[i + 3] = 255;
+    }
+    
+    noiseCtx.clearRect(0, 0, width, height);
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = noiseWidth;
+    tempCanvas.height = noiseHeight;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.putImageData(imageData, 0, 0);
+    
+    noiseCtx.imageSmoothingEnabled = false;
+    noiseCtx.drawImage(tempCanvas, 0, 0, noiseWidth, noiseHeight, 0, 0, width, height);
+  }
+
+  let time = 0;
+  let noiseFrame = 0;
+
+  function animate() {
+    ctx.fillStyle = 'rgba(10, 10, 10, 1)';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.globalCompositeOperation = 'lighter';
+    
+    blobs.forEach(blob => {
+      blob.update(time);
+      blob.draw(time);
+    });
+
+    ctx.globalCompositeOperation = 'source-over';
+
+    noiseFrame++;
+    if (noiseFrame % 10 === 0) {
+      drawNoise();
+    }
+
+    time++;
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    noiseCanvas.width = width;
+    noiseCanvas.height = height;
+    
+    blobs.forEach((blob, i) => {
+      if (i === 0) { blob.x = width * 0.2; blob.y = height * 0.3; }
+      if (i === 1) { blob.x = width * 0.8; blob.y = height * 0.2; }
+      if (i === 2) { blob.x = width * 0.5; blob.y = height * 0.7; }
+      if (i === 3) { blob.x = width * 0.1; blob.y = height * 0.8; }
+      if (i === 4) { blob.x = width * 0.9; blob.y = height * 0.6; }
+      if (i === 5) { blob.x = width * 0.6; blob.y = height * 0.4; }
+      if (i === 6) { blob.x = width * 0.3; blob.y = height * 0.6; }
+    });
+    
+    drawNoise();
+  });
+
+  drawNoise();
+  animate();
+
+  // ===== СТАТИСТИКА АНИМАЦИЯ =====
+  const statNumbers = document.querySelectorAll('.stat-number');
+  let statsAnimated = false;
+
+  const statsObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !statsAnimated) {
+        statsAnimated = true;
+        animateStats();
+      }
+    });
+  }, { threshold: 0.8 });
+
+  statNumbers.forEach(stat => statsObserver.observe(stat));
+
+  function animateStats() {
+    statNumbers.forEach(stat => {
+      const target = parseInt(stat.getAttribute('data-target'));
+      const duration = 2000;
+      const increment = target / (duration / 16);
+      let current = 0;
+
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        
+        const displayValue = Math.floor(current);
+        if (target === 92 || target === 85) {
+          stat.textContent = displayValue + '%';
+        } else if (target === 500) {
+          stat.textContent = displayValue + '+';
+        } else {
+          stat.textContent = displayValue + '+';
+        }
+      }, 16);
+    });
+  }
+
+  // ===== REVEAL ANIMATION =====
+  const items=document.querySelectorAll('.reveal');
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+      }
+    });
+  },{threshold:0.4});
+  items.forEach(el=>io.observe(el));
+
+  // ===== REVIEWS SLIDER =====
+  const track = document.getElementById('reviewsTrack');
+  const dotsContainer = document.getElementById('reviewDots');
+  const reviews = track.querySelectorAll('.review-card');
+  let currentIndex = 0;
+  let autoSlideInterval;
+
+  reviews.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = dotsContainer.querySelectorAll('.dot');
+
+  function goToSlide(index) {
+    currentIndex = index;
+    const reviewWidth = reviews[0].offsetWidth;
+    const gap = 16;
+    const offset = (reviewWidth + gap) * currentIndex;
+    track.style.transform = `translateX(-${offset}px)`;
+    
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % reviews.length;
+    goToSlide(currentIndex);
+  }
+
+  function startAutoSlide() {
+    autoSlideInterval = setInterval(nextSlide, 4000);
+  }
+
+  function stopAutoSlide() {
+    clearInterval(autoSlideInterval);
+  }
+
+  startAutoSlide();
+
+  track.addEventListener('mouseenter', stopAutoSlide);
+  track.addEventListener('mouseleave', startAutoSlide);
+
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+
+  track.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+    stopAutoSlide();
+  });
+
+  track.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    currentX = e.touches[0].clientX;
+  });
+
+  track.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    const diff = startX - currentX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && currentIndex < reviews.length - 1) {
+        currentIndex++;
+      } else if (diff < 0 && currentIndex > 0) {
+        currentIndex--;
+      }
+      goToSlide(currentIndex);
+    }
+    isDragging = false;
+    startAutoSlide();
+  });
+
+  window.addEventListener('resize', () => {
+    goToSlide(currentIndex);
+  });
+
+
+
+
+
+// ===============================
+// ===== GALLERY DATA (6 slides)
+// ===============================
+// URL для превью (верхней картинки в стопке)
+var previewImage = 'https://github.com/Vdffrfr333434/karma2/blob/main/CoverBG-ezgif.com-video-to-webp-converter.webp?raw=true';
+var previewImage2 = 'https://github.com/Vdffrfr333434/karma2/blob/main/CoverBG_1-ezgif.com-video-to-webp-converter.webp?raw=true';  // добавьте эту строку
+var gallerySlides = [
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G1.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K1.png',
+    title: 'КАРМОЛОГИЯ',
+    description: 'Кармология в работе с ментальным здоровьем. В контексте ментального благополучия кармология применяется как инструмент глубокого психоанализа и поиска первопричин внутренних конфликтов. Она дополняет традиционные подходы, предлагая взгляд на ментальное состояние через призму личной ответственности и системных связей.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G2.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K2.png',
+    title: 'РЕГРЕССИЯ',
+    description: 'Регрессия — это метод глубокой работы с подсознанием, который позволяет совершить путешествие к истокам нынешних проблем. Через состояние легкого транса или направленной медитации человек обращается к памяти своего прошлого — событиям раннего детства, внутриутробного периода или прошлых воплощений. Это помогает обнаружить те моменты, где возникли первые страхи, психосоматические блоки или ограничивающие клятвы, которые продолжают влиять на жизнь в настоящем.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G3.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K3.png',
+    title: 'НУМЕРОЛОГИЯ',
+    description: 'Нумерология — это система анализа личности и судьбы через математические вибрации чисел. В основе метода лежит идея о том, что дата рождения и имя человека содержат уникальный цифровой код, определяющий его потенциал, скрытые таланты и жизненные задачи. С помощью нумерологических расчетов можно расшифровать индивидуальную «дорожную карту», которая помогает принимать верные решения в карьере, финансах и личных отношениях.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G4.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K4.png',
+    title: 'МАТРИЦА СУДЬБЫ',
+    description: 'Матрица судьбы — это система самопознания, объединяющая нумерологию и архетипическую психологию. Метод строится на расчете индивидуальной диаграммы по дате рождения, где каждая точка соответствует определенной энергии (одному из 22 высших арканов). Это позволяет составить детальный психологический портрет и увидеть графическое воплощение жизненного пути человека.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G5.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K5.png',
+    title: 'ГЕШТАЛЬТ-ТЕРАПИЯ',
+    description: 'Гештальт-терапия — это направление гуманистической психологии, основанное на принципах целостности и осознанности. Главная идея метода заключается в том, что психика человека всегда стремится к завершенности (созданию целого образа — гештальта). Если важная ситуация, потребность или эмоция не были прожиты до конца, они остаются «незавершенными гештальтами», которые забирают энергию и проявляются в виде тревоги, неудовлетворенности или телесных зажимов.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G6.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I2.png',
+    title: 'КАРАТЕЛЬНАЯ ПСИХИАТРИЯ',
+    description: 'Карательная психиатрия — это использование психиатрических диагнозов, лечения и изоляции в немедицинских целях для подавления инакомыслия, политического контроля или наказания личностей, неугодных власти. В этой системе медицина перестает быть инструментом помощи и превращается в механизм репрессий, где психиатрические больницы фактически выполняют функции тюрем.'
+  }
+];
+
+
+
+var galleryCurrentIndex = 0;
+
+
+// ===============================
+// ===== STACK (preview cards)
+// ===============================
+
+function createStack() {
+    var stack = document.getElementById('photoStack');
+    stack.innerHTML = '';
+
+    // Создаем 3 карточки для стопки
+    var stackImages = [
+        gallerySlides[2].image,          // Нижняя (из галереи)
+        previewImage2,                   // Средняя (второе превью)
+        previewImage                     // Верхняя (первое превью)
+    ];
+
+    // Добавляем карточки в обратном порядке
+    for (var i = stackImages.length - 1; i >= 0; i--) {
+        var item = document.createElement('div');
+        item.className = 'photo-stack-item';
+
+        var img = document.createElement('img');
+        img.src = stackImages[i];
+        img.alt = '';
+
+        item.appendChild(img);
+        stack.appendChild(item);
+    }
+}
+
+// ===============================
+// ===== LIGHTBOX CONTROL
+// ===============================
+
+function openLightbox(index) {
+    galleryCurrentIndex = index;
+    var stack = document.getElementById('photoStack');
+    var lightbox = document.getElementById('lightbox');
+
+    // Карточки раздвигаются
+    stack.classList.add('opening');
+
+    setTimeout(function() {
+        // Открываем галерею
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        updateLightbox();
+    }, 200);  // было 400 - уменьшили задержку
+}
+
+function closeLightbox() {
+    var stack = document.getElementById('photoStack');
+    var lightbox = document.getElementById('lightbox');
+
+    // Закрываем галерею
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+
+    // Убираем opening и добавляем closing
+    stack.classList.remove('opening');
+    stack.classList.add('closing');
+
+    setTimeout(function() {
+        // Убираем класс анимации
+        stack.classList.remove('closing');
+    }, 50);
+}
+function changeImage(direction) {
+    galleryCurrentIndex += direction;
+
+    if (galleryCurrentIndex < 0) {
+        galleryCurrentIndex = gallerySlides.length - 1;
+    } else if (galleryCurrentIndex >= gallerySlides.length) {
+        galleryCurrentIndex = 0;
+    }
+
+    updateLightbox();
+}
+
+
+// ===============================
+// ===== UPDATE SLIDE CONTENT
+// ===============================
+
+function updateLightbox() {
+    var slide = gallerySlides[galleryCurrentIndex];
+
+    document.getElementById('lightboxImage').src = slide.image;
+    document.getElementById('lightboxIcon').src  = slide.icon;
+
+    document.getElementById('lightboxTitle').textContent = slide.title;
+    document.getElementById('lightboxDescription').textContent = slide.description;
+}
+
+
+
+// ===============================
+// ===== EVENTS
+// ===============================
+
+document.getElementById('lightbox').addEventListener('click', function (e) {
+    if (e.target.id === 'lightbox') {
+        closeLightbox();
+    }
+});
+
+document.addEventListener('keydown', function (e) {
+    var lightbox = document.getElementById('lightbox');
+    if (!lightbox.classList.contains('active')) return;
+
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') changeImage(-1);
+    if (e.key === 'ArrowRight') changeImage(1);
+});
+
+
+// ===============================
+// ===== INIT
+// ===============================
+
+createStack();
+
+
+
+
+  
+</script>
+
+
+</html>
