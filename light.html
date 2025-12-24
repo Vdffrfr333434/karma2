@@ -1491,10 +1491,10 @@ function openLightbox(index) {
         document.body.style.overflow = 'hidden';
         updateLightbox();
         
-        // Инициализируем canvas
+        // Инициализируем canvas с задержкой побольше
         setTimeout(() => {
           initLightboxCanvas();
-        }, 100);
+        }, 300);
     }, 200);
 }
 
@@ -1584,13 +1584,21 @@ let lightboxBlobs = [];
 
 function initLightboxCanvas() {
   lightboxCanvas = document.getElementById('lightboxCanvas');
-  if (!lightboxCanvas) return;
+  if (!lightboxCanvas) {
+    console.error('Canvas не найден!');
+    return;
+  }
   
   lightboxCtx = lightboxCanvas.getContext('2d');
   
+  // Получаем реальные размеры контейнера
   const container = lightboxCanvas.parentElement;
-  lightboxCanvas.width = container.offsetWidth;
-  lightboxCanvas.height = container.offsetHeight;
+  const rect = container.getBoundingClientRect();
+  
+  lightboxCanvas.width = rect.width;
+  lightboxCanvas.height = rect.height;
+  
+  console.log('Canvas размеры:', lightboxCanvas.width, 'x', lightboxCanvas.height);
   
   // Создаем блобы для lightbox
   lightboxBlobs = [
@@ -1601,6 +1609,7 @@ function initLightboxCanvas() {
     new ColorBlob(lightboxCanvas.width * 0.7, lightboxCanvas.height * 0.4, 4)
   ];
   
+  lightboxTime = 0;
   animateLightboxCanvas();
 }
 
@@ -1609,6 +1618,7 @@ let lightboxTime = 0;
 function animateLightboxCanvas() {
   if (!lightboxCtx || !lightboxCanvas) return;
   
+  // Заливаем светлым фоном
   lightboxCtx.fillStyle = '#faf8f5';
   lightboxCtx.fillRect(0, 0, lightboxCanvas.width, lightboxCanvas.height);
   
@@ -1643,6 +1653,7 @@ function stopLightboxCanvas() {
     cancelAnimationFrame(lightboxAnimationId);
     lightboxAnimationId = null;
   }
+  lightboxTime = 0;
 }
   
 </script>
