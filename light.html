@@ -1507,7 +1507,8 @@ function updateLightbox() {
 // ===============================
 
 document.getElementById('lightbox').addEventListener('click', function (e) {
-    if (e.target.id === 'lightbox') {
+    // Закрываем при клике на затемнённый фон (но не на контейнер слайда)
+    if (e.target === this) {
         closeLightbox();
     }
 });
