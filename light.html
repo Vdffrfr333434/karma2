@@ -553,7 +553,13 @@ background: rgba(123, 104, 168, 0.1);
 }
 
  /* PRISMATIC GRAIN BACKGROUND - LIGHT */
+/* PRISMATIC GRAIN BACKGROUND - LIGHT */
 .prism-bg {
+  position: relative;  /* ← ДОБАВЬТЕ */
+  width: 100%;  /* ← ДОБАВЬТЕ */
+  border-radius: 10px;
+  height: 100%;  /* ← ДОБАВЬТЕ (или можно удалить, если не нужна) */
+  background-clip: padding-box;
   background-color: #fdfbfe;  /* очень светлый фиолетовый */
 
   background-image:
@@ -583,6 +589,11 @@ background: rgba(123, 104, 168, 0.1);
       transparent 65%
     );
 
+  background-size: 200% 200%;
+  animation: prism-drift 45s ease-in-out infinite;
+
+  filter: saturate(1.1) contrast(1.02);
+  overflow: hidden;
   box-shadow: 0 8px 32px rgba(139, 123, 165, 0.12);
 }
      
