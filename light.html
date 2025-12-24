@@ -318,6 +318,46 @@
       margin-bottom:4px;
     }
 
+/* Золотистая кнопка "Записаться" с коричневой надписью */
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.6);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: #5c4033;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+  background: linear-gradient(135deg, #f4d03f 0%, #ffd700 50%, #f4d03f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.5),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+     
+
 .btn {
   position: relative;
   overflow: hidden;
@@ -466,7 +506,7 @@
     }
      /* Инверсия иконок контактов для светлой темы */
 .grid-4 img {
-  filter: invert(0.3) sepia(1) saturate(3) hue-rotate(15deg);
+  filter: invert(0.3) sepia(1) saturate(1) hue-rotate(15deg);
 }
 
 /* Стеклянный эффект для контактов */
@@ -988,7 +1028,7 @@
         <li>Рекомендации и практики</li>
         <li>Ответы на вопросы</li>
       </ul>
-      <button class="btn">Записаться</button>
+      <button class="btn-gold">Записаться</button>
     </div>
     
     <div class="glass card price-card">
@@ -1003,7 +1043,7 @@
         <li>Проработка травм и блоков</li>
         <li>Запись сеанса</li>
       </ul>
-      <button class="btn">Записаться</button>
+      <button class="btn-gold">Записаться</button>
     </div>
     
     <div class="glass card price-card">
@@ -1019,7 +1059,7 @@
         <li>Калькулятор удачи</li>
         <li>PDF-отчёт</li>
         </ul>
-      <button class="btn">Записаться</button>
+      <button class="btn-gold">Записаться</button>
     </div>
     
     <div class="glass card price-card">
@@ -1035,7 +1075,7 @@
         <li>Персональные практики</li>
         <li>Экономия 3 500$</li>
       </ul>
-      <button class="btn">Записаться</button>
+      <button class="btn-gold">Записаться</button>
     </div>
   </div>
 </section>
