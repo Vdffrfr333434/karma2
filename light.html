@@ -1447,20 +1447,12 @@ function openLightbox(index) {
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
         updateLightbox();
-        
-        // Инициализируем canvas с задержкой побольше
-        setTimeout(() => {
-          initLightboxCanvas();
-        }, 300);
     }, 200);
 }
 
 function closeLightbox() {
     var stack = document.getElementById('photoStack');
     var lightbox = document.getElementById('lightbox');
-
-    // Останавливаем canvas
-    stopLightboxCanvas();
     
     // Закрываем галерею
     lightbox.classList.remove('active');
