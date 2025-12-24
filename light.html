@@ -1514,13 +1514,21 @@ function openLightbox(index) {
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
         updateLightbox();
-    }, 200);  // было 400 - уменьшили задержку
+        
+        // Инициализируем canvas
+        setTimeout(() => {
+          initLightboxCanvas();
+        }, 100);
+    }, 200);
 }
 
 function closeLightbox() {
     var stack = document.getElementById('photoStack');
     var lightbox = document.getElementById('lightbox');
 
+    // Останавливаем canvas
+    stopLightboxCanvas();
+    
     // Закрываем галерею
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
@@ -1534,6 +1542,7 @@ function closeLightbox() {
         stack.classList.remove('closing');
     }, 50);
 }
+  
 function changeImage(direction) {
     galleryCurrentIndex += direction;
 
@@ -1659,22 +1668,6 @@ function stopLightboxCanvas() {
     lightboxAnimationId = null;
   }
 }
-
-// Обновляем функцию openLightbox
-const originalOpenLightbox = openLightbox;
-openLightbox = function(index) {
-  originalOpenLightbox(index);
-  setTimeout(() => {
-    initLightboxCanvas();
-  }, 100);
-};
-
-// Обновляем функцию closeLightbox
-const originalCloseLightbox = closeLightbox;
-closeLightbox = function() {
-  stopLightboxCanvas();
-  originalCloseLightbox();
-};
   
 </script>
 
