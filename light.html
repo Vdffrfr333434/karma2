@@ -1400,6 +1400,7 @@
 // URL для превью (верхней картинки в стопке)
 var previewImage = 'https://github.com/Vdffrfr333434/karma2/blob/main/Matrix.webp?raw=true';
 var previewImage2 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Matrix2.png?raw=true';  // добавьте эту строку
+var previewImage3 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Matrix.webp?raw=true'; // ← ДОБАВЬТЕ
 var gallerySlides = [
   {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G1.png',
@@ -1453,8 +1454,8 @@ function createStack() {
     stack.innerHTML = '';
 
     // Создаем 3 карточки для стопки
-    var stackImages = [
-        gallerySlides[2].image,          // Нижняя (из галереи)
+ var stackImages = [
+        previewImage3,          // Нижняя (из галереи) ← ВОТ ЭТА
         previewImage2,                   // Средняя (второе превью)
         previewImage                     // Верхняя (первое превью)
     ];
