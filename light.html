@@ -6,17 +6,17 @@
   <title>Марьяна | Кармолог | Регрессолог</title>
    <style>
     /* MOBILE FIRST - LIGHT THEME */
-   :root{
-      --bg1:#d4af37;
-      --bg2:#c9a0dc;
-      --bg3:#8b7355;
-      --glass:rgba(139, 115, 85, 0.08);
-      --border:rgba(139, 115, 85, 0.2);
-      --text:#6b4423;
-      --text-muted:#8b7355;
-      --gold:#d4af37;
-      --lavender:#c9a0dc;
-     }
+  :root{
+  --bg1:#9b7fd4;  /* фиолетовый вместо золотого */
+  --bg2:#c9a0dc;  /* остается лавандовый */
+  --bg3:#8b7ba5;  /* фиолетово-серый вместо коричневого */
+  --glass:rgba(139, 123, 165, 0.08);  /* фиолетовый оттенок */
+  --border:rgba(139, 123, 165, 0.2);  /* фиолетовый оттенок */
+  --text:#5a4470;  /* темно-фиолетовый вместо коричневого */
+  --text-muted:#8b7ba5;  /* приглушенный фиолетовый */
+  --gold:#9b7fd4;  /* фиолетовый вместо золотого */
+  --lavender:#c9a0dc;  /* остается */
+}
 
     *{box-sizing:border-box}
  body {
@@ -25,7 +25,7 @@
   color: var(--text);
   overflow-x: hidden;
   position: relative;
-  background: #faf8f5;
+   background: #f8f5fa;  /* светло-фиолетовый оттенок вместо бежевого */
   display: flex;
   justify-content: center;
 }
@@ -90,13 +90,14 @@
     /* glass */
 .glass{
   position: relative;
-  background: rgba(255, 250, 245, 0.65);
-  border: 1px solid rgba(139, 115, 85, 0.15);
+ background: rgba(250, 245, 255, 0.65);  /* фиолетовый оттенок */
+  border: 1px solid rgba(139, 123, 165, 0.15);
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.08);
   border-radius: 10px;
   backdrop-filter:blur(30px);
   -webkit-backdrop-filter:blur(30px);
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.08);
+   
 }
 
 /* Паттерн бриллиантов */
@@ -324,23 +325,29 @@
 .btn-gold {
   position: relative;
   overflow: hidden;
-  border: 1px solid #8B6F47;
+  
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
   text-align: center;
-  color: #5c4033;
+  
   padding: 10px 20px;
-  background: rgba(212, 175, 55, 0.05);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+ 
+ 
   transition: all 0.3s ease;
+
+  border: 1px solid #8b7ba5;  /* фиолетовая рамка */
+  color: #5a4470;  /* фиолетовый текст */
+  background: rgba(155, 127, 212, 0.05);  /* светло-фиолетовый фон */
+  box-shadow: 0 4px 15px rgba(155, 127, 212, 0.2);
 }
 
 .btn-gold:hover {
-  background: rgba(212, 175, 55, 0.05);
+ background: rgba(155, 127, 212, 0.05);
+  box-shadow: 0 6px 20px rgba(155, 127, 212, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+  
 }
 
 .btn-gold::before {
@@ -363,22 +370,25 @@
 .btn-certificate {
   position: relative;
   overflow: hidden;
-  border: 1px solid #1d848a;
+  border: 1px solid #7b68a8;  /* темно-фиолетовая рамка */
+  color: #7b68a8;  /* темно-фиолетовый текст */
+  background: rgba(123, 104, 168, 0.1);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
   text-align: center;
-  color: #1d848a;
+  
   padding: 10px 20px;
-  background: rgba(139, 111, 71, 0.1);
+ 
   transition: all 0.3s ease;
 }
 
 .btn-certificate:hover {
-  background: rgba(139, 111, 71, 0.1);
+background: rgba(123, 104, 168, 0.1);
+  box-shadow: 0 4px 16px rgba(123, 104, 168, 0.2);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(139, 111, 71, 0.2);
+
 }
      
 
@@ -398,9 +408,10 @@
 }
 
 .btn:hover {
-  background: rgba(212, 175, 55, 0.25);
+ background: rgba(155, 127, 212, 0.25);  /* фиолетовый hover */
+  box-shadow: 0 4px 16px rgba(139, 123, 165, 0.15);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(139, 115, 85, 0.15);
+
 }
 
 .btn::before {
@@ -410,10 +421,10 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
+ background: linear-gradient(
     90deg,
     transparent,
-    rgba(212, 175, 55, 0.3),
+    rgba(155, 127, 212, 0.3),  /* фиолетовый shimmer */
     transparent
   );
   animation: shimmer 3s infinite;
@@ -451,12 +462,12 @@
 /* Чистый стеклянный эффект */
 .glass-clean {
   position: relative;
-  background: rgba(255, 250, 245, 0.7);
-  border: 1px solid rgba(139, 115, 85, 0.2);
+ background: rgba(250, 245, 255, 0.7);  /* фиолетовый оттенок */
+  border: 1px solid rgba(139, 123, 165, 0.2);
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.1);
   border-radius: 10px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.1);
   overflow: hidden;
 }
 
@@ -489,7 +500,7 @@
       align-items:stretch;
     }
     .glass.reviews-container {
-  background: rgba(255, 250, 245, 0.75);
+ background: rgba(250, 245, 255, 0.75);  /* фиолетовый оттенок */
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
 }
@@ -498,7 +509,7 @@
       min-width:100%;
       max-width:100%;
       flex-shrink:0;
-      background:rgba(212, 175, 55, 0.08);
+     background:rgba(155, 127, 212, 0.08);  /* светло-фиолетовый фон */
       border-radius:6px;
       color: var(--text);
     }
@@ -512,12 +523,12 @@
       width:8px;
       height:8px;
       border-radius:50%;
-      background:rgba(139, 115, 85, 0.3);
+     background:rgba(139, 123, 165, 0.3);  /* фиолетовые точки */
       cursor:pointer;
       transition:.3s;
     }
     .dot.active{
-      background:rgba(212, 175, 55, 0.9);
+   background:rgba(155, 127, 212, 0.9);  /* активная фиолетовая */
       width:24px;
       border-radius:4px;
     }
@@ -530,12 +541,12 @@
     }
      /* Инверсия иконок контактов для светлой темы */
 .grid-4 img {
-  filter: invert(0.7) sepia(1) saturate(2) hue-rotate(15deg);
+  filter: invert(0.4) sepia(1) saturate(1.5) hue-rotate(240deg);  /* фиолетовый оттенок */
 }
 
 /* Стеклянный эффект для контактов */
 .glass.service-card {
-  background: rgba(255, 250, 245, 0.7);
+   background: rgba(250, 245, 255, 0.7);  /* фиолетовый оттенок */
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   padding: 20px;
@@ -543,48 +554,38 @@
 
  /* PRISMATIC GRAIN BACKGROUND - LIGHT */
 .prism-bg {
-  position: relative;
-  width: 100%;
-  border-radius: 10px;
-  height: 100%;
-  background-clip: padding-box;
-  background-color: #fdfbf8;
+  background-color: #fdfbfe;  /* очень светлый фиолетовый */
 
   background-image:
     radial-gradient(
       at 15% 25%,
-      rgba(212, 175, 55, 0.15),
+      rgba(155, 127, 212, 0.15),  /* фиолетовый */
       transparent 55%
     ),
     radial-gradient(
       at 85% 20%,
-      rgba(201, 160, 220, 0.15),
+      rgba(201, 160, 220, 0.15),  /* лавандовый */
       transparent 60%
     ),
     radial-gradient(
       at 70% 80%,
-      rgba(212, 175, 55, 0.2),
+      rgba(155, 127, 212, 0.2),  /* фиолетовый */
       transparent 55%
     ),
     radial-gradient(
       at 30% 75%,
-      rgba(201, 160, 220, 0.18),
+      rgba(201, 160, 220, 0.18),  /* лавандовый */
       transparent 60%
     ),
     radial-gradient(
       at 55% 55%,
-      rgba(139, 115, 85, 0.1),
+      rgba(139, 123, 165, 0.1),  /* серо-фиолетовый */
       transparent 65%
     );
 
-  background-size: 200% 200%;
-  animation: prism-drift 45s ease-in-out infinite;
-
-  filter: saturate(1.1) contrast(1.02);
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.12);
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.12);
 }
-
+     
 .prism-bg::after {
   content: "";
   position: absolute;
@@ -646,7 +647,7 @@
     height: 100%;
     border-radius: var(--card-radius);
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(139, 115, 85, 0.2);
+     box-shadow: 0 4px 12px rgba(139, 123, 165, 0.2);  /* фиолетовая тень */
     transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     background: transparent;
     border: none;
@@ -725,7 +726,7 @@
 
 .lightbox.active {
   display: flex;
-  background: rgba(250, 248, 245, 0.95);
+ background: rgba(248, 245, 250, 0.95);  /* светло-фиолетовый фон */
 }
 
 .lightbox-image-container {
@@ -738,9 +739,9 @@
   opacity: 0;
   transform: scale(0.85);
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  background: #faf8f5;
+ background: #f8f5fa;  /* светло-фиолетовый */
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.25);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.25);
 }
 
 .lightbox.active .lightbox-image-container {
@@ -763,7 +764,7 @@
   font-size: 16px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #6b4423;
+ color: #5a4470;  /* темно-фиолетовый */
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
@@ -775,7 +776,7 @@
   line-height: 1.6;
   letter-spacing: 0.01em;
   text-align: center;
-  color: #6b4423;
+   color: #5a4470;  /* темно-фиолетовый */
   width: 100%;
 }
 
@@ -785,8 +786,8 @@
   transform: translateY(-50%);
   width: 48px;
   height: 48px;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(139, 115, 85, 0.2);
+   background: rgba(155, 127, 212, 0.15);  /* фиолетовый фон */
+  border: 1px solid rgba(139, 123, 165, 0.2);
   border-radius: 8px;
   color: var(--text);
   font-size: 26px;
@@ -801,8 +802,8 @@
 }
 
 .lightbox-arrow:hover {
-  background: rgba(212, 175, 55, 0.25);
-  box-shadow: 0 4px 16px rgba(139, 115, 85, 0.15);
+ background: rgba(155, 127, 212, 0.25);
+  box-shadow: 0 4px 16px rgba(139, 123, 165, 0.15);
 }
 
 .lightbox-arrow.prev { left: 20px; }
@@ -1002,7 +1003,7 @@
       <h3>Консультация</h3>
      <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
   <div class="price">$3 500</div>
-  <div style="font-size: 16px; color: #8B6F47; text-decoration: line-through;">$5 000</div>
+  <div style="font-size: 16px; color: #8b7ba5; text-decoration: line-through;">$5 000</div>
 </div>
       <ul>
         <li>1 час личного времени</li>
@@ -1017,7 +1018,7 @@
       <h3>Регрессия</h3>
   <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
   <div class="price">$5 000</div>
-  <div style="font-size: 16px; color: #8B6F47; text-decoration: line-through;">$8 000</div>
+  <div style="font-size: 16px; color: #8b7ba5; text-decoration: line-through;">$8 000</div>
 </div>
       <ul>
         <li>2 часа глубинной работы</li>
@@ -1032,7 +1033,7 @@
       <h3>Матрица судьбы</h3>
    <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
   <div class="price">$7 500</div>
-  <div style="font-size: 16px; color: #8B6F47; text-decoration: line-through;">$16 500</div>
+  <div style="font-size: 16px; color: #8b7ba5; text-decoration: line-through;">$16 500</div>
 </div>
       <ul>
         <li>Полный нумерологический расчёт</li>
@@ -1048,7 +1049,7 @@
       <h3>Трансформация</h3>
     <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
   <div class="price">$18 000</div>
-  <div style="font-size: 16px; color: #8B6F47; text-decoration: line-through;">$22 500</div>
+  <div style="font-size: 16px; color: #8b7ba5; text-decoration: line-through;">$22 500</div>
 </div>
       <ul>
         <li>3 сеанса по выбору</li>
@@ -1090,12 +1091,13 @@
   noiseCanvas.width = width;
   noiseCanvas.height = height;
 
-  const colorPalette = [
-    [72, 58, 160],
-  [20, 50, 65],
-  [92, 180, 150],
-  [57, 63, 29],
-  [90, 30, 70],
+// Замените массив colorPalette на:
+const colorPalette = [
+  [120, 100, 200],  // яркий фиолетовый
+  [155, 127, 212],  // средний фиолетовый
+  [201, 160, 220],  // лавандовый
+  [139, 123, 165],  // серо-фиолетовый
+  [180, 140, 230],  // светло-фиолетовый
 ];
 
   class ColorBlob {
