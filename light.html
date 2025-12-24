@@ -711,13 +711,12 @@
   }
 
 /* LIGHTBOX - LIGHT THEME */
+/* LIGHTBOX - LIGHT THEME */
 .lightbox {
   display: none;
   position: fixed;
   inset: 0;
   background: rgba(250, 248, 245, 0);
-  backdrop-filter: blur(0);
-  -webkit-backdrop-filter: blur(0);
   z-index: 9999;
   align-items: center;
   justify-content: center;
@@ -726,9 +725,7 @@
 
 .lightbox.active {
   display: flex;
-  background: rgba(250, 248, 245, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(250, 248, 245, 0.95);
 }
 
 .lightbox-image-container {
@@ -741,6 +738,9 @@
   opacity: 0;
   transform: scale(0.85);
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #faf8f5;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.25);
 }
 
 .lightbox.active .lightbox-image-container {
@@ -748,23 +748,8 @@
   transform: scale(1);
 }
 
-/* Canvas фон для слайдов */
-/* Canvas фон для слайдов */
-.lightbox-slide-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  z-index: 0;
-  box-shadow: 0 8px 32px rgba(139, 115, 85, 0.25);
-}
-
-/* Контент слайда поверх canvas */
-/* Контент слайда поверх canvas */
+/* Контент слайда */
 .lightbox-content-overlay {
-  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
@@ -772,48 +757,25 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  z-index: 1;
-}
-
-.lightbox-icon-wrap {
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-bottom: 20px;
-}
-
-.lightbox-icon {
-  max-width: 100%;
-  max-height: 100%;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(255,255,255,0.5));
 }
 
 .lightbox-text {
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #6b4423;
   width: 100%;
   text-align: center;
-  text-shadow: 0 2px 8px rgba(255,255,255,0.8);
-  margin-bottom: 16px;
-  font-weight: 600;
+  margin-bottom: 20px;
+  font-weight: 700;
 }
 
 .lightbox-description {
-  font-size: 11px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.6;
   letter-spacing: 0.01em;
   text-align: center;
   color: #6b4423;
-  text-shadow: 0 2px 8px rgba(255,255,255,0.8);
   width: 100%;
 }
 
@@ -853,11 +815,11 @@
   }
   
   .lightbox-description {
-    font-size: 10px;
+    font-size: 11px;
   }
   
   .lightbox-text {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
@@ -906,18 +868,12 @@
 
 <!-- Lightbox -->
 <!-- Lightbox -->
+<!-- Lightbox -->
 <div id="lightbox" class="lightbox">
   <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
 
   <div class="lightbox-image-container">
-    <!-- Canvas фон -->
-    <canvas id="lightboxCanvas" class="lightbox-slide-canvas"></canvas>
-    
-    <!-- Контент поверх canvas -->
     <div class="lightbox-content-overlay">
-      <div class="lightbox-icon-wrap">
-        <img id="lightboxIcon" class="lightbox-icon" alt="">
-      </div>
       <div id="lightboxTitle" class="lightbox-text"></div>
       <div id="lightboxDescription" class="lightbox-description"></div>
     </div>
@@ -1539,10 +1495,7 @@ function changeImage(direction) {
 
 function updateLightbox() {
     var slide = gallerySlides[galleryCurrentIndex];
-
-    document.getElementById('lightboxImage').src = slide.image;
-    document.getElementById('lightboxIcon').src  = slide.icon;
-
+    
     document.getElementById('lightboxTitle').textContent = slide.title;
     document.getElementById('lightboxDescription').textContent = slide.description;
 }
@@ -1577,85 +1530,7 @@ createStack();
 
 
 
-// ===== LIGHTBOX CANVAS GRADIENT =====
-let lightboxCanvas = null;
-let lightboxCtx = null;
-let lightboxAnimationId = null;
-let lightboxBlobs = [];
-
-function initLightboxCanvas() {
-  lightboxCanvas = document.getElementById('lightboxCanvas');
-  if (!lightboxCanvas) {
-    console.error('Canvas не найден!');
-    return;
-  }
-  
-  lightboxCtx = lightboxCanvas.getContext('2d');
-  
-  // Получаем реальные размеры контейнера
-  const container = lightboxCanvas.parentElement;
-  const rect = container.getBoundingClientRect();
-  
-  lightboxCanvas.width = rect.width;
-  lightboxCanvas.height = rect.height;
-  
-  console.log('Canvas размеры:', lightboxCanvas.width, 'x', lightboxCanvas.height);
-  
-  // Создаем блобы для lightbox
-  lightboxBlobs = [
-    new ColorBlob(lightboxCanvas.width * 0.2, lightboxCanvas.height * 0.3, 0),
-    new ColorBlob(lightboxCanvas.width * 0.8, lightboxCanvas.height * 0.2, 1),
-    new ColorBlob(lightboxCanvas.width * 0.5, lightboxCanvas.height * 0.7, 2),
-    new ColorBlob(lightboxCanvas.width * 0.3, lightboxCanvas.height * 0.6, 3),
-    new ColorBlob(lightboxCanvas.width * 0.7, lightboxCanvas.height * 0.4, 4)
-  ];
-  
-  lightboxTime = 0;
-  animateLightboxCanvas();
-}
-
-let lightboxTime = 0;
-
-function animateLightboxCanvas() {
-  if (!lightboxCtx || !lightboxCanvas) return;
-  
-  // Заливаем светлым фоном
-  lightboxCtx.fillStyle = '#faf8f5';
-  lightboxCtx.fillRect(0, 0, lightboxCanvas.width, lightboxCanvas.height);
-  
-  lightboxCtx.globalCompositeOperation = 'lighter';
-  
-  lightboxBlobs.forEach(blob => {
-    blob.update(lightboxTime);
-    
-    const gradient = lightboxCtx.createRadialGradient(
-      blob.x, blob.y, 0,
-      blob.x, blob.y, blob.radius
-    );
-    
-    const brightness = 0.9 + Math.sin(lightboxTime * 0.002 + blob.offset) * 0.1;
-    
-    gradient.addColorStop(0, `rgba(${blob.color[0] * brightness}, ${blob.color[1] * brightness}, ${blob.color[2] * brightness}, 0.3)`);
-    gradient.addColorStop(0.4, `rgba(${blob.color[0] * brightness}, ${blob.color[1] * brightness}, ${blob.color[2] * brightness}, 0.15)`);
-    gradient.addColorStop(1, `rgba(${blob.color[0] * brightness}, ${blob.color[1] * brightness}, ${blob.color[2] * brightness}, 0)`);
-    
-    lightboxCtx.fillStyle = gradient;
-    lightboxCtx.fillRect(0, 0, lightboxCanvas.width, lightboxCanvas.height);
-  });
-  
-  lightboxCtx.globalCompositeOperation = 'source-over';
-  
-  lightboxTime++;
-  lightboxAnimationId = requestAnimationFrame(animateLightboxCanvas);
-}
-
-function stopLightboxCanvas() {
-  if (lightboxAnimationId) {
-    cancelAnimationFrame(lightboxAnimationId);
-    lightboxAnimationId = null;
-  }
-  lightboxTime = 0;
-}
+ 
   
 </script>
 
