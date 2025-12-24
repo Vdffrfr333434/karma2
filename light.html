@@ -1554,6 +1554,18 @@ document.addEventListener('touchstart', startAudio, { once: true });
  
   
 </script>
+<script>
+const audio = document.getElementById('bg');
+audio.volume = 0.15;
 
+function startAudio() {
+  audio.play().catch(()=>{});
+  document.removeEventListener('click', startAudio);
+  document.removeEventListener('touchstart', startAudio);
+}
+
+document.addEventListener('click', startAudio, { once: true });
+document.addEventListener('touchstart', startAudio, { once: true });
+</script>
 
 </html>
