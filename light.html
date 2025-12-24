@@ -1536,19 +1536,20 @@ document.addEventListener('keydown', function (e) {
 
 createStack();
 
+ 
 const audio = document.getElementById('bg');
-audio.volume = 0.12;
+audio.volume = 0.15;
 
-const startAudio = () => {
+function startAudio() {
   audio.play().catch(()=>{});
-  window.removeEventListener('scroll', startAudio);
-  window.removeEventListener('click', startAudio);
-  window.removeEventListener('keydown', startAudio);
-};
+  document.removeEventListener('click', startAudio);
+  document.removeEventListener('touchstart', startAudio);
+}
 
-window.addEventListener('scroll', startAudio, { once: true });
-window.addEventListener('click', startAudio, { once: true });
-window.addEventListener('keydown', startAudio, { once: true });
+document.addEventListener('click', startAudio, { once: true });
+document.addEventListener('touchstart', startAudio, { once: true });
+ 
+
 
  
   
