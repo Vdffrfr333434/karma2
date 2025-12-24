@@ -754,6 +754,34 @@
   object-fit: cover;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(139, 115, 85, 0.25);
+  display: none; /* Скрываем изображение */
+}
+
+/* Canvas фон для слайдов */
+.lightbox-slide-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  z-index: 0;
+}
+
+/* Контент слайда поверх canvas */
+.lightbox-content-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  z-index: 1;
+  border-radius: 20px;
 }
 
 .lightbox-header {
@@ -790,14 +818,16 @@
 }
 
 .lightbox-text {
-  font-size: 13px;
+  font-size: 16px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--text);
-  max-width: 360px;
+  color: #6b4423;
+  max-width: 100%;
   width: 100%;
   text-align: center;
   text-shadow: 0 2px 8px rgba(255,255,255,0.8);
+  margin-bottom: 16px;
+  font-weight: 600;
 }
 
 .lightbox-arrow {
@@ -827,12 +857,13 @@
 }
 
 .lightbox-description {
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.6;
   letter-spacing: 0.02em;
   text-align: center;
-  color: var(--text);
+  color: #6b4423;
   text-shadow: 0 2px 8px rgba(255,255,255,0.8);
+  max-width: 100%;
 }
 
 .lightbox-arrow.prev { left: 20px; }
@@ -845,12 +876,13 @@
 }
 
 .lightbox-icon-wrap {
-  width: 75px;
-  height: 75px;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 75px;
+  flex: 0 0 90px;
+  margin-bottom: 20px;
 }
 
   </style>
@@ -897,31 +929,25 @@
 </section>
 
 <!-- Lightbox -->
+<!-- Lightbox -->
 <div id="lightbox" class="lightbox">
-
   <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
 
   <div class="lightbox-image-container">
-<br>  
-    <!-- ИКОНКА + ТЕКСТ СВЕРХУ -->
- <div class="lightbox-header">
-<br> <br>  
-  <div class="lightbox-icon-wrap">
-    <img id="lightboxIcon" class="lightbox-icon" alt="">
-  </div>
-
-  <div id="lightboxTitle" class="lightbox-text"></div>
-
-  <div id="lightboxDescription" class="lightbox-description"></div>
-
-</div>
-
-    <!-- ОСНОВНОЕ ИЗОБРАЖЕНИЕ -->
-    <img id="lightboxImage" alt="">
+    <!-- Canvas фон -->
+    <canvas id="lightboxCanvas" class="lightbox-slide-canvas"></canvas>
+    
+    <!-- Контент поверх canvas -->
+    <div class="lightbox-content-overlay">
+      <div class="lightbox-icon-wrap">
+        <img id="lightboxIcon" class="lightbox-icon" alt="">
+      </div>
+      <div id="lightboxTitle" class="lightbox-text"></div>
+      <div id="lightboxDescription" class="lightbox-description"></div>
+    </div>
   </div>
 
   <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
-
 </div>
 
 
@@ -1565,7 +1591,90 @@ createStack();
 
 
 
+// ===== LIGHTBOX CANVAS GRADIENT =====
+let lightboxCanvas = null;
+let lightboxCtx = null;
+let lightboxAnimationId = null;
+let lightboxBlobs = [];
 
+function initLightboxCanvas() {
+  lightboxCanvas = document.getElementById('lightboxCanvas');
+  if (!lightboxCanvas) return;
+  
+  lightboxCtx = lightboxCanvas.getContext('2d');
+  
+  const container = lightboxCanvas.parentElement;
+  lightboxCanvas.width = container.offsetWidth;
+  lightboxCanvas.height = container.offsetHeight;
+  
+  // Создаем блобы для lightbox
+  lightboxBlobs = [
+    new ColorBlob(lightboxCanvas.width * 0.2, lightboxCanvas.height * 0.3, 0),
+    new ColorBlob(lightboxCanvas.width * 0.8, lightboxCanvas.height * 0.2, 1),
+    new ColorBlob(lightboxCanvas.width * 0.5, lightboxCanvas.height * 0.7, 2),
+    new ColorBlob(lightboxCanvas.width * 0.3, lightboxCanvas.height * 0.6, 3),
+    new ColorBlob(lightboxCanvas.width * 0.7, lightboxCanvas.height * 0.4, 4)
+  ];
+  
+  animateLightboxCanvas();
+}
+
+let lightboxTime = 0;
+
+function animateLightboxCanvas() {
+  if (!lightboxCtx || !lightboxCanvas) return;
+  
+  lightboxCtx.fillStyle = '#faf8f5';
+  lightboxCtx.fillRect(0, 0, lightboxCanvas.width, lightboxCanvas.height);
+  
+  lightboxCtx.globalCompositeOperation = 'lighter';
+  
+  lightboxBlobs.forEach(blob => {
+    blob.update(lightboxTime);
+    
+    const gradient = lightboxCtx.createRadialGradient(
+      blob.x, blob.y, 0,
+      blob.x, blob.y, blob.radius
+    );
+    
+    const brightness = 0.9 + Math.sin(lightboxTime * 0.002 + blob.offset) * 0.1;
+    
+    gradient.addColorStop(0, `rgba(${blob.color[0] * brightness}, ${blob.color[1] * brightness}, ${blob.color[2] * brightness}, 0.3)`);
+    gradient.addColorStop(0.4, `rgba(${blob.color[0] * brightness}, ${blob.color[1] * brightness}, ${blob.color[2] * brightness}, 0.15)`);
+    gradient.addColorStop(1, `rgba(${blob.color[0] * brightness}, ${blob.color[1] * brightness}, ${blob.color[2] * brightness}, 0)`);
+    
+    lightboxCtx.fillStyle = gradient;
+    lightboxCtx.fillRect(0, 0, lightboxCanvas.width, lightboxCanvas.height);
+  });
+  
+  lightboxCtx.globalCompositeOperation = 'source-over';
+  
+  lightboxTime++;
+  lightboxAnimationId = requestAnimationFrame(animateLightboxCanvas);
+}
+
+function stopLightboxCanvas() {
+  if (lightboxAnimationId) {
+    cancelAnimationFrame(lightboxAnimationId);
+    lightboxAnimationId = null;
+  }
+}
+
+// Обновляем функцию openLightbox
+const originalOpenLightbox = openLightbox;
+openLightbox = function(index) {
+  originalOpenLightbox(index);
+  setTimeout(() => {
+    initLightboxCanvas();
+  }, 100);
+};
+
+// Обновляем функцию closeLightbox
+const originalCloseLightbox = closeLightbox;
+closeLightbox = function() {
+  stopLightboxCanvas();
+  originalCloseLightbox();
+};
   
 </script>
 
