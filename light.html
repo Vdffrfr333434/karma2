@@ -319,10 +319,11 @@
     }
 
 /* Золотистая кнопка "Записаться" с коричневой надписью */
+/* Золотистая кнопка "Записаться" с прозрачным фоном */
 .btn-gold {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(212, 175, 55, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.8);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
@@ -330,15 +331,15 @@
   text-align: center;
   color: #5c4033;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  background: rgba(212, 175, 55, 0.25); /* 25% прозрачности */
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
   transition: all 0.3s ease;
 }
 
 .btn-gold:hover {
-  background: linear-gradient(135deg, #f4d03f 0%, #ffd700 50%, #f4d03f 100%);
+  background: rgba(212, 175, 55, 0.35);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
 }
 
 .btn-gold::before {
@@ -351,10 +352,32 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255,255,255,0.5),
+    rgba(255,255,255,0.3),
     transparent
   );
   animation: shimmer 3s infinite;
+}
+
+     /* Голубые кнопки номиналов сертификата */
+.btn-certificate {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #87CEEB;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: #87CEEB;
+  padding: 10px 20px;
+  background: rgba(135, 206, 235, 0.1);
+  transition: all 0.3s ease;
+}
+
+.btn-certificate:hover {
+  background: rgba(135, 206, 235, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(135, 206, 235, 0.2);
 }
      
 
@@ -989,19 +1012,19 @@
       <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; display: flex; gap: 7px; justify-content: center;">
         
         <a href="https://your-payment-link.com/2500" target="_blank" style="text-decoration: none;">
-          <button class="btn" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$2500</button>
+          <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$2500</button>
         </a>
         
         <a href="https://your-payment-link.com/5000" target="_blank" style="text-decoration: none;">
-          <button class="btn" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$5000</button>
+          <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$5000</button>
         </a>
         
         <a href="https://your-payment-link.com/7500" target="_blank" style="text-decoration: none;">
-          <button class="btn" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$7500</button>
+          <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$7500</button>
         </a>
         
         <a href="https://your-payment-link.com/10000" target="_blank" style="text-decoration: none;">
-          <button class="btn" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$10000</button>
+          <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;">$10000</button>
         </a>
         
       </div>
