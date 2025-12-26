@@ -837,6 +837,39 @@ background: rgba(123, 104, 168, 0.1);
   }
 }
 
+
+/* CERTIFICATES */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.cert-img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 20px rgba(139, 123, 165, 0.25);
+}
+
+.cert-img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 32px rgba(139, 123, 165, 0.35);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .cert-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+     
+
   </style>
 </head>
 <body>
@@ -916,6 +949,38 @@ background: rgba(123, 104, 168, 0.1);
   </div>
 </section>
 
+
+<!-- МОИ СЕРТИФИКАТЫ -->
+<section class="reveal">
+  <div class="glass card no-diamond" style="padding:24px;">
+    
+    <h3 style="text-align:center; margin-bottom:8px;">
+      Мои сертификаты
+    </h3>
+
+    <p style="text-align:center; font-size:12px; opacity:0.75; margin-bottom:16px;">
+      Подтверждение обучения и практики в смежных направлениях
+    </p>
+
+    <div class="cert-grid">
+      <img 
+        src="https://placehold.co/600x800/png" 
+        alt="Сертификат 1"
+        class="cert-img"
+        onclick="openCert(this.src)"
+      >
+      <img 
+        src="https://placehold.co/600x800/png" 
+        alt="Сертификат 2"
+        class="cert-img"
+        onclick="openCert(this.src)"
+      >
+    </div>
+
+  </div>
+</section>
+  
+
 <!-- СТАТИСТИКА -->
 <section class="reveal">
   <div class="glass-clean" style="padding: 24px;">
@@ -947,7 +1012,7 @@ background: rgba(123, 104, 168, 0.1);
 <!-- FEEDBACK SLIDER -->
 <section class="reveal">
   <div class="glass card reviews-container">
-    <h3 style="text-align:center; margin-bottom:12px">Отзывы моих клиентов</h3>
+    <h3 style="text-align:center; margin-bottom:12px">Впечатления моих учеников</h3>
     <div class="reviews-track" id="reviewsTrack">
       <div class="card review-card">
         <strong>Анна, 34 года</strong>
@@ -1091,6 +1156,15 @@ background: rgba(123, 104, 168, 0.1);
 
 </div>
 
+<!-- CERT LIGHTBOX -->
+<div id="certLightbox" class="lightbox" onclick="closeCert()">
+  <div class="lightbox-image-container" onclick="event.stopPropagation()">
+    <img id="certLightboxImg" src="" style="width:100%; height:100%; object-fit:contain; border-radius:20px;">
+  </div>
+</div>
+
+
+  
 </body>
 <script>
   // ===== MORPHING GRADIENT =====
@@ -1550,6 +1624,17 @@ document.addEventListener('click', startAudio, { once: true });
 document.addEventListener('touchstart', startAudio, { once: true });
  
 
+function openCert(src) {
+  const lb = document.getElementById('certLightbox');
+  const img = document.getElementById('certLightboxImg');
+  img.src = src;
+  lb.classList.add('active');
+}
+
+function closeCert() {
+  const lb = document.getElementById('certLightbox');
+  lb.classList.remove('active');
+}
 
  
   
