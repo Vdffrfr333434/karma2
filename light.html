@@ -840,6 +840,7 @@ background: rgba(123, 104, 168, 0.1);
 
 /* CERTIFICATES */
 /* CERTIFICATES */
+/* CERTIFICATES */
 .cert-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -855,9 +856,10 @@ background: rgba(123, 104, 168, 0.1);
   transition: transform 0.3s ease;
   position: relative;
   overflow: hidden;
+  display: block;
 }
 
-.cert-img::before {
+.cert-img::after {
   content: '';
   position: absolute;
   top: -50%;
@@ -867,10 +869,11 @@ background: rgba(123, 104, 168, 0.1);
   background: linear-gradient(
     45deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.5) 50%,
     transparent 70%
   );
   animation: cert-shimmer 3s infinite;
+  pointer-events: none;
 }
 
 @keyframes cert-shimmer {
@@ -885,6 +888,7 @@ background: rgba(123, 104, 168, 0.1);
 .cert-img:hover {
   transform: scale(1.03);
 }
+
 /* Mobile */
 @media (max-width: 480px) {
   .cert-grid {
@@ -895,8 +899,8 @@ background: rgba(123, 104, 168, 0.1);
 /* CERT LIGHTBOX - отдельный от галереи */
 .cert-lightbox-container {
   position: relative;
-  width: 90%;
-  max-width: 90vw;
+  width: auto;
+  max-width: 85vw;
   aspect-ratio: 1.45;
   max-height: 85vh;
   margin: 0 auto;
@@ -916,8 +920,7 @@ background: rgba(123, 104, 168, 0.1);
 
 @media (max-width: 768px) {
   .cert-lightbox-container {
-    width: 95%;
-    max-width: 95vw;
+    max-width: 90vw;
   }
 }
      
