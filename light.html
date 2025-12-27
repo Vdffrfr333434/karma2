@@ -41,6 +41,211 @@
   z-index: 2;
 }
 
+
+/* REVIEWS GALLERY - отдельная от методов */
+.reviews-gallery-container {
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+}
+
+.reviews-photo-stack {
+  position: relative;
+  width: 100%;
+  max-width: 150px;
+  height: calc(150px * 1.5);
+  margin: 0 auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.reviews-photo-stack:hover {
+  transform: scale(1.02);
+}
+
+.reviews-photo-stack-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(139, 123, 165, 0.2);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: transparent;
+  border: none;
+}
+
+.reviews-photo-stack.opening .reviews-photo-stack-item:nth-child(1) {
+  transform: rotate(-5deg) translate(calc(15px * 6), calc(15px * -0.5));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.opening .reviews-photo-stack-item:nth-child(2) {
+  transform: rotate(3deg) translate(calc(15px * -7), calc(15px * -0.3));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.opening .reviews-photo-stack-item:nth-child(3) {
+  transform: rotate(-2deg) translate(0, calc(15px * -0.7));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.closing .reviews-photo-stack-item:nth-child(1) {
+  transform: rotate(-5deg) translate(calc(15px * 6), calc(15px * -0.5));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.closing .reviews-photo-stack-item:nth-child(2) {
+  transform: rotate(3deg) translate(calc(15px * -7), calc(15px * -0.3));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.closing .reviews-photo-stack-item:nth-child(3) {
+  transform: rotate(-2deg) translate(0, calc(15px * -0.7));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reviews-photo-stack-item:nth-child(1) {
+  z-index: 3;
+  transform: rotate(-3deg) translate(calc(15px * -0.8), calc(15px * -0.8));
+}
+
+.reviews-photo-stack-item:nth-child(2) {
+  z-index: 2;
+  transform: rotate(2deg) translate(calc(15px * 0.4), calc(15px * 0.4));
+}
+
+.reviews-photo-stack-item:nth-child(3) {
+  z-index: 1;
+  transform: rotate(-1.5deg) translate(15px, 15px);
+  opacity: 0.9;
+}
+
+/* REVIEWS LIGHTBOX */
+.reviews-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(250, 248, 245, 0);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.reviews-lightbox.active {
+  display: flex;
+  background: rgba(248, 245, 250, 0.95);
+}
+
+.reviews-lightbox-image-container {
+  position: relative;
+  width: 85%;
+  max-width: 320px;
+  aspect-ratio: 2 / 3;
+  max-height: 90vh;
+  margin: 0 auto;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #f8f5fa;
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.25);
+  border-radius: 20px;
+}
+
+.reviews-lightbox.active .reviews-lightbox-image-container {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reviews-lightbox-content-overlay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.reviews-lightbox-text {
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5a4470;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.reviews-lightbox-description {
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: #5a4470;
+  width: 100%;
+}
+
+.reviews-lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(155, 127, 212, 0.15);
+  border: 1px solid rgba(139, 123, 165, 0.2);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 26px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10000;
+}
+
+.reviews-lightbox.active .reviews-lightbox-arrow {
+  opacity: 1;
+}
+
+.reviews-lightbox-arrow:hover {
+  background: rgba(155, 127, 212, 0.25);
+  box-shadow: 0 4px 16px rgba(139, 123, 165, 0.15);
+}
+
+.reviews-lightbox-arrow.prev { left: 20px; }
+.reviews-lightbox-arrow.next { right: 20px; }
+
+@media (max-width: 768px) {
+  .reviews-lightbox-image-container {
+    width: 90%;
+    max-width: 280px;
+  }
+  
+  .reviews-lightbox-description {
+    font-size: 11px;
+  }
+  
+  .reviews-lightbox-text {
+    font-size: 14px;
+  }
+}
+
+
+     
+
 /* Morphing gradient background */
 #gradient-canvas {
   position: fixed;
@@ -1073,6 +1278,36 @@ background: rgba(123, 104, 168, 0.1);
   </div>
 </section>
 
+
+ <!-- ОТЗЫВЫ МОИХ КЛИЕНТОВ -->
+<section class="reveal">
+  <div class="prism-bg diamond-bottom" style="padding: 20px;">
+    <h3 style="text-align:center; margin-bottom:20px">Відгуки моїх клієнтів</h3> <br>
+    
+    <div class="reviews-gallery-container">
+      <div class="reviews-photo-stack" id="reviewsPhotoStack" onclick="openReviewsLightbox(0)">
+        <!-- Карточки будут добавлены через JavaScript -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews Lightbox -->
+<div id="reviewsLightbox" class="reviews-lightbox">
+  <button class="reviews-lightbox-arrow prev" onclick="changeReviewImage(-1)">‹</button>
+
+  <div class="reviews-lightbox-image-container">
+    <div class="reviews-lightbox-content-overlay">
+      <div id="reviewsLightboxTitle" class="reviews-lightbox-text"></div>
+      <div id="reviewsLightboxDescription" class="reviews-lightbox-description"></div>
+    </div>
+  </div>
+
+  <button class="reviews-lightbox-arrow next" onclick="changeReviewImage(1)">›</button>
+</div>
+
+  
+
   <!-- ПОДАРОЧНАЯ КАРТА -->
 <section class="reveal">
   <div class="glass card reviews-container no-diamond" style="padding: 24px;">
@@ -1674,7 +1909,135 @@ function closeCert() {
   lb.classList.remove('active');
 }
 
- 
+
+
+
+
+// ===============================
+// ===== REVIEWS GALLERY
+// ===============================
+
+// URL для превью стопки отзывов
+var reviewPreviewImage1 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Review1.jpg?raw=true';
+var reviewPreviewImage2 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Review2.jpg?raw=true';
+var reviewPreviewImage3 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Review3.jpg?raw=true';
+
+// Массив всех отзывов для галереи (с заголовками и текстом)
+var reviewsGallerySlides = [
+  {
+    title: 'АННА, 34 РОКИ',
+    description: 'Після сеансу регресії я нарешті зрозуміла причини своїх страхів. Мар\'яна дуже делікатно провела мене через процес. Відчуваю себе звільненою від багажу минулого. Дякую за професіоналізм і підтримку!'
+  },
+  {
+    title: 'ІГОР, 41 РІК',
+    description: 'Нумерологічний розбір показав мої сильні сторони та точки зростання. Тепер розумію, чому в житті відбувалися ті чи інші події. Це дало мені чіткий план дій на майбутнє. Рекомендую всім, хто шукає відповіді!'
+  },
+  {
+    title: 'МАРІЯ, 28 РОКІВ',
+    description: 'Кармічна діагностика допомогла мені розібратися у стосунках з мамою. Стільки років носила образу, а тепер відчуваю звільнення та прощення. Дякую Мар\'яні за чуйність і глибоке розуміння.'
+  },
+  {
+    title: 'ДМИТРО, 45 РОКІВ',
+    description: 'Скептично ставився до езотерики, але вирішив спробувати. Сеанс відкрив очі на багато речей у моєму житті. Зараз працюю над собою з новим розумінням. Дякую за професійний підхід!'
+  },
+  {
+    title: 'ОЛЕНА, 31 РІК',
+    description: 'Матриця долі стала для мене справжнім відкриттям. Тепер знаю свої сильні енергії і розумію, як їх використовувати. Після консультації з\'явилася впевненість у собі та своєму шляху. Безмежно вдячна!'
+  }
+];
+
+var reviewsCurrentIndex = 0;
+
+// Создание стопки превью
+function createReviewsStack() {
+  var stack = document.getElementById('reviewsPhotoStack');
+  if (!stack) return;
+  
+  stack.innerHTML = '';
+
+  var stackImages = [
+    reviewPreviewImage3,
+    reviewPreviewImage2,
+    reviewPreviewImage1
+  ];
+
+  for (var i = stackImages.length - 1; i >= 0; i--) {
+    var item = document.createElement('div');
+    item.className = 'reviews-photo-stack-item';
+
+    var img = document.createElement('img');
+    img.src = stackImages[i];
+    img.alt = '';
+
+    item.appendChild(img);
+    stack.appendChild(item);
+  }
+}
+
+// Открытие лайтбокса
+function openReviewsLightbox(index) {
+  reviewsCurrentIndex = index;
+  var stack = document.getElementById('reviewsPhotoStack');
+  var lightbox = document.getElementById('reviewsLightbox');
+
+  stack.classList.add('opening');
+
+  setTimeout(function() {
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateReviewsLightbox();
+  }, 200);
+}
+
+// Закрытие лайтбокса
+function closeReviewsLightbox() {
+  var stack = document.getElementById('reviewsPhotoStack');
+  var lightbox = document.getElementById('reviewsLightbox');
+  
+  lightbox.classList.remove('active');
+  document.body.style.overflow = '';
+
+  stack.classList.remove('opening');
+  stack.classList.add('closing');
+
+  setTimeout(function() {
+    stack.classList.remove('closing');
+  }, 50);
+}
+
+// Переключение изображений
+function changeReviewImage(direction) {
+  reviewsCurrentIndex += direction;
+
+  if (reviewsCurrentIndex < 0) {
+    reviewsCurrentIndex = reviewsGallerySlides.length - 1;
+  } else if (reviewsCurrentIndex >= reviewsGallerySlides.length) {
+    reviewsCurrentIndex = 0;
+  }
+
+  updateReviewsLightbox();
+}
+
+// Обновление контента в лайтбоксе
+function updateReviewsLightbox() {
+  var slide = reviewsGallerySlides[reviewsCurrentIndex];
+  
+  document.getElementById('reviewsLightboxTitle').textContent = slide.title;
+  document.getElementById('reviewsLightboxDescription').textContent = slide.description;
+}
+
+// События
+document.getElementById('reviewsLightbox').addEventListener('click', function (e) {
+  if (e.target === this) {
+    closeReviewsLightbox();
+  }
+});
+
+// Инициализация
+createReviewsStack();
+
+
+  
   
 </script>
 <script>
