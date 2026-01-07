@@ -65,32 +65,28 @@
     ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
     
     const purpleColor = '#2a1b3d'; 
-    const goldColor = '#D4AF37';   
+    const goldCodeColor = '#ffce81'; // Новий колір коду
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // --- 1. ІМ'Я (Сміщено вправо та трохи вниз) ---
+    // --- 1. ІМ'Я ---
     ctx.fillStyle = purpleColor;
     ctx.font = 'bold italic 85px Caslon, Georgia, serif';
-    // X змінено з 345 на 450 (вправо), Y змінено з 1225 на 1238 (вниз)
-    ctx.fillText(data.recipientName,750, 1238);
+    ctx.fillText(data.recipientName, 750, 1238);
 
-    // --- 2. ПРИЗНАЧЕННЯ (Трохи вниз) ---
+    // --- 2. ПРИЗНАЧЕННЯ ---
     ctx.font = 'bold italic 90px Caslon, Georgia, serif';
-    // Y змінено з 1325 на 1340 (вниз)
     ctx.fillText(data.purpose, canvas.width / 2, 1340);
 
-    // --- 3. ДАТА (Трохи вниз) ---
-    ctx.font = 'italic 70px Caslon, Georgia, serif';
+    // --- 3. ДАТА (Шрифт Arial) ---
+    ctx.font = 'italic 70px Arial, sans-serif'; // Змінено на Arial
     const formattedDate = new Date(data.validUntil).toLocaleDateString('uk-UA');
-    // Y змінено з 1610 на 1622 (вниз)
     ctx.fillText(formattedDate, 2205, 1622);
 
-    // --- 4. КОД ВЕРИФІКАЦІЇ (Шрифт Arial, золото, трохи вниз) ---
-    ctx.fillStyle = goldColor;
-    ctx.font = 'bold 70px Arial, sans-serif'; 
-    // Y змінено з 1650 на 1665 (вниз)
+    // --- 4. КОД ВЕРИФІКАЦІЇ (Arial, колір #ffce81, розмір -30%) ---
+    ctx.fillStyle = goldCodeColor;
+    ctx.font = 'bold 49px Arial, sans-serif'; // 70px * 0.7 = 49px
     ctx.fillText(data.verificationCode, canvas.width / 2, 1665);
   }
 
