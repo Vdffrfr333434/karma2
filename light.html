@@ -514,17 +514,25 @@ background-repeat: no-repeat;
 }
 
     /* price */
-    .price{font-size:22px; font-weight:600; margin:8px 0; color: var(--gold)}
-    .price-card ul{
-      margin:0;
-      padding-left:18px;
-      font-size:12px;
-      line-height:1.5;
-      color: var(--text);
-    }
-    .price-card ul li{
-      margin-bottom:4px;
-    }
+.price{font-size:22px; font-weight:600; margin:8px 0; color: var(--gold)}
+.price-card{
+  display: flex;
+  flex-direction: column;
+}
+.price-card ul{
+  margin:0;
+  padding-left:18px;
+  font-size:12px;
+  line-height:1.5;
+  color: var(--text);
+  flex-grow: 1;
+}
+.price-card ul li{
+  margin-bottom:4px;
+}
+.price-card .btn-gold{
+  margin-top: auto;
+}
 
 /* Золотистая кнопка "Записаться" с коричневой надписью */
 /* Золотистая кнопка "Записаться" с прозрачным фоном */
