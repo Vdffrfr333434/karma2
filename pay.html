@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mono Test Shop</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        h2 { margin-bottom: 1.5rem; color: #333; }
+        .btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 8px; background: #000; color: white; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.02); background: #222; }
+        .btn-10 { background: #333; }
+        .btn-20 { background: #222; }
+        .btn-30 { background: #111; }
+        #status { margin-top: 15px; font-size: 0.9rem; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Купить тестовый товар</h2>
+    <input type="password" id="apiKey" placeholder="Введите ваш Mono Token" style="width: 90%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;">
+    
+    <button class="btn btn-10" onclick="pay(10)">Купить за 10 грн</button>
+    <button class="btn btn-20" onclick="pay(20)">Купить за 20 грн</button>
+    <button class="btn btn-30" onclick="pay(30)">Купить за 30 грн</button>
+
+    <div id="status"></div>
+</div>
+
+<script>
+    async function pay(amount) {
+        const key = document.getElementById('apiKey').value;
+        const statusDiv = document.getElementById('status');
+
+        if (!key) {
+            alert("Сначала введите API ключ!");
+            return;
+        }
+
+        statusDiv.innerText = "Создаю счет...";
+
+        const payload = {
+            amount: amount * 100, // в копейки
+            ccy: 980,
+            merchantPaymInfo: { destination: "Тестовый товар на GitHub" },
+            redirectUrl: window.location.href // вернет сюда же после оплаты
+        };
+
+        try {
+            // Используем прокси, чтобы обойти CORS (только для тестов!)
+            const proxy = "https://cors-anywhere.herokuapp.com/";
+            const url = "https://api.monobank.ua/api/merchant/invoice/create";
+
+            const response = await fetch(proxy + url, {
+                method: 'POST',
+                headers: {
+                    'X-Token': key,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (data.pageUrl) {
+                statusDiv.innerText = "Перенаправляю на оплату...";
+                window.location.href = data.pageUrl;
+            } else {
+                statusDiv.innerText = "Ошибка: " + (data.errText || "неизвестно");
+            }
+        } catch (err) {
+            statusDiv.innerText = "Ошибка сети. Возможно, нужно активировать демо-доступ к cors-anywhere.";
+            console.error(err);
+        }
+    }
+
+    // Проверка статуса при возвращении на страницу
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('invoiceId')) {
+            document.getElementById('status').innerText = "Платеж инициирован. Проверьте статус в приложении.";
+        }
+    };
+</script>
+
+</body>
+</html>
