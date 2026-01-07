@@ -3,137 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monobank API Test</title>
+    <title>Mono Shop Fast</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 350px; }
-        h1 { font-size: 1.5rem; margin-bottom: 1.5rem; color: #1a1a1a; }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-size: 0.8rem; color: #666; margin-bottom: 5px; margin-left: 5px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 14px; }
-        .buttons { display: grid; gap: 10px; }
-        .btn { border: none; padding: 15px; border-radius: 12px; background: #000; color: #fff; font-weight: bold; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
-        .btn:hover { background: #333; transform: translateY(-2px); }
-        .btn:active { transform: translateY(0); }
-        #status-area { margin-top: 20px; padding: 15px; border-radius: 10px; display: none; font-size: 0.9rem; }
-        .status-loading { background: #e3f2fd; color: #0d47a1; display: block !important; }
-        .status-success { background: #e8f5e9; color: #2e7d32; display: block !important; }
-        .status-error { background: #ffebee; color: #c62828; display: block !important; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #111; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; }
+        .card { background: #222; padding: 2.5rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center; width: 100%; max-width: 320px; border: 1px solid #333; }
+        h1 { font-size: 1.2rem; margin-bottom: 2rem; letter-spacing: 1px; }
+        .buttons { display: grid; gap: 15px; }
+        .btn { border: none; padding: 18px; border-radius: 12px; background: #fff; color: #000; font-weight: 800; cursor: pointer; transition: all 0.3s; font-size: 1.1rem; }
+        .btn:hover { background: #ccc; transform: scale(1.03); }
+        #status-area { margin-top: 25px; font-size: 0.9rem; min-height: 20px; color: #aaa; }
+        .status-success { color: #4caf50; font-weight: bold; }
+        .status-error { color: #ff5252; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Оплатити sex</h1>
+    <h1>Оплатити SEX</h1>
     
-    <div class="input-group">
-        <label for="apiKey">Ваш API Токен (X-Token):</label>
-        <input type="password" id="apiKey" placeholder="Вставьте токен из api.monobank.ua">
-    </div>
-
     <div class="buttons">
-        <button class="btn" onclick="createInvoice(10)">Тариф sex за 10 грн</button>
-        <button class="btn" onclick="createInvoice(20)">Тариф sex за20 грн</button>
-        <button class="btn" onclick="createInvoice(30)">Тариф sex за30 грн (SALE)</button>
+        <button class="btn" onclick="createInvoice(10)">Sex за 10 ГРН</button>
+        <button class="btn" onclick="createInvoice(20)">Sex за 20 ГРН</button>
+        <button class="btn" onclick="createInvoice(30)">Sex за 30 ГРН</button>
     </div>
 
-    <div id="status-area"></div>
+    <div id="status-area">Нажмите на кнопку для оплаты</div>
 </div>
 
 <script>
+    // --- КОНФИГУРАЦИЯ ---
+    const MONO_TOKEN = "uQJ7XJ0WSnFxTa6cEg8QUV8dz9p190h-Px0cEI2nQIFI"; // <--- ВСТАВЬТЕ ВАШ ТОКЕН СЮДА
+    const PROXY = "https://corsproxy.io/?";
+    const API_URL = "https://api.monobank.ua/api/merchant/invoice";
+    // --------------------
+
     const statusArea = document.getElementById('status-area');
-    const proxy = "https://corsproxy.io/?";
 
-    // Функция обновления статуса на экране
-    function showStatus(text, type) {
-        statusArea.innerText = text;
-        statusArea.className = 'status-' + type;
-    }
+    async function createInvoice(amount) {
+        statusArea.innerHTML = "Генерация счета...";
+        statusArea.className = "";
 
-    // 1. Создание счета
-    async function createInvoice(amountGrn) {
-        const token = document.getElementById('apiKey').value;
-        if (!token) {
-            alert("Пожалуйста, введите ваш API токен!");
-            return;
-        }
-
-        showStatus("Создание счета...", "loading");
-
-        const url = "https://api.monobank.ua/api/merchant/invoice/create";
-        const body = {
-            amount: amountGrn * 100, // сумма в копейках
-            ccy: 980, // Грн
-            merchantPaymInfo: { destination: "Тестовая покупка " + amountGrn + " грн" },
-            // Передаем в redirectUrl текущий адрес, добавляя в него ID для проверки после возврата
-            redirectUrl: window.location.origin + window.location.pathname + "?check_payment=true"
+        const payload = {
+            amount: amount * 100,
+            ccy: 980,
+            merchantPaymInfo: { destination: `Покупка товара (${amount} грн)` },
+            redirectUrl: window.location.href.split('?')[0] + "?check=1"
         };
 
         try {
-            const response = await fetch(proxy + encodeURIComponent(url), {
+            const res = await fetch(PROXY + encodeURIComponent(`${API_URL}/create`), {
                 method: 'POST',
-                headers: {
-                    'X-Token': token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
+                headers: { 'X-Token': MONO_TOKEN, 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
 
-            const data = await response.json();
+            const data = await res.json();
 
             if (data.pageUrl) {
-                // Сохраняем invoiceId в память браузера, чтобы проверить его при возврате
-                localStorage.setItem('last_invoice_id', data.invoiceId);
-                localStorage.setItem('mono_token', token); // Сохраняем токен для проверки
-                
-                showStatus("Счет создан! Перенаправление...", "success");
-                setTimeout(() => window.location.href = data.pageUrl, 1000);
+                localStorage.setItem('last_id', data.invoiceId);
+                window.location.href = data.pageUrl;
             } else {
-                showStatus("Ошибка: " + (data.errText || "Неверный токен"), "error");
+                statusArea.innerText = "Ошибка: " + (data.errText || "Проверьте токен");
+                statusArea.className = "status-error";
             }
         } catch (e) {
-            showStatus("Ошибка сети или прокси", "error");
-            console.error(e);
+            statusArea.innerText = "Ошибка сети";
+            statusArea.className = "status-error";
         }
     }
 
-    // 2. Проверка статуса (срабатывает при загрузке страницы)
     async function checkStatus() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const invoiceId = localStorage.getItem('last_invoice_id');
-        const token = localStorage.getItem('mono_token');
+        const params = new URLSearchParams(window.location.search);
+        const invoiceId = localStorage.getItem('last_id');
 
-        if (urlParams.has('check_payment') && invoiceId && token) {
-            showStatus("Проверяем оплату...", "loading");
+        if (params.has('check') && invoiceId) {
+            statusArea.innerText = "Проверка платежа...";
             
-            // Подставляем токен в поле ввода для удобства
-            document.getElementById('apiKey').value = token;
-
-            const url = `https://api.monobank.ua/api/merchant/invoice/status?invoiceId=${invoiceId}`;
-
             try {
-                const response = await fetch(proxy + encodeURIComponent(url), {
-                    method: 'GET',
-                    headers: { 'X-Token': token }
+                const res = await fetch(PROXY + encodeURIComponent(`${API_URL}/status?invoiceId=${invoiceId}`), {
+                    headers: { 'X-Token': MONO_TOKEN }
                 });
-
-                const data = await response.json();
+                const data = await res.json();
                 
                 if (data.status === 'success') {
-                    showStatus("✅ Оплачено успешно!", "success");
-                    localStorage.removeItem('last_invoice_id');
-                } else if (data.status === 'created') {
-                    showStatus("⏳ Ожидание оплаты...", "loading");
+                    statusArea.innerText = "✅ ОПЛАЧЕНО УСПЕШНО";
+                    statusArea.className = "status-success";
+                    localStorage.removeItem('last_id');
                 } else {
-                    showStatus("Статус: " + data.status, "error");
+                    statusArea.innerText = "Статус: " + data.status;
                 }
             } catch (e) {
-                showStatus("Не удалось проверить статус", "error");
+                statusArea.innerText = "Ошибка при проверке";
             }
         }
     }
 
-    // Запускаем проверку при открытии страницы
     window.onload = checkStatus;
 </script>
 
