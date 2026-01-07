@@ -7,6 +7,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
+    @font-face {
+      font-family: 'Caslon';
+      src: url('https://github.com/Vdffrfr333434/karma2/raw/main/caslonbeckerno540swashrus_italic.otf') format('opentype');
+      font-weight: normal;
+      font-style: italic;
+    }
+
     :root{
       --bg1:#9b7fd4;
       --bg2:#c9a0dc;
@@ -570,7 +577,7 @@
     const canvas = document.getElementById('certCanvas');
     const ctx = canvas.getContext('2d');
     
-    const scale = 2; // Увеличение разрешения для чёткости
+    const scale = 2;
     const displayWidth = 400;
     const displayHeight = 280;
     
@@ -581,63 +588,88 @@
     
     ctx.scale(scale, scale);
 
-    // Градиентный фон
+    // Рандомный золотистый градиент для каждого сертификата
+    const goldColors = [
+      ['#D4AF37', '#FFD700', '#F4C430'], // Классическое золото
+      ['#C9A961', '#E6C170', '#D4AF37'], // Бледное золото
+      ['#B8860B', '#DAA520', '#FFD700'], // Тёмное золото
+      ['#F0E68C', '#FFD700', '#FFA500'], // Яркое золото
+      ['#C5B358', '#D4AF37', '#E6C170']  // Винтажное золото
+    ];
+    
+    const randomPalette = goldColors[Math.floor(Math.random() * goldColors.length)];
+    
     const gradient = ctx.createLinearGradient(0, 0, displayWidth, displayHeight);
-    gradient.addColorStop(0, '#667eea');
-    gradient.addColorStop(1, '#764ba2');
+    gradient.addColorStop(0, randomPalette[0]);
+    gradient.addColorStop(0.5, randomPalette[1]);
+    gradient.addColorStop(1, randomPalette[2]);
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, displayWidth, displayHeight);
 
-    // Белая рамка
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 4;
+    // Добавляем зернистость (noise texture)
+    ctx.globalAlpha = 0.15;
+    for (let i = 0; i < displayWidth * displayHeight / 4; i++) {
+      const x = Math.random() * displayWidth;
+      const y = Math.random() * displayHeight;
+      const brightness = Math.random() * 255;
+      ctx.fillStyle = `rgb(${brightness}, ${brightness}, ${brightness})`;
+      ctx.fillRect(x, y, 1, 1);
+    }
+    ctx.globalAlpha = 1.0;
+
+    // Декоративная рамка золотого цвета
+    ctx.strokeStyle = '#8B7355';
+    ctx.lineWidth = 3;
     ctx.strokeRect(20, 20, displayWidth - 40, displayHeight - 40);
-
-    // ===== НАСТРОЙКА ШРИФТОВ =====
-    // Для кастомного шрифта добавьте @font-face в <style> выше
-    // Пример: @font-face { font-family: 'MyFont'; src: url('font.woff2'); }
     
-    // Заголовок
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 24px Arial'; // Замените Arial на ваш шрифт
-    ctx.textAlign = 'center';
-    ctx.fillText('ПОДАРУНКОВИЙ СЕРТИФІКАТ', displayWidth / 2, 60);
-
-    // Линия
-    ctx.beginPath();
-    ctx.moveTo(100, 75);
-    ctx.lineTo(300, 75);
-    ctx.strokeStyle = '#ffffff';
+    // Внутренняя тонкая рамка
+    ctx.strokeStyle = '#D4AF37';
     ctx.lineWidth = 1;
+    ctx.strokeRect(25, 25, displayWidth - 50, displayHeight - 50);
+
+    // Заголовок - Caslon шрифт
+    ctx.fillStyle = '#5D4E37'; // Тёмно-коричневый/золотистый
+    ctx.font = 'italic 28px Caslon, Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Подарунковий Сертифікат', displayWidth / 2, 60);
+
+    // Декоративная линия
+    ctx.beginPath();
+    ctx.moveTo(80, 75);
+    ctx.lineTo(320, 75);
+    ctx.strokeStyle = '#8B7355';
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // ===== КООРДИНАТЫ ТЕКСТА - НАСТРАИВАЙТЕ ЗДЕСЬ =====
-    ctx.font = '14px Arial';
+    // Текст сертификата
+    ctx.fillStyle = '#5D4E37';
     ctx.textAlign = 'left';
     
-    // "Для:" - X: 50, Y: 110
+    // "Для:"
+    ctx.font = 'italic 16px Caslon, Georgia, serif';
     ctx.fillText('Для:', 50, 110);
     
-    // Имя - X: 50, Y: 135
-    ctx.font = 'bold 16px Arial';
+    // Имя получателя
+    ctx.font = 'italic bold 20px Caslon, Georgia, serif';
     ctx.fillText(data.name, 50, 135);
 
-    // "Призначення:" - X: 50, Y: 165
-    ctx.font = '14px Arial';
+    // "Призначення:"
+    ctx.font = 'italic 15px Caslon, Georgia, serif';
     ctx.fillText('Призначення:', 50, 165);
     
-    // Текст призначения - X: 50, Y: 185, MaxWidth: 300
-    ctx.font = '12px Arial';
+    // Описание
+    ctx.font = 'italic 13px Caslon, Georgia, serif';
     wrapText(ctx, data.purpose, 50, 185, 300, 16);
 
-    // Срок действия - X: 50, Y: 240
-    ctx.font = '11px Arial';
+    // Срок действия
+    ctx.font = 'italic 12px Caslon, Georgia, serif';
     ctx.fillText(`Дійсний до: ${formatDate(data.validUntil)}`, 50, 240);
 
-    // Код верификации - X: center, Y: 265
-    ctx.font = '10px Courier New';
+    // Код верификации (моноширинный шрифт)
+    ctx.font = '9px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillText(`Код: ${data.verificationCode}`, displayWidth / 2, 265);
+    ctx.fillStyle = '#8B7355';
+    ctx.fillText(`Код верифікації: ${data.verificationCode}`, displayWidth / 2, 265);
   }
 
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
