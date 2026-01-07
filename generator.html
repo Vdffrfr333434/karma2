@@ -64,34 +64,34 @@
     canvas.height = 1754;
     ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
     
-    const purpleColor = '#2a1b3d'; // Темно-фіолетовий
-    const goldColor = '#D4AF37';   // Золотистий
+    const purpleColor = '#2a1b3d'; 
+    const goldColor = '#D4AF37';   
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // --- 1. ІМ'Я (На першій малій плашці) ---
+    // --- 1. ІМ'Я (Сміщено вправо та трохи вниз) ---
     ctx.fillStyle = purpleColor;
     ctx.font = 'bold italic 85px Caslon, Georgia, serif';
-    // Піднято на 20px (з 1245 до 1225)
-    ctx.fillText(data.recipientName, 345, 1225);
+    // X змінено з 345 на 450 (вправо), Y змінено з 1225 на 1238 (вниз)
+    ctx.fillText(data.recipientName, 450, 1238);
 
-    // --- 2. ПРИЗНАЧЕННЯ (На довгій плашці) ---
+    // --- 2. ПРИЗНАЧЕННЯ (Трохи вниз) ---
     ctx.font = 'bold italic 90px Caslon, Georgia, serif';
-    // Піднято на 20px (з 1345 до 1325)
-    ctx.fillText(data.purpose, canvas.width / 2, 1325);
+    // Y змінено з 1325 на 1340 (вниз)
+    ctx.fillText(data.purpose, canvas.width / 2, 1340);
 
-    // --- 3. ДАТА (В маленькому віконці) ---
+    // --- 3. ДАТА (Трохи вниз) ---
     ctx.font = 'italic 70px Caslon, Georgia, serif';
     const formattedDate = new Date(data.validUntil).toLocaleDateString('uk-UA');
-    // Піднято на 15px (з 1625 до 1610)
-    ctx.fillText(formattedDate, 2205, 1610);
+    // Y змінено з 1610 на 1622 (вниз)
+    ctx.fillText(formattedDate, 2205, 1622);
 
-    // --- 4. КОД ВЕРИФІКАЦІЇ (Золотий, тим самим шрифтом) ---
+    // --- 4. КОД ВЕРИФІКАЦІЇ (Шрифт Arial, золото, трохи вниз) ---
     ctx.fillStyle = goldColor;
-    ctx.font = 'italic 75px Caslon, Georgia, serif';
-    // Піднято на 20px (з 1670 до 1650)
-    ctx.fillText(data.verificationCode, canvas.width / 2, 1650);
+    ctx.font = 'bold 70px Arial, sans-serif'; 
+    // Y змінено з 1650 на 1665 (вниз)
+    ctx.fillText(data.verificationCode, canvas.width / 2, 1665);
   }
 
   document.getElementById('certForm').addEventListener('submit', function(e) {
