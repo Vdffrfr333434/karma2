@@ -538,16 +538,30 @@
     };
 
     await saveCertificate(verificationCode, currentCertData);
+    
+    // Очищаем canvas перед новым рисованием
+    const canvas = document.getElementById('certCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     drawCertificate(currentCertData);
 
     document.getElementById('previewSection').style.display = 'block';
     document.getElementById('verificationCode').textContent = verificationCode;
 
-    document.getElementById('qrPreview').innerHTML = '';
-    new QRCode(document.getElementById('qrPreview'), {
+    // Очищаем старый QR-код и создаём новый
+    const qrContainer = document.getElementById('qrPreview');
+    qrContainer.innerHTML = '';
+    new QRCode(qrContainer, {
       text: verificationCode,
       width: 120,
       height: 120
+    });
+    
+    // Скроллим к превью
+    document.getElementById('previewSection').scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'nearest' 
     });
   });
 
