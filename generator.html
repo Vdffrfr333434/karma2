@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Генератор сертифікатів</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      background: #f8f9fa;
+      border-bottom: 2px solid #e9ecef;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      color: #6c757d;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab.active {
+      color: #667eea;
+      background: white;
+      border-bottom: 3px solid #667eea;
+    }
+
+    .tab:hover {
+      background: #ffffff;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 40px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    h2 {
+      color: #2d3748;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #4a5568;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: #48bb78;
+    }
+
+    .btn-secondary:hover {
+      box-shadow: 0 10px 25px rgba(72, 187, 120, 0.4);
+    }
+
+    .preview {
+      margin-top: 30px;
+      border: 2px dashed #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      background: #f7fafc;
+    }
+
+    .preview canvas {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #qrPreview {
+      margin: 20px auto;
+      display: inline-block;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f0fff4;
+      border: 2px solid #48bb78;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result h3 {
+      color: #22543d;
+      margin-bottom: 15px;
+    }
+
+    .result p {
+      color: #2d3748;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .error {
+      background: #fff5f5;
+      border-color: #fc8181;
+      color: #c53030;
+    }
+
+    .code-display {
+      background: #2d3748;
+      color: #48bb78;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 15px 0;
+      word-break: break-all;
+    }
+
+    .info-box {
+      background: #ebf8ff;
+      border-left: 4px solid #4299e1;
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 4px;
+      color: #2c5282;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 0;
+        border-radius: 0;
+      }
+
+      .tab-content {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('generate')">
+      📝 Створити сертифікат
+    </div>
+    <div class="tab" onclick="switchTab('verify')">
+      ✅ Перевірити сертифікат
+    </div>
+  </div>
+
+  <!-- TAB 1: GENERATE -->
+  <div id="generateTab" class="tab-content active">
+    <h2>Генератор сертифікатів</h2>
+    
+    <div class="info-box">
+      ℹ️ Заповніть всі поля. Система автоматично створить унікальний код верифікації та QR-код для перевірки автентичності.
+    </div>
+
+    <form id="certForm">
+      <div class="form-group">
+        <label for="recipientName">Ім'я отримувача *</label>
+        <input type="text" id="recipientName" placeholder="Наприклад: Олена Коваленко" required>
+      </div>
+
+      <div class="form-group">
+        <label for="purpose">Призначення сертифікату *</label>
+        <textarea id="purpose" placeholder="Наприклад: Консультація кармолога (3500 грн)" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="validUntil">Дійсний до *</label>
+        <input type="date" id="validUntil" required>
+      </div>
+
+      <button type="submit" class="btn">🎨 Згенерувати сертифікат</button>
+    </form>
+
+    <div class="preview" id="previewSection" style="display: none;">
+      <h3>Попередній перегляд:</h3>
+      <canvas id="certCanvas"></canvas>
+      <div id="qrPreview"></div>
+      <div class="code-display" id="verificationCode"></div>
+      <button class="btn btn-secondary" onclick="downloadPDF()">📥 Завантажити PDF</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: VERIFY -->
+  <div id="verifyTab" class="tab-content">
+    <h2>Перевірка сертифікату</h2>
+
+    <div class="info-box">
+      🔍 Введіть код верифікації з сертифікату для перевірки його автентичності.
+    </div>
+
+    <form id="verifyForm">
+      <div class="form-group">
+        <label for="verifyCode">Код верифікації</label>
+        <input type="text" id="verifyCode" placeholder="Введіть код з сертифікату" required>
+      </div>
+
+      <button type="submit" class="btn">🔎 Перевірити сертифікат</button>
+    </form>
+
+    <div class="result" id="verifyResult"></div>
+  </div>
+</div>
+
+<script>
+  let currentCertData = null;
+
+  // Переключение табов
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    if (tab === 'generate') {
+      document.querySelectorAll('.tab')[0].classList.add('active');
+      document.getElementById('generateTab').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab')[1].classList.add('active');
+      document.getElementById('verifyTab').classList.add('active');
+    }
+  }
+
+  // Генерация уникального кода верификации
+  function generateVerificationCode(name, purpose, date) {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const hash = btoa(`${name}|${purpose}|${date}|${timestamp}`).substring(0, 16);
+    return `CERT-${random}-${hash}`.replace(/[=/+]/g, '');
+  }
+
+  // Сохранение данных сертификата
+  async function saveCertificate(code, data) {
+    try {
+      await window.storage.set(`cert:${code}`, JSON.stringify(data), true);
+      console.log('Сертификат сохранен:', code);
+    } catch (error) {
+      console.error('Ошибка сохранения:', error);
+    }
+  }
+
+  // Генерация сертификата
+  document.getElementById('certForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('recipientName').value;
+    const purpose = document.getElementById('purpose').value;
+    const validUntil = document.getElementById('validUntil').value;
+
+    // Генерируем код верификации
+    const verificationCode = generateVerificationCode(name, purpose, validUntil);
+
+    // Сохраняем данные
+    currentCertData = {
+      name,
+      purpose,
+      validUntil,
+      verificationCode,
+      issueDate: new Date().toISOString(),
+      status: 'active'
+    };
+
+    // Сохраняем в хранилище
+    await saveCertificate(verificationCode, currentCertData);
+
+    // Рисуем сертификат
+    drawCertificate(currentCertData);
+
+    // Показываем превью
+    document.getElementById('previewSection').style.display = 'block';
+    document.getElementById('verificationCode').textContent = verificationCode;
+
+    // Генерируем QR-код
+    document.getElementById('qrPreview').innerHTML = '';
+    new QRCode(document.getElementById('qrPreview'), {
+      text: verificationCode,
+      width: 150,
+      height: 150
+    });
+  });
+
+  // Рисование сертификата на canvas
+  function drawCertificate(data) {
+    const canvas = document.getElementById('certCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Размеры сертификата (альбомная ориентация)
+    canvas.width = 800;
+    canvas.height = 600;
+
+    // Фон (градиент)
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, '#667eea');
+    gradient.addColorStop(1, '#764ba2');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Белая рамка
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+    // Заголовок
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 48px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('ПОДАРУНКОВИЙ СЕРТИФІКАТ', canvas.width / 2, 120);
+
+    // Линия под заголовком
+    ctx.beginPath();
+    ctx.moveTo(200, 140);
+    ctx.lineTo(600, 140);
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Информация
+    ctx.font = '24px Arial';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    
+    ctx.fillText('Для:', 100, 220);
+    ctx.font = 'bold 28px Arial';
+    ctx.fillText(data.name, 100, 260);
+
+    ctx.font = '24px Arial';
+    ctx.fillText('Призначення:', 100, 320);
+    ctx.font = '22px Arial';
+    wrapText(ctx, data.purpose, 100, 355, 600, 28);
+
+    ctx.font = '20px Arial';
+    ctx.fillText(`Дійсний до: ${formatDate(data.validUntil)}`, 100, 480);
+
+    // Код верификации (внизу)
+    ctx.font = '16px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Код: ${data.verificationCode}`, canvas.width / 2, 550);
+  }
+
+  // Перенос текста
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+    let currentY = y;
+
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      const testWidth = metrics.width;
+      
+      if (testWidth > maxWidth && n > 0) {
+        ctx.fillText(line, x, currentY);
+        line = words[n] + ' ';
+        currentY += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, x, currentY);
+  }
+
+  // Форматирование даты
+  function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('uk-UA', options);
+  }
+
+  // Скачивание PDF
+  function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const canvas = document.getElementById('certCanvas');
+    
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    pdf.addImage(imgData, 'PNG', 10, 10, 277, 190);
+    
+    pdf.save(`Сертифікат_${currentCertData.name.replace(/\s/g, '_')}.pdf`);
+  }
+
+  // Проверка сертификата
+  document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const code = document.getElementById('verifyCode').value.trim();
+    const resultDiv = document.getElementById('verifyResult');
+
+    try {
+      const result = await window.storage.get(`cert:${code}`, true);
+      
+      if (!result) {
+        resultDiv.className = 'result show error';
+        resultDiv.innerHTML = `
+          <h3>❌ Сертифікат не знайдено</h3>
+          <p>Код верифікації не існує в системі. Можливо, сертифікат підроблений.</p>
+        `;
+        return;
+      }
+
+      const data = JSON.parse(result.value);
+      const validUntil = new Date(data.validUntil);
+      const today = new Date();
+      const isExpired = validUntil < today;
+
+      resultDiv.className = 'result show';
+      resultDiv.innerHTML = `
+        <h3>✅ Сертифікат автентичний</h3>
+        <p><strong>Отримувач:</strong> ${data.name}</p>
+        <p><strong>Призначення:</strong> ${data.purpose}</p>
+        <p><strong>Виданий:</strong> ${formatDate(data.issueDate)}</p>
+        <p><strong>Дійсний до:</strong> ${formatDate(data.validUntil)}</p>
+        <p><strong>Статус:</strong> ${isExpired ? '⚠️ Термін дії закінчився' : '✅ Активний'}</p>
+      `;
+    } catch (error) {
+      resultDiv.className = 'result show error';
+      resultDiv.innerHTML = `
+        <h3>❌ Помилка перевірки</h3>
+        <p>Не вдалося перевірити сертифікат. Спробуйте ще раз.</p>
+      `;
+    }
+  });
+
+  // Установка минимальной даты (сегодня)
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('validUntil').setAttribute('min', today);
+</script>
+
+</body>
+</html>
