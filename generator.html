@@ -18,7 +18,15 @@
     .form-group { margin-bottom: 15px; }
     label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 600; color: #2a1b3d; }
     input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
-    .btn { width: 100%; padding: 15px; background: #9b7fd4; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 16px; }
+    
+    /* Кнопки з текстом, що темніший за фон */
+    .btn { 
+      width: 100%; padding: 15px; background: #9b7fd4; color: #4b367c; 
+      border: none; border-radius: 10px; font-weight: 600; cursor: pointer; 
+      margin-top: 10px; font-size: 16px; transition: 0.3s;
+    }
+    .btn-download { background: #48bb78; color: #1a4d2e; margin-top: 20px; }
+    
     .preview-section { margin-top: 30px; text-align: center; display: none; }
     canvas { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
   </style>
@@ -27,7 +35,7 @@
 
 <div class="content-wrapper">
   <div class="glass">
-    <h2>🎁 Створити сертифікат</h2>
+    <h2>Створити сертифікат</h2>
     <form id="certForm">
       <div class="form-group">
         <label>Ім'я отримувача</label>
@@ -38,15 +46,15 @@
         <input type="text" id="purpose" placeholder="Консультація кармолога" required>
       </div>
       <div class="form-group">
-        <label>Дійсний до</label>
-        <input type="date" id="validUntil" required>
+        <label>Дійсний до (ДД.ММ.РРРР)</label>
+        <input type="text" id="validUntil" placeholder="31.12.2025" maxlength="10" required>
       </div>
-      <button type="submit" class="btn">✨ Згенерувати макет</button>
+      <button type="submit" class="btn">Сгенерувати сертификат</button>
     </form>
     
     <div class="preview-section" id="previewSection">
       <canvas id="certCanvas"></canvas>
-      <button class="btn" style="background: #28a745; margin-top: 20px;" onclick="downloadPDF()">📥 Завантажити PDF</button>
+      <button class="btn btn-download" onclick="downloadPDF()">Завантажити PDF</button>
     </div>
   </div>
 </div>
@@ -54,10 +62,23 @@
 <script>
   const canvas = document.getElementById('certCanvas');
   const ctx = canvas.getContext('2d');
+  const dateInput = document.getElementById('validUntil');
   const templateImg = new Image();
   
   templateImg.src = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/CertificateFront2.webp';
   templateImg.crossOrigin = "anonymous";
+
+  // Логіка автозаповнення точок у даті
+  dateInput.addEventListener('input', function (e) {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+    if (v.length >= 5) {
+      e.target.value = `${v.slice(0, 2)}.${v.slice(2, 4)}.${v.slice(4, 8)}`;
+    } else if (v.length >= 3) {
+      e.target.value = `${v.slice(0, 2)}.${v.slice(2, 4)}`;
+    } else {
+      e.target.value = v;
+    }
+  });
 
   function draw(data) {
     canvas.width = 2480;
@@ -70,21 +91,20 @@
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // --- 1. ІМ'Я (Тонше - прибрано bold) ---
+    // 1. ІМ'Я (Тонкий курсив)
     ctx.fillStyle = purpleColor;
     ctx.font = 'italic 85px Caslon, Georgia, serif';
     ctx.fillText(data.recipientName, 750, 1238);
 
-    // --- 2. ПРИЗНАЧЕННЯ (Тонше - прибрано bold) ---
+    // 2. ПРИЗНАЧЕННЯ (Тонкий курсив)
     ctx.font = 'italic 90px Caslon, Georgia, serif';
     ctx.fillText(data.purpose, canvas.width / 2, 1340);
 
-    // --- 3. ДАТА (Arial Bold, Прямий, -2px вліво) ---
-    ctx.font = 'bold 45px Arial, sans-serif'; // Прибрано italic
-    const formattedDate = new Date(data.validUntil).toLocaleDateString('uk-UA');
-    ctx.fillText(formattedDate, 2203, 1622); // Було 2205, стало 2203
+    // 3. ДАТА (Жирний Arial, прямий, -2px вліво)
+    ctx.font = 'bold 45px Arial, sans-serif'; 
+    ctx.fillText(data.date, 2203, 1622); 
 
-    // --- 4. КОД ВЕРИФІКАЦІЇ (Arial Regular) ---
+    // 4. КОД ВЕРИФІКАЦІЇ (Звичайний Arial, розмір 49)
     ctx.fillStyle = goldCodeColor;
     ctx.font = '49px Arial, sans-serif'; 
     ctx.fillText(data.verificationCode, canvas.width / 2, 1665);
@@ -98,7 +118,7 @@
     const data = {
       recipientName: document.getElementById('recipientName').value,
       purpose: document.getElementById('purpose').value,
-      validUntil: document.getElementById('validUntil').value,
+      date: dateInput.value,
       verificationCode: code
     };
 
