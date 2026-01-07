@@ -13,11 +13,6 @@
       font-style: italic;
     }
 
-    :root {
-      --text: #5a4470;
-      --accent: #9b7fd4;
-    }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
       background: #f8f5fa;
@@ -27,10 +22,7 @@
       padding: 20px;
     }
 
-    .content-wrapper {
-      width: 100%;
-      max-width: 500px;
-    }
+    .content-wrapper { width: 100%; max-width: 500px; }
 
     .glass {
       background: white;
@@ -39,7 +31,7 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     }
 
-    h2 { text-align: center; margin-bottom: 20px; color: var(--text); }
+    h2 { text-align: center; margin-bottom: 20px; color: #5a4470; }
 
     .form-group { margin-bottom: 15px; }
     label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 14px; }
@@ -49,29 +41,18 @@
     }
 
     .btn {
-      width: 100%; padding: 14px; background: var(--accent); color: white;
+      width: 100%; padding: 14px; background: #9b7fd4; color: white;
       border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px;
     }
 
-    .preview-section {
-      margin-top: 25px;
-      text-align: center;
-      display: none;
-    }
+    .preview-section { margin-top: 25px; text-align: center; display: none; }
 
     canvas {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
+      max-width: 100%; height: auto; border-radius: 8px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
-    .status-msg {
-      font-size: 12px;
-      color: #666;
-      margin-top: 5px;
-      text-align: center;
-    }
+    .status-msg { font-size: 12px; color: #666; margin-top: 5px; text-align: center; }
   </style>
 </head>
 <body>
@@ -94,7 +75,7 @@
         <input type="date" id="validUntil" required>
       </div>
       <button type="submit" class="btn" id="submitBtn">✨ Сформувати макет</button>
-      <div id="loadingStatus" class="status-msg"></div>
+      <div id="loadingStatus" class="status-msg">Завантаження шаблону...</div>
     </form>
 
     <div class="preview-section" id="previewSection">
@@ -110,65 +91,47 @@
   const loadingStatus = document.getElementById('loadingStatus');
   const templateImg = new Image();
   
-  // Використовуємо правильне пряме посилання (raw)
   templateImg.src = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/CertificateFront2.webp';
   templateImg.crossOrigin = "anonymous";
 
-  templateImg.onload = () => {
-    console.log("Картинка завантажена успішно");
-    loadingStatus.innerText = "Шаблон готовий";
-  };
-
-  templateImg.onerror = () => {
-    console.error("Помилка завантаження картинки");
-    loadingStatus.style.color = "red";
-    loadingStatus.innerText = "Помилка завантаження шаблону. Перевірте інтернет.";
-  };
+  templateImg.onload = () => { loadingStatus.innerText = "Шаблон готовий"; };
+  templateImg.onerror = () => { loadingStatus.innerText = "Помилка завантаження шаблону"; };
 
   function draw(data) {
-    // Встановлюємо розмір канвасу як у картинки (наприклад 1000х700)
     canvas.width = templateImg.naturalWidth;
     canvas.height = templateImg.naturalHeight;
-
-    // Малюємо шаблон
     ctx.drawImage(templateImg, 0, 0);
 
-    // --- ТЕКСТ 1: ПРИЗНАЧЕННЯ ---
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#fce4c4'; 
-    ctx.font = 'italic 34px Caslon, Georgia, serif';
-    // Центруємо за координатами (приблизно центр по горизонталі, висота 705)
-    ctx.fillText(data.purpose, canvas.width / 2, 705);
 
-    // --- ТЕКСТ 2: ІМ'Я НА ЖОВТІЙ СМУЗІ ---
-    ctx.fillStyle = '#2a1b3d'; 
-    ctx.font = 'bold italic 36px Caslon, Georgia, serif';
-    // Координата висоти для жовтої смуги
-    ctx.fillText(data.recipientName, canvas.width / 2, 765);
+    // --- ПРИЗНАЧЕННЯ (Збільшено в 3 рази, Колір: Зелений) ---
+    ctx.fillStyle = '#1b4d3e'; // Насичений темно-зелений
+    ctx.font = 'italic 102px Caslon, Georgia, serif'; // Було 34, стало 102
+    ctx.fillText(data.purpose, canvas.width / 2, 690);
 
-    // --- ТЕКСТ 3: ДАТА ---
+    // --- ІМ'Я НА ЖОВТІЙ СМУЗІ (Збільшено в 3 рази, Колір: Зелений) ---
+    ctx.fillStyle = '#1b4d3e'; 
+    ctx.font = 'bold italic 108px Caslon, Georgia, serif'; // Було 36, стало 108
+    ctx.fillText(data.recipientName, canvas.width / 2, 775);
+
+    // --- ДАТА (у правому нижньому куті) ---
     ctx.textAlign = 'right';
     ctx.fillStyle = '#fce4c4';
     ctx.font = 'italic 28px Caslon, Georgia, serif';
-    const dateObj = new Date(data.validUntil);
-    const dateStr = dateObj.toLocaleDateString('uk-UA');
+    const dateStr = new Date(data.validUntil).toLocaleDateString('uk-UA');
     ctx.fillText(dateStr, canvas.width - 120, 915);
 
-    // --- ТЕКСТ 4: КОД (внизу) ---
+    // --- КОД ВЕРИФІКАЦІЇ (Збільшено в 4 рази, Колір: Золотистий) ---
     ctx.textAlign = 'center';
-    ctx.font = '14px Courier New';
-    ctx.fillStyle = 'rgba(252, 228, 196, 0.6)';
-    ctx.fillText(data.verificationCode, canvas.width / 2, canvas.height - 25);
+    ctx.fillStyle = '#D4AF37'; // Золотистий
+    ctx.font = 'bold 56px Courier New'; // Було 14, стало 56
+    ctx.fillText(data.verificationCode, canvas.width / 2, canvas.height - 60);
   }
 
   document.getElementById('certForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    if (!templateImg.complete) {
-      alert("Картинка ще завантажується, зачекайте секунду...");
-      return;
-    }
+    if (!templateImg.complete) return;
 
     const code = `ID-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
     const data = {
@@ -180,22 +143,17 @@
 
     document.getElementById('previewSection').style.display = 'block';
     draw(data);
-    
-    // Скрол до превью
     canvas.scrollIntoView({ behavior: 'smooth' });
   });
 
   function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const imgData = canvas.toDataURL('image/png');
-    
-    // Створюємо PDF під точний розмір картинки
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'px',
       format: [canvas.width, canvas.height]
     });
-    
     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
     pdf.save(`Сертифікат_${document.getElementById('recipientName').value}.pdf`);
   }
