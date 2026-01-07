@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Генератор сертифікатів | Марьяна</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     @font-face {
@@ -17,303 +16,127 @@
     :root{
       --bg1:#9b7fd4;
       --bg2:#c9a0dc;
-      --bg3:#8b7ba5;
-      --glass:rgba(139, 123, 165, 0.08);
-      --border:rgba(139, 123, 165, 0.2);
       --text:#5a4470;
-      --text-muted:#8b7ba5;
       --gold:#9b7fd4;
-      --lavender:#c9a0dc;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
       color: var(--text);
       background: #f8f5fa;
-      overflow-x: hidden;
-      position: relative;
       display: flex;
       justify-content: center;
       min-height: 100vh;
     }
 
-    #gradient-canvas {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      filter: blur(80px);
-      opacity: 0.4;
-    }
-
-    #noise-overlay {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      opacity: 0.015;
-      z-index: 1;
-    }
-
     .content-wrapper {
       width: 100%;
       max-width: 480px;
-      position: relative;
-      z-index: 2;
       padding: 20px 16px;
+      z-index: 2;
     }
 
     .glass {
-      position: relative;
-      background: rgba(250, 245, 255, 0.65);
+      background: rgba(250, 245, 255, 0.85);
       border: 1px solid rgba(139, 123, 165, 0.15);
-      box-shadow: 0 8px 32px rgba(139, 123, 165, 0.08);
-      border-radius: 10px;
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
-      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(139, 123, 165, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
     }
 
-    .no-diamond::before {
-      content: none !important;
-    }
+    h2 { font-size: 20px; margin-bottom: 20px; text-align: center; }
 
-    h2 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      text-align: center;
-      color: var(--text);
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
 
     .tab {
-      flex: 1;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text-muted);
-      background: rgba(250, 245, 255, 0.5);
-      border: 1px solid rgba(139, 123, 165, 0.15);
-      border-radius: 8px;
-      transition: all 0.3s;
+      flex: 1; padding: 12px; text-align: center; cursor: pointer;
+      font-weight: 600; font-size: 14px; color: #8b7ba5;
+      background: rgba(250, 245, 255, 0.5); border: 1px solid rgba(139, 123, 165, 0.15);
+      border-radius: 8px; transition: 0.3s;
     }
 
     .tab.active {
-      color: var(--text);
-      background: rgba(155, 127, 212, 0.15);
+      color: var(--text); background: rgba(155, 127, 212, 0.15);
       border-color: rgba(155, 127, 212, 0.3);
     }
 
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .info-box {
-      background: rgba(155, 127, 212, 0.1);
-      border-left: 4px solid var(--gold);
-      padding: 12px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--text);
-      font-weight: 500;
-      font-size: 14px;
-    }
-
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; }
     input, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid rgba(139, 123, 165, 0.2);
-      border-radius: 8px;
-      font-size: 14px;
-      background: rgba(255, 255, 255, 0.8);
-      color: var(--text);
-      font-family: inherit;
-      transition: all 0.3s;
+      width: 100%; padding: 12px; border: 1px solid rgba(139, 123, 165, 0.2);
+      border-radius: 8px; font-size: 14px; background: white;
     }
 
     .btn {
-      width: 100%;
-      padding: 12px;
-      background: rgba(155, 127, 212, 0.05);
-      border: 1px solid #8b7ba5;
-      color: var(--text);
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 8px;
+      width: 100%; padding: 12px; background: #9b7fd4; color: white;
+      border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;
     }
 
-    .btn:hover {
-      background: rgba(155, 127, 212, 0.15);
-      box-shadow: 0 4px 16px rgba(139, 123, 165, 0.2);
-      transform: translateY(-2px);
-    }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
     .preview {
-      margin-top: 20px;
-      padding: 16px;
-      background: rgba(250, 245, 255, 0.5);
-      border: 2px dashed rgba(139, 123, 165, 0.3);
-      border-radius: 10px;
-      text-align: center;
+      margin-top: 20px; padding: 16px; border: 2px dashed #c9a0dc;
+      border-radius: 10px; text-align: center;
     }
 
     .preview canvas {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(139, 123, 165, 0.2);
-      margin-bottom: 12px;
+      max-width: 100%; height: auto; border-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .code-display {
-      background: var(--text);
-      color: #48bb78;
-      padding: 12px;
-      border-radius: 6px;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      font-weight: bold;
-      margin: 12px 0;
+      background: #5a4470; color: #d4af37; padding: 10px;
+      border-radius: 6px; font-family: monospace; font-size: 14px;
+      margin: 15px 0; font-weight: bold;
     }
 
     .back-link {
-      display: inline-block;
-      margin-bottom: 16px;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 14px;
-      padding: 8px 12px;
-      background: rgba(250, 245, 255, 0.5);
-      border-radius: 6px;
+      display: inline-block; margin-bottom: 15px; color: var(--text);
+      text-decoration: none; font-size: 14px;
     }
   </style>
 </head>
 <body>
 
-<canvas id="gradient-canvas"></canvas>
-<canvas id="noise-overlay"></canvas>
-
 <div class="content-wrapper">
-  <br>
-  <a href="index.html" class="back-link">← Повернутися на головну</a>
+  <a href="index.html" class="back-link">← Назад</a>
 
-  <div class="glass no-diamond" style="padding: 24px;">
-    <h2>🎁 Генератор сертифікатів</h2>
+  <div class="glass">
+    <h2>🎁 Створити сертифікат</h2>
 
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('generate')">Створити</div>
-      <div class="tab" onclick="switchTab('verify')">Перевірити</div>
+      <div class="tab active" id="tab-gen">Створення</div>
+      <div class="tab" id="tab-ver">Перевірка</div>
     </div>
 
-    <div id="generateTab" class="tab-content active">
-      <div class="info-box">ℹ️ Заповніть усі поля. Система автоматично створить код та QR-код.</div>
-      <form id="certForm">
-        <div class="form-group">
-          <label for="recipientName">Ім'я отримувача *</label>
-          <input type="text" id="recipientName" placeholder="Олена Коваленко" required>
-        </div>
-        <div class="form-group">
-          <label for="purpose">Призначення *</label>
-          <textarea id="purpose" placeholder="Консультація кармолога" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="validUntil">Дійсний до *</label>
-          <input type="date" id="validUntil" required>
-        </div>
-        <button type="submit" class="btn">🎨 Згенерувати сертифікат</button>
-      </form>
-
-      <div class="preview" id="previewSection" style="display: none;">
-        <h3>Попередній перегляд:</h3>
-        <canvas id="certCanvas"></canvas>
-        <div id="qrPreview" style="margin: 10px auto; display: inline-block;"></div>
-        <div class="code-display" id="verificationCode"></div>
-        <button class="btn" style="background: #48bb78; color: white; border: none;" onclick="downloadPDF()">📥 Завантажити PDF</button>
+    <form id="certForm">
+      <div class="form-group">
+        <label>Ім'я отримувача</label>
+        <input type="text" id="recipientName" placeholder="Олена Коваленко" required>
       </div>
-    </div>
+      <div class="form-group">
+        <label>Призначення</label>
+        <textarea id="purpose" placeholder="Консультація кармолога" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Дійсний до</label>
+        <input type="date" id="validUntil" required>
+      </div>
+      <button type="submit" class="btn">Згенерувати</button>
+    </form>
 
-    <div id="verifyTab" class="tab-content">
-      <form id="verifyForm">
-        <div class="form-group">
-          <label for="verifyCode">Код верифікації</label>
-          <input type="text" id="verifyCode" placeholder="CERT-XXXXXX..." required>
-        </div>
-        <button type="submit" class="btn">🔎 Перевірити</button>
-      </form>
-      <div class="result" id="verifyResult" style="margin-top:15px; padding:10px; border-radius:8px; display:none;"></div>
+    <div class="preview" id="previewSection" style="display: none;">
+      <canvas id="certCanvas"></canvas>
+      <div class="code-display" id="verificationCodeDisplay"></div>
+      <button class="btn" style="background: #48bb78;" onclick="downloadPDF()">Завантажити PDF</button>
     </div>
   </div>
 </div>
 
 <script>
-  // BG ANIMATION
-  const canvas = document.getElementById('gradient-canvas');
-  const ctx = canvas.getContext('2d');
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = window.innerHeight;
-
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
-    gradient.addColorStop(0, '#f8f5fa');
-    gradient.addColorStop(1, '#c9a0dc');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0,0, width, height);
-    requestAnimationFrame(animate);
-  }
-  animate();
-
-  // TABS
-  function switchTab(tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    if (tab === 'generate') {
-      document.querySelectorAll('.tab')[0].classList.add('active');
-      document.getElementById('generateTab').classList.add('active');
-    } else {
-      document.querySelectorAll('.tab')[1].classList.add('active');
-      document.getElementById('verifyTab').classList.add('active');
-    }
-  }
-
-  // DRAWING LOGIC
   function drawDiamond(ctx, x, y, size) {
     ctx.beginPath();
     ctx.moveTo(x, y - size);
@@ -327,16 +150,15 @@
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     const words = text.split(' ');
     let line = '';
-    let currentY = y;
     for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n] + ' ';
       if (ctx.measureText(testLine).width > maxWidth && n > 0) {
-        ctx.fillText(line, x, currentY);
+        ctx.fillText(line, x, y);
         line = words[n] + ' ';
-        currentY += lineHeight;
+        y += lineHeight;
       } else { line = testLine; }
     }
-    ctx.fillText(line, x, currentY);
+    ctx.fillText(line, x, y);
   }
 
   function drawCertificate(data) {
@@ -344,86 +166,88 @@
     const ctx = canvas.getContext('2d');
     const scale = 2;
     const w = 400, h = 280;
-    canvas.width = w * scale; canvas.height = h * scale;
-    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    
+    canvas.width = w * scale;
+    canvas.height = h * scale;
     ctx.scale(scale, scale);
 
-    // 1. Посилений Градієнт
+    // 1. Градієнт без білого (Рожево-бузковий)
     const gradient = ctx.createLinearGradient(0, 0, w, h);
-    gradient.addColorStop(0, '#FFFFFF');
-    gradient.addColorStop(0.4, '#EDE8F5');
-    gradient.addColorStop(1, '#C9A0DC');
+    gradient.addColorStop(0, '#e0aaff'); // Світлий бузок
+    gradient.addColorStop(0.5, '#c9a0dc'); // Рожево-бузковий
+    gradient.addColorStop(1, '#ff99c8'); // Теплий рожевий
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, w, h);
 
-    // 2. Тонка золота рамка
+    // Зернистість (Noise)
+    ctx.globalAlpha = 0.07;
+    for (let i = 0; i < 6000; i++) {
+      ctx.fillStyle = Math.random() > 0.5 ? '#000' : '#fff';
+      ctx.fillRect(Math.random() * w, Math.random() * h, 1, 1);
+    }
+    ctx.globalAlpha = 1.0;
+
+    // 2. Рамка (одна тонка золота)
     ctx.strokeStyle = '#D4AF37';
-    ctx.lineWidth = 0.75;
+    ctx.lineWidth = 0.7;
     ctx.strokeRect(15, 15, w - 30, h - 30);
 
-    // 3. Заголовок (менше на 25%, без лінії)
+    // 3. Заголовок
     ctx.fillStyle = '#D4AF37';
     ctx.font = 'italic 21px Caslon, Georgia, serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('Подарунковий Сертифікат', w / 2, 50);
 
-    // 4. Текст "Для" та "Ім'я" (однаковий розмір, вирівнювання middle)
+    // 4. Текст "Для"
     ctx.textAlign = 'left';
     ctx.fillStyle = '#B8860B';
     ctx.font = 'italic 16px Caslon, Georgia, serif';
     const forLabel = 'Для: ';
     const labelW = ctx.measureText(forLabel).width;
-    ctx.fillText(forLabel, 50, 110);
-    ctx.fillText(data.name, 50 + labelW, 110);
+    ctx.fillText(forLabel, 50, 105);
+    ctx.fillText(data.name, 50 + labelW, 105);
 
-    // 5. Призначення (вирівнювання middle)
+    // 5. Призначення
     const purpLabel = 'Призначення: ';
-    ctx.font = 'italic 15px Caslon, Georgia, serif';
     const purpLabelW = ctx.measureText(purpLabel).width;
-    ctx.fillText(purpLabel, 50, 145);
-    wrapText(ctx, data.purpose, 50 + purpLabelW, 145, 280 - purpLabelW, 18);
+    ctx.fillText(purpLabel, 50, 140);
+    wrapText(ctx, data.purpose, 50 + purpLabelW, 140, 280 - purpLabelW, 18);
 
-    // 6. Паттерн діамантів (правий нижній кут)
-    ctx.fillStyle = 'rgba(212, 175, 55, 0.25)';
-    const cx = w - 65, cy = h - 65;
-    drawDiamond(ctx, cx + 25, cy + 25, 10);
-    drawDiamond(ctx, cx + 45, cy + 5, 5);
-    drawDiamond(ctx, cx + 5, cy + 45, 6);
-    drawDiamond(ctx, cx + 45, cy + 45, 4);
+    // 6. Паттерн діамантів
+    ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
+    const cx = w - 60, cy = h - 60;
+    drawDiamond(ctx, cx + 20, cy + 20, 9);
+    drawDiamond(ctx, cx + 40, cy + 5, 5);
+    drawDiamond(ctx, cx + 5, cy + 40, 6);
 
-    // Срок дії
+    // 7. Срок дії (Такий самий розмір 16px)
     ctx.fillStyle = '#B8860B';
-    ctx.font = 'italic 11px Caslon, Georgia, serif';
+    ctx.font = 'italic 15px Caslon, Georgia, serif';
     ctx.textAlign = 'right';
     const dateStr = new Date(data.validUntil).toLocaleDateString('uk-UA', {year:'numeric', month:'long', day:'numeric'});
-    ctx.fillText(`Дійсний до: ${dateStr}`, w - 40, h - 40);
+    ctx.fillText(`Дійсний до: ${dateStr}`, w - 40, h - 45);
 
-    // Код
-    ctx.font = '8px Courier New';
+    // 8. Код (Опущено ще нижче, колір золото)
+    ctx.font = 'bold 8px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(90, 68, 112, 0.6)';
-    ctx.fillText(data.verificationCode, w / 2, h - 10);
+    ctx.fillStyle = '#D4AF37';
+    ctx.fillText(data.verificationCode, w / 2, h - 6); // Максимально низько
   }
 
-  // GENERATE EVENT
-  let currentCertData = null;
-  document.getElementById('certForm').addEventListener('submit', function(e) {
+  let currentData = null;
+  document.getElementById('certForm').addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.getElementById('recipientName').value;
-    const purpose = document.getElementById('purpose').value;
-    const validUntil = document.getElementById('validUntil').value;
     const code = `CERT-${Math.random().toString(36).substr(2,6).toUpperCase()}`;
-
-    currentCertData = { name, purpose, validUntil, verificationCode: code };
-    
+    currentData = {
+      name: document.getElementById('recipientName').value,
+      purpose: document.getElementById('purpose').value,
+      validUntil: document.getElementById('validUntil').value,
+      verificationCode: code
+    };
     document.getElementById('previewSection').style.display = 'block';
-    document.getElementById('verificationCode').textContent = code;
-    
-    drawCertificate(currentCertData);
-    
-    document.getElementById('qrPreview').innerHTML = '';
-    new QRCode(document.getElementById('qrPreview'), { text: code, width: 90, height: 90 });
+    document.getElementById('verificationCodeDisplay').textContent = code;
+    drawCertificate(currentData);
   });
 
   function downloadPDF() {
@@ -431,9 +255,8 @@
     const canvas = document.getElementById('certCanvas');
     const pdf = new jsPDF('l', 'mm', [148, 105]);
     pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 148, 105);
-    pdf.save(`Certificate_${currentCertData.name}.pdf`);
+    pdf.save(`Сертифікат_${currentData.name}.pdf`);
   }
 </script>
-
 </body>
 </html>
