@@ -572,7 +572,7 @@
     });
   });
 
-  // ===== ВЫСОКОЕ КАЧЕСТВО: увеличиваем разрешение canvas в 2 раза =====
+  // ===== РИСОВАНИЕ СЕРТИФИКАТА =====
   function drawCertificate(data) {
     const canvas = document.getElementById('certCanvas');
     const ctx = canvas.getContext('2d');
@@ -588,16 +588,15 @@
     
     ctx.scale(scale, scale);
 
-    // Рандомный золотистый градиент для каждого сертификата
-    const goldColors = [
-      ['#D4AF37', '#FFD700', '#F4C430'], // Классическое золото
-      ['#C9A961', '#E6C170', '#D4AF37'], // Бледное золото
-      ['#B8860B', '#DAA520', '#FFD700'], // Тёмное золото
-      ['#F0E68C', '#FFD700', '#FFA500'], // Яркое золото
-      ['#C5B358', '#D4AF37', '#E6C170']  // Винтажное золото
+    // Градиент фона в тонах главной страницы (белый, серый, лиловый)
+    const bgColors = [
+      ['#FFFFFF', '#F0EDF5', '#E8E1F0'], // Белый → светло-лиловый
+      ['#F8F5FA', '#EDE8F5', '#E0D5EC'], // Бледный → лиловый
+      ['#FAFAFA', '#F2EDF7', '#DCD0E8'], // Светло-серый → лиловый
+      ['#FFFFFF', '#EBE5F2', '#D8CCDF'], // Белый → серо-лиловый
     ];
     
-    const randomPalette = goldColors[Math.floor(Math.random() * goldColors.length)];
+    const randomPalette = bgColors[Math.floor(Math.random() * bgColors.length)];
     
     const gradient = ctx.createLinearGradient(0, 0, displayWidth, displayHeight);
     gradient.addColorStop(0, randomPalette[0]);
@@ -607,7 +606,7 @@
     ctx.fillRect(0, 0, displayWidth, displayHeight);
 
     // Добавляем зернистость (noise texture)
-    ctx.globalAlpha = 0.15;
+    ctx.globalAlpha = 0.08;
     for (let i = 0; i < displayWidth * displayHeight / 4; i++) {
       const x = Math.random() * displayWidth;
       const y = Math.random() * displayHeight;
@@ -617,18 +616,18 @@
     }
     ctx.globalAlpha = 1.0;
 
-    // Декоративная рамка золотого цвета
-    ctx.strokeStyle = '#8B7355';
-    ctx.lineWidth = 3;
+    // Декоративная рамка золотого цвета (толщина вдвое меньше)
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 1.5;
     ctx.strokeRect(20, 20, displayWidth - 40, displayHeight - 40);
     
     // Внутренняя тонкая рамка
-    ctx.strokeStyle = '#D4AF37';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#C9A961';
+    ctx.lineWidth = 0.5;
     ctx.strokeRect(25, 25, displayWidth - 50, displayHeight - 50);
 
-    // Заголовок - Caslon шрифт
-    ctx.fillStyle = '#5D4E37'; // Тёмно-коричневый/золотистый
+    // Заголовок - Caslon шрифт (золотистый)
+    ctx.fillStyle = '#D4AF37';
     ctx.font = 'italic 28px Caslon, Georgia, serif';
     ctx.textAlign = 'center';
     ctx.fillText('Подарунковий Сертифікат', displayWidth / 2, 60);
@@ -637,39 +636,42 @@
     ctx.beginPath();
     ctx.moveTo(80, 75);
     ctx.lineTo(320, 75);
-    ctx.strokeStyle = '#8B7355';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#C9A961';
+    ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Текст сертификата
-    ctx.fillStyle = '#5D4E37';
+    // Текст сертификата (золотистый шрифт)
+    ctx.fillStyle = '#B8860B';
     ctx.textAlign = 'left';
     
-    // "Для:"
+    // "Для:" и имя получателя в одну строку
     ctx.font = 'italic 16px Caslon, Georgia, serif';
-    ctx.fillText('Для:', 50, 110);
+    const forText = 'Для: ';
+    const forWidth = ctx.measureText(forText).width;
+    ctx.fillText(forText, 50, 110);
     
-    // Имя получателя
     ctx.font = 'italic bold 20px Caslon, Georgia, serif';
-    ctx.fillText(data.name, 50, 135);
+    ctx.fillText(data.name, 50 + forWidth, 110);
 
-    // "Призначення:"
+    // "Призначення:" и описание в одну строку (с переносом если нужно)
     ctx.font = 'italic 15px Caslon, Georgia, serif';
-    ctx.fillText('Призначення:', 50, 165);
+    const purposeLabel = 'Призначення: ';
+    const purposeLabelWidth = ctx.measureText(purposeLabel).width;
+    ctx.fillText(purposeLabel, 50, 145);
     
-    // Описание
     ctx.font = 'italic 13px Caslon, Georgia, serif';
-    wrapText(ctx, data.purpose, 50, 185, 300, 16);
+    wrapText(ctx, data.purpose, 50 + purposeLabelWidth, 145, 300 - purposeLabelWidth, 16);
 
-    // Срок действия
+    // Срок действия - правый нижний угол (в пределах внутренней рамки)
     ctx.font = 'italic 12px Caslon, Georgia, serif';
-    ctx.fillText(`Дійсний до: ${formatDate(data.validUntil)}`, 50, 240);
+    ctx.textAlign = 'right';
+    ctx.fillText(`Дійсний до: ${formatDate(data.validUntil)}`, displayWidth - 35, displayHeight - 35);
 
-    // Код верификации (моноширинный шрифт)
+    // Код верификации - за пределами рамки, по центру, ниже
     ctx.font = '9px Courier New';
     ctx.textAlign = 'center';
-    ctx.fillStyle = '#8B7355';
-    ctx.fillText(`Код верифікації: ${data.verificationCode}`, displayWidth / 2, 265);
+    ctx.fillStyle = '#8B7ba5';
+    ctx.fillText(`Код верифікації: ${data.verificationCode}`, displayWidth / 2, displayHeight - 8);
   }
 
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
