@@ -65,28 +65,28 @@
     ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
     
     const purpleColor = '#2a1b3d'; 
-    const goldCodeColor = '#ffce81'; // Новий колір коду
+    const goldCodeColor = '#ffce81'; 
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // --- 1. ІМ'Я ---
+    // --- 1. ІМ'Я (Статичний розмір) ---
     ctx.fillStyle = purpleColor;
     ctx.font = 'bold italic 85px Caslon, Georgia, serif';
     ctx.fillText(data.recipientName, 750, 1238);
 
-    // --- 2. ПРИЗНАЧЕННЯ ---
+    // --- 2. ПРИЗНАЧЕННЯ (Статичний розмір) ---
     ctx.font = 'bold italic 90px Caslon, Georgia, serif';
     ctx.fillText(data.purpose, canvas.width / 2, 1340);
 
-    // --- 3. ДАТА (Шрифт Arial) ---
-    ctx.font = ' 50px Arial, sans-serif'; // Змінено на Arial
+    // --- 3. ДАТА (Arial Bold, 45px) ---
+    ctx.font = 'bold italic 45px Arial, sans-serif'; 
     const formattedDate = new Date(data.validUntil).toLocaleDateString('uk-UA');
     ctx.fillText(formattedDate, 2205, 1622);
 
-    // --- 4. КОД ВЕРИФІКАЦІЇ (Arial, колір #ffce81, розмір -30%) ---
+    // --- 4. КОД ВЕРИФІКАЦІЇ (Arial Regular, 49px) ---
     ctx.fillStyle = goldCodeColor;
-    ctx.font = 'bold 49px Arial, sans-serif'; // 70px * 0.7 = 49px
+    ctx.font = '49px Arial, sans-serif'; // Прибрано bold
     ctx.fillText(data.verificationCode, canvas.width / 2, 1665);
   }
 
