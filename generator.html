@@ -11,17 +11,18 @@
       src: url('https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/caslonbeckerno540swashrus_italic.otf') format('opentype');
       font-weight: normal; font-style: italic;
     }
-    body { font-family: sans-serif; background: #f8f5fa; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+    body { font-family: sans-serif; background: #f0ebf5; display: flex; flex-direction: column; align-items: center; padding: 20px; color: #333; }
     .content-wrapper { width: 100%; max-width: 500px; }
-    .glass { background: white; padding: 24px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-    h2 { text-align: center; color: #5a4470; }
+    .glass { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #5a4470; margin-bottom: 20px; }
     .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 500; }
-    input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-    .btn { width: 100%; padding: 14px; background: #9b7fd4; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-    .preview-section { margin-top: 25px; text-align: center; display: none; }
-    canvas { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-    .status-msg { font-size: 12px; color: #666; margin-top: 5px; text-align: center; }
+    label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 600; color: #5a4470; }
+    input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+    .btn { width: 100%; padding: 15px; background: #9b7fd4; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 16px; transition: 0.3s; }
+    .btn:hover { background: #8265c0; }
+    .preview-section { margin-top: 30px; text-align: center; display: none; }
+    canvas { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    .status-msg { font-size: 13px; color: #888; margin-top: 8px; text-align: center; }
   </style>
 </head>
 <body>
@@ -30,15 +31,25 @@
   <div class="glass">
     <h2>🎁 Створити сертифікат</h2>
     <form id="certForm">
-      <div class="form-group"><label>Призначення</label><input type="text" id="purpose" placeholder="Консультація" required></div>
-      <div class="form-group"><label>Ім'я отримувача</label><input type="text" id="recipientName" placeholder="Олена" required></div>
-      <div class="form-group"><label>Дійсний до</label><input type="date" id="validUntil" required></div>
-      <button type="submit" class="btn">✨ Сформувати макет</button>
-      <div id="loadingStatus" class="status-msg">Завантаження шаблону...</div>
+      <div class="form-group">
+        <label>Ім'я отримувача</label>
+        <input type="text" id="recipientName" placeholder="Введіть ім'я" required>
+      </div>
+      <div class="form-group">
+        <label>Призначення сертифіката</label>
+        <input type="text" id="purpose" placeholder="Наприклад: Консультація кармолога" required>
+      </div>
+      <div class="form-group">
+        <label>Дійсний до</label>
+        <input type="date" id="validUntil" required>
+      </div>
+      <button type="submit" class="btn">✨ Згенерувати макет</button>
+      <div id="loadingStatus" class="status-msg">Завантаження фону...</div>
     </form>
+    
     <div class="preview-section" id="previewSection">
       <canvas id="certCanvas"></canvas>
-      <button class="btn" style="background: #48bb78; margin-top: 20px;" onclick="downloadPDF()">📥 Завантажити PDF</button>
+      <button class="btn" style="background: #28a745; margin-top: 20px;" onclick="downloadPDF()">📥 Завантажити у форматі PDF</button>
     </div>
   </div>
 </div>
@@ -48,57 +59,98 @@
   const ctx = canvas.getContext('2d');
   const loadingStatus = document.getElementById('loadingStatus');
   const templateImg = new Image();
+  
+  // Використовуємо пряме посилання на ваш файл
   templateImg.src = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/CertificateFront.webp';
   templateImg.crossOrigin = "anonymous";
-  templateImg.onload = () => { loadingStatus.innerText = "Шаблон готовий"; };
+
+  templateImg.onload = () => { loadingStatus.innerText = "Шаблон готовий до роботи"; };
+  templateImg.onerror = () => { loadingStatus.innerText = "Помилка завантаження зображення"; };
 
   function draw(data) {
-    canvas.width = templateImg.naturalWidth;
-    canvas.height = templateImg.naturalHeight;
-    ctx.drawImage(templateImg, 0, 0);
-    ctx.textAlign = 'center';
+    // Встановлюємо реальний розмір картинки 2480x1754
+    canvas.width = 2480;
+    canvas.height = 1754;
+    
+    ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+    
+    const greenColor = '#1b4d3e'; // Ваш темно-зелений
+    const goldColor = '#D4AF37';  // Золотистий для коду
+
+    // --- 1. ТЕКСТ: ВІТАЮ, [ІМ'Я]! ---
+    ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    const greenColor = '#1b4d3e';
-
-    // Призначення
     ctx.fillStyle = greenColor;
-    ctx.font = 'italic 102px Caslon, Georgia, serif';
-    ctx.fillText(data.purpose, canvas.width / 2, 760);
+    ctx.font = 'italic 75px Caslon, Georgia, serif';
+    
+    const welcomePrefix = "Вітаю, ";
+    const prefixWidth = ctx.measureText(welcomePrefix).width;
+    const startX = 320; // Початкова позиція фрази "Вітаю"
+    const lineY = 1245;  // Висота рядка з "Вітаю"
+    
+    ctx.fillText(welcomePrefix, startX, lineY);
+    
+    // Саме ім'я на місці жовтої плашки
+    ctx.font = 'bold italic 85px Caslon, Georgia, serif';
+    ctx.fillText(data.recipientName, startX + prefixWidth + 10, lineY);
+    
+    // Продовження фрази після імені
+    const nameWidth = ctx.measureText(data.recipientName).width;
+    ctx.font = 'italic 75px Caslon, Georgia, serif';
+    ctx.fillText("! Ви отримали сертифікат на:", startX + prefixWidth + nameWidth + 25, lineY);
 
-    // Ім'я
-    ctx.font = 'bold italic 108px Caslon, Georgia, serif';
-    ctx.fillText(data.recipientName, canvas.width / 2, 840);
+    // --- 2. ПРИЗНАЧЕННЯ СЕРТИФІКАТА (На довгій плашці) ---
+    ctx.textAlign = 'center';
+    ctx.fillStyle = greenColor;
+    ctx.font = 'bold italic 90px Caslon, Georgia, serif';
+    ctx.fillText(data.purpose, canvas.width / 2, 1345);
 
-    // Дата (Зелена)
-    ctx.font = 'italic 84px Caslon, Georgia, serif';
-    const dateStr = new Date(data.validUntil).toLocaleDateString('uk-UA');
-    ctx.fillText(dateStr, canvas.width / 2, 910);
+    // --- 3. ДАТА (В маленькому віконці) ---
+    ctx.textAlign = 'center';
+    ctx.fillStyle = greenColor;
+    ctx.font = 'italic 70px Caslon, Georgia, serif';
+    const formattedDate = new Date(data.validUntil).toLocaleDateString('uk-UA');
+    ctx.fillText(formattedDate, 2205, 1625);
 
-    // Код (Золото)
-    ctx.fillStyle = '#D4AF37';
-    ctx.font = 'bold 56px Courier New';
-    ctx.fillText(data.verificationCode, canvas.width / 2, canvas.height - 40);
+    // --- 4. КОД ВЕРИФІКАЦІЇ (В самому низу) ---
+    ctx.textAlign = 'center';
+    ctx.fillStyle = goldColor;
+    ctx.font = 'bold 70px Courier New, monospace';
+    ctx.fillText(data.verificationCode, canvas.width / 2, 1670);
   }
 
   document.getElementById('certForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    if (!templateImg.complete) return;
+
     const code = `ID-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-    document.getElementById('previewSection').style.display = 'block';
-    draw({
-      purpose: document.getElementById('purpose').value,
+    const data = {
       recipientName: document.getElementById('recipientName').value,
+      purpose: document.getElementById('purpose').value,
       validUntil: document.getElementById('validUntil').value,
       verificationCode: code
-    });
+    };
+
+    document.getElementById('previewSection').style.display = 'block';
+    draw(data);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   });
 
   function downloadPDF() {
     const { jsPDF } = window.jspdf;
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height] });
-    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-    pdf.save('Certificate.pdf');
+    const imgData = canvas.toDataURL('image/png', 1.0);
+    
+    // PDF створюється в пікселях під розмір картинки для максимальної чіткості
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'px',
+      format: [2480, 1754]
+    });
+    
+    pdf.addImage(imgData, 'PNG', 0, 0, 2480, 1754);
+    pdf.save(`Сертифікат_${document.getElementById('recipientName').value}.pdf`);
   }
 </script>
+
 </body>
 </html>
