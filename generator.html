@@ -17,13 +17,20 @@
     h2 { text-align: center; color: #2a1b3d; margin-bottom: 20px; }
     .form-group { margin-bottom: 15px; }
     label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 600; color: #2a1b3d; }
-    input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+    input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; outline: none; }
     
-    /* Кнопки з текстом, що темніший за фон */
+    /* Кнопки пресетов */
+    .preset-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .btn-preset { 
+      background: #e2d9f3; color: #4b367c; border: none; padding: 6px 12px; 
+      border-radius: 20px; font-size: 12px; cursor: pointer; transition: 0.2s;
+    }
+    .btn-preset:hover { background: #d0c1ec; }
+
     .btn { 
       width: 100%; padding: 15px; background: #9b7fd4; color: #4b367c; 
       border: none; border-radius: 10px; font-weight: 600; cursor: pointer; 
-      margin-top: 10px; font-size: 16px; transition: 0.3s;
+      margin-top: 15px; font-size: 16px; transition: 0.3s;
     }
     .btn-download { background: #48bb78; color: #1a4d2e; margin-top: 20px; }
     
@@ -39,16 +46,25 @@
     <form id="certForm">
       <div class="form-group">
         <label>Ім'я отримувача</label>
-        <input type="text" id="recipientName" placeholder="Олена Коваленко" required>
+        <input type="text" id="recipientName" placeholder="Введіть ім'я" required>
       </div>
+      
       <div class="form-group">
         <label>Призначення сертифіката</label>
-        <input type="text" id="purpose" placeholder="Консультація кармолога" required>
+        <input type="text" id="purpose" placeholder="Оберіть або введіть своє" required>
+        <div class="preset-container">
+          <button type="button" class="btn-preset" onclick="setPurpose('Консультація кармолога')">Консультація кармолога</button>
+          <button type="button" class="btn-preset" onclick="setPurpose('Сеанс регресії')">Сеанс регресії</button>
+          <button type="button" class="btn-preset" onclick="setPurpose('Розрахунок Матриці Судьби')">Матриця Судьби</button>
+          <button type="button" class="btn-preset" onclick="setPurpose('Трансформація')">Трансформація</button>
+        </div>
       </div>
+
       <div class="form-group">
-        <label>Дійсний до (ДД.ММ.РРРР)</label>
-        <input type="text" id="validUntil" placeholder="31.12.2025" maxlength="10" required>
+        <label>Дійсний до (порожньо = ∞)</label>
+        <input type="text" id="validUntil" placeholder="31.12.2025" maxlength="10">
       </div>
+      
       <button type="submit" class="btn">Сгенерувати сертификат</button>
     </form>
     
@@ -68,7 +84,12 @@
   templateImg.src = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/CertificateFront2.webp';
   templateImg.crossOrigin = "anonymous";
 
-  // Логіка автозаповнення точок у даті
+  // Установка значения из кнопок
+  function setPurpose(val) {
+    document.getElementById('purpose').value = val;
+  }
+
+  // Маска даты
   dateInput.addEventListener('input', function (e) {
     let v = e.target.value.replace(/\D/g, '').slice(0, 8);
     if (v.length >= 5) {
@@ -91,23 +112,24 @@
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // 1. ІМ'Я (Тонкий курсив)
+    // 1. ИМЯ (-25% от 85px = 64px)
     ctx.fillStyle = purpleColor;
-    ctx.font = 'italic 85px Caslon, Georgia, serif';
+    ctx.font = 'italic 64px Caslon, Georgia, serif';
     ctx.fillText(data.recipientName, 750, 1238);
 
-    // 2. ПРИЗНАЧЕННЯ (Тонкий курсив)
-    ctx.font = 'italic 90px Caslon, Georgia, serif';
+    // 2. НАЗНАЧЕНИЕ (-25% от 90px = 68px)
+    ctx.font = 'italic 68px Caslon, Georgia, serif';
     ctx.fillText(data.purpose, canvas.width / 2, 1340);
 
-    // 3. ДАТА (Жирний Arial, прямий, -2px вліво)
-    ctx.font = 'bold 45px Arial, sans-serif'; 
-    ctx.fillText(data.date, 2203, 1622); 
+    // 3. ДАТА (Теперь Caslon как и имя, бесконечность если пусто)
+    ctx.font = 'italic 60px Caslon, Georgia, serif';
+    const displayDate = data.date.trim() === "" ? "∞" : data.date;
+    ctx.fillText(displayDate, 2203, 1622); 
 
-    // 4. КОД ВЕРИФІКАЦІЇ (Звичайний Arial, розмір 49)
+    // 4. КОД ВЕРИФИКАЦИИ (Arial, тоньше, +5px вниз)
     ctx.fillStyle = goldCodeColor;
-    ctx.font = '49px Arial, sans-serif'; 
-    ctx.fillText(data.verificationCode, canvas.width / 2, 1665);
+    ctx.font = '300 44px Arial, sans-serif'; // 300 - легкий вес
+    ctx.fillText(data.verificationCode, canvas.width / 2, 1670);
   }
 
   document.getElementById('certForm').addEventListener('submit', function(e) {
@@ -136,7 +158,7 @@
       format: [2480, 1754]
     });
     pdf.addImage(imgData, 'PNG', 0, 0, 2480, 1754);
-    pdf.save(`Сертифікат_${document.getElementById('recipientName').value}.pdf`);
+    pdf.save(`Certificate_${document.getElementById('recipientName').value}.pdf`);
   }
 </script>
 
