@@ -149,17 +149,21 @@
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   });
 
-  function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const imgData = canvas.toDataURL('image/png', 1.0);
-    const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'px',
-      format: [2480, 1754]
-    });
-    pdf.addImage(imgData, 'PNG', 0, 0, 2480, 1754);
-    pdf.save(`Certificate_${document.getElementById('recipientName').value}.pdf`);
-  }
+ function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  // Змініть 'image/png' на 'image/jpeg' та додайте 0.7 (якість 70%)
+  const imgData = canvas.toDataURL('image/jpeg', 0.7); 
+  
+  const pdf = new jsPDF({
+    orientation: 'landscape',
+    unit: 'px',
+    format: [2480, 1754]
+  });
+  
+  // Тут також змініть 'PNG' на 'JPEG'
+  pdf.addImage(imgData, 'JPEG', 0, 0, 2480, 1754);
+  pdf.save(`Certificate_${document.getElementById('recipientName').value}.pdf`);
+}
 </script>
 
 </body>
