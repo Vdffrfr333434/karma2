@@ -2237,7 +2237,6 @@ document.getElementById('reviewsLightbox').addEventListener('click', function (e
 
 // Инициализация
 createReviewsStack();
-
 // ===== КОНФИГУРАЦИЯ MONOBANK =====
 const MONO_TOKEN = "uQJ7XJ0WSnFxTa6cEg8QUV8dz9p190h-Px0cEI2nQIFI";
 const PROXY = "https://corsproxy.io/?";
@@ -2256,23 +2255,25 @@ function openCertModal(amount) {
     const btn = document.getElementById('modalActionBtn');
     const statusMsg = document.getElementById('statusMessage');
     
-    title.textContent = `Сертифікат на $${amount}`;
+    title.textContent = `Сертифікат на ${amount} ₴`;
     
     // Проверяем, был ли уже оплачен этот сертификат
-    const paymentStatus = sessionStorage.getItem(`cert_${amount}`);
+    const paymentStatus = localStorage.getItem(`cert_${amount}`); // ИЗМЕНЕНО: localStorage вместо sessionStorage
     
     if (paymentStatus === 'paid') {
         btn.textContent = 'Завантажити PDF-сертифікат';
         btn.className = 'btn-modal-action btn-download';
         btn.onclick = () => downloadCertificate(amount);
+        
+        statusMsg.className = 'status-message success';
+        statusMsg.textContent = '✓ Оплата успішна! Можете завантажити сертифікат';
     } else {
         btn.textContent = 'Перейти до оплати';
         btn.className = 'btn-modal-action';
         btn.onclick = handlePayment;
+        statusMsg.className = 'status-message';
+        statusMsg.textContent = '';
     }
-    
-    statusMsg.className = 'status-message';
-    statusMsg.textContent = '';
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -2306,7 +2307,7 @@ async function handlePayment() {
         merchantPaymInfo: { 
             destination: `Подарунковий сертифікат (${currentAmount} грн)` 
         },
-        redirectUrl: window.location.href.split('?')[0] + `?check=1&amount=${currentAmount}`
+        redirectUrl: window.location.href.split('?')[0] + `?payment=success&amount=${currentAmount}`
     };
     
     try {
@@ -2323,7 +2324,8 @@ async function handlePayment() {
         
         if (data.pageUrl) {
             currentInvoiceId = data.invoiceId;
-            sessionStorage.setItem(`invoice_${currentAmount}`, data.invoiceId);
+            localStorage.setItem(`invoice_${currentAmount}`, data.invoiceId); // ИЗМЕНЕНО: localStorage
+            localStorage.setItem(`payment_pending_${currentAmount}`, 'true'); // Маркер ожидания оплаты
             
             statusMsg.className = 'status-message success';
             statusMsg.textContent = 'Рахунок створено! Перенаправлення...';
@@ -2349,16 +2351,38 @@ async function handlePayment() {
 async function checkPaymentStatus() {
     const params = new URLSearchParams(window.location.search);
     
-    if (!params.has('check') || !params.has('amount')) {
+    // Проверяем, вернулись ли мы после оплаты
+    if (!params.has('payment') || !params.has('amount')) {
         return;
     }
     
     const amount = params.get('amount');
-    const invoiceId = sessionStorage.getItem(`invoice_${amount}`);
+    const invoiceId = localStorage.getItem(`invoice_${amount}`);
     
     if (!invoiceId) {
+        console.log('Invoice ID not found');
         return;
     }
+    
+    // Показываем индикатор загрузки
+    const loadingDiv = document.createElement('div');
+    loadingDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(250, 245, 255, 0.95);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(139, 123, 165, 0.3);
+        z-index: 10000;
+        text-align: center;
+    `;
+    loadingDiv.innerHTML = `
+        <div style="font-size: 18px; color: #5a4470; margin-bottom: 10px;">Перевірка оплати...</div>
+        <div style="font-size: 14px; color: #8b7ba5;">Зачекайте, будь ласка</div>
+    `;
+    document.body.appendChild(loadingDiv);
     
     try {
         const res = await fetch(PROXY + encodeURIComponent(`${API_URL}/status?invoiceId=${invoiceId}`), {
@@ -2367,18 +2391,56 @@ async function checkPaymentStatus() {
         
         const data = await res.json();
         
+        document.body.removeChild(loadingDiv);
+        
         if (data.status === 'success') {
-            sessionStorage.setItem(`cert_${amount}`, 'paid');
-            sessionStorage.removeItem(`invoice_${amount}`);
+            // Оплата успешна!
+            localStorage.setItem(`cert_${amount}`, 'paid');
+            localStorage.removeItem(`invoice_${amount}`);
+            localStorage.removeItem(`payment_pending_${amount}`);
             
             // Очищаем URL
             window.history.replaceState({}, document.title, window.location.pathname);
             
-            // Открываем модалку с кнопкой скачивания
-            openCertModal(parseInt(amount));
+            // Прокручиваем к секции с сертификатом
+            const certSection = document.querySelector('section:has(.cert-container)');
+            if (certSection) {
+                certSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            // Открываем модалку через небольшую задержку для плавности
+            setTimeout(() => {
+                openCertModal(parseInt(amount));
+            }, 800);
+            
+        } else if (data.status === 'processing') {
+            // Платеж в обработке
+            document.body.removeChild(loadingDiv);
+            
+            const retryDiv = document.createElement('div');
+            retryDiv.style.cssText = loadingDiv.style.cssText;
+            retryDiv.innerHTML = `
+                <div style="font-size: 18px; color: #5a4470; margin-bottom: 10px;">Платіж обробляється...</div>
+                <div style="font-size: 14px; color: #8b7ba5; margin-bottom: 20px;">Перевірка через 3 секунди</div>
+            `;
+            document.body.appendChild(retryDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(retryDiv);
+                checkPaymentStatus();
+            }, 3000);
+            
+        } else {
+            // Оплата не прошла
+            alert('Платіж не завершено. Спробуйте ще раз.');
+            localStorage.removeItem(`payment_pending_${amount}`);
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
+        
     } catch (error) {
+        document.body.removeChild(loadingDiv);
         console.error('Status check error:', error);
+        alert('Помилка перевірки статусу. Перезавантажте сторінку.');
     }
 }
 
@@ -2386,16 +2448,14 @@ async function checkPaymentStatus() {
 function downloadCertificate(amount) {
     const statusMsg = document.getElementById('statusMessage');
     
-    statusMsg.className = 'status-message success';
+    statusMsg.className = 'status-message loading';
     statusMsg.textContent = 'Генерація PDF-сертифікату...';
     
-    // Здесь должна быть логика генерации PDF
-    // Для демонстрации создадим простой текстовый файл
     setTimeout(() => {
         const content = `
 ПОДАРУНКОВИЙ СЕРТИФІКАТ
 
-Номінал: $${amount}
+Номінал: ${amount} ₴
 
 Цей сертифікат дає право на отримання 
 будь-якої консультації або сеансу.
@@ -2403,28 +2463,29 @@ function downloadCertificate(amount) {
 З любов'ю,
 Мар'яна
 Кармолог | Регресолог
+
+Instagram: @karmolog_mariana
+Telegram: @karmolog_ya
         `.trim();
         
         const blob = new Blob([content], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `certificate_${amount}.txt`;
+        a.download = `certificate_${amount}_UAH.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         
         statusMsg.className = 'status-message success';
-        statusMsg.textContent = 'Сертифікат завантажено! ✓';
+        statusMsg.textContent = '✓ Сертифікат завантажено!';
     }, 1000);
 }
 
-// ===== ИНИЦИАЛИЗАЦИЯ - ДОБАВЬТЕ ЭТО В КОНЕЦ window.onload =====
-// Найдите строку window.onload = checkStatus; и замените на:
+// ===== ИНИЦИАЛИЗАЦИЯ =====
 window.addEventListener('load', () => {
-    checkStatus(); // ваша существующая функция
-    checkPaymentStatus(); // новая функция для проверки оплаты сертификатов
+    checkPaymentStatus();
 });
 
 // Закрытие модалки по Escape
