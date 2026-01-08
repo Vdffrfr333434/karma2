@@ -2449,38 +2449,65 @@ function downloadCertificate(amount) {
     const statusMsg = document.getElementById('statusMessage');
     
     statusMsg.className = 'status-message loading';
-    statusMsg.textContent = 'Генерація PDF-сертифікату...';
+    statusMsg.textContent = 'Генерація сертифікату...';
     
-    setTimeout(() => {
-        const content = `
-ПОДАРУНКОВИЙ СЕРТИФІКАТ
+    // ЗДЕСЬ укажите ссылку на ваш SVG-файл
+    const SVG_TEMPLATE_URL = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/53e26d8670d576a6b3d119e58c4b94912d358ee3/CertSVG.SVG';
+    
+    fetch(SVG_TEMPLATE_URL)
+        .then(response => response.text())
+        .then(svgText => {
+            const certId = generateCertificateId();
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+            const amountElement = svgDoc.getElementById('certAmount');
+            const idElement = svgDoc.getElementById('certId');
+            
+            if (!amountElement || !idElement) {
+                throw new Error('Не знайдено елементи з ID certAmount або certId в SVG');
+            }
+            
+            amountElement.textContent = `${amount} ₴`;
+            idElement.textContent = `ID: ${certId}`;
+            
+            const serializer = new XMLSerializer();
+            const modifiedSvg = serializer.serializeToString(svgDoc);
+            const blob = new Blob([modifiedSvg], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `certificate_${certId}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            localStorage.setItem(`cert_id_${amount}`, certId);
+            statusMsg.className = 'status-message success';
+            statusMsg.textContent = `✓ Сертифікат завантажено! ID: ${certId}`;
+        })
+        .catch(error => {
+            console.error('Certificate generation error:', error);
+            statusMsg.className = 'status-message error';
+            statusMsg.textContent = 'Помилка: ' + error.message;
+        });
+}
 
-Номінал: ${amount} ₴
-
-Цей сертифікат дає право на отримання 
-будь-якої консультації або сеансу.
-
-З любов'ю,
-Мар'яна
-Кармолог | Регресолог
-
-Instagram: @karmolog_mariana
-Telegram: @karmolog_ya
-        `.trim();
-        
-        const blob = new Blob([content], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `certificate_${amount}_UAH.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        statusMsg.className = 'status-message success';
-        statusMsg.textContent = '✓ Сертифікат завантажено!';
-    }, 1000);
+// ===== ГЕНЕРАЦИЯ ID =====
+function generateCertificateId() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const segments = 4;
+    const segmentLength = 4;
+    
+    let id = '';
+    for (let i = 0; i < segments; i++) {
+        if (i > 0) id += '-';
+        for (let j = 0; j < segmentLength; j++) {
+            id += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+    }
+    
+    return id;
 }
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
