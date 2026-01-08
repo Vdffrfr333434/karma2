@@ -2257,23 +2257,13 @@ function openCertModal(amount) {
     
     title.textContent = `Сертифікат на ${amount} ₴`;
     
-    // Проверяем, был ли уже оплачен этот сертификат
-    const paymentStatus = localStorage.getItem(`cert_${amount}`); // ИЗМЕНЕНО: localStorage вместо sessionStorage
-    
-    if (paymentStatus === 'paid') {
-        btn.textContent = 'Завантажити PDF-сертифікат';
-        btn.className = 'btn-modal-action btn-download';
-        btn.onclick = () => downloadCertificate(amount);
-        
-        statusMsg.className = 'status-message success';
-        statusMsg.textContent = '✓ Оплата успішна! Можете завантажити сертифікат';
-    } else {
-        btn.textContent = 'Перейти до оплати';
-        btn.className = 'btn-modal-action';
-        btn.onclick = handlePayment;
-        statusMsg.className = 'status-message';
-        statusMsg.textContent = '';
-    }
+    // Всегда показываем кнопку оплаты - позволяем покупать несколько сертификатов
+    btn.textContent = 'Перейти до оплати';
+    btn.className = 'btn-modal-action';
+    btn.onclick = handlePayment;
+    btn.disabled = false;
+    statusMsg.className = 'status-message';
+    statusMsg.textContent = '';
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -2393,25 +2383,22 @@ async function checkPaymentStatus() {
         
         document.body.removeChild(loadingDiv);
         
-        if (data.status === 'success') {
-            // Оплата успешна!
-            localStorage.setItem(`cert_${amount}`, 'paid');
-            localStorage.removeItem(`invoice_${amount}`);
-            localStorage.removeItem(`payment_pending_${amount}`);
-            
-            // Очищаем URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-            
-            // Прокручиваем к секции с сертификатом
-            const certSection = document.querySelector('section:has(.cert-container)');
-            if (certSection) {
-                certSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            
-            // Открываем модалку через небольшую задержку для плавности
-            setTimeout(() => {
-                openCertModal(parseInt(amount));
-            }, 800);
+       if (data.status === 'success') {
+    // Оплата успешна!
+    localStorage.removeItem(`invoice_${amount}`);
+    localStorage.removeItem(`payment_pending_${amount}`);
+    
+    // Очищаем URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    // Генерируем и показываем сертификат
+    setTimeout(() => {
+        openCertModal(parseInt(amount));
+        // Автоматически генерируем сертификат
+        setTimeout(() => {
+            downloadCertificate(parseInt(amount));
+        }, 500);
+    }, 800);
             
         } else if (data.status === 'processing') {
             // Платеж в обработке
@@ -2451,8 +2438,7 @@ function downloadCertificate(amount) {
     statusMsg.className = 'status-message loading';
     statusMsg.textContent = 'Генерація сертифікату...';
     
-    // ЗДЕСЬ укажите ссылку на ваш SVG-файл
-    const SVG_TEMPLATE_URL = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/264d50483993ee325d672e642f01ef1d5a2a2152/CertSVG.SVG';
+    const SVG_TEMPLATE_URL = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/53e26d8670d576a6b3d119e58c4b94912d358ee3/CertSVG.SVG';
     
     fetch(SVG_TEMPLATE_URL)
         .then(response => response.text())
@@ -2460,11 +2446,47 @@ function downloadCertificate(amount) {
             const certId = generateCertificateId();
             const parser = new DOMParser();
             const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
-            const amountElement = svgDoc.getElementById('certAmount');
-            const idElement = svgDoc.getElementById('certId');
             
-            if (!amountElement || !idElement) {
-                throw new Error('Не знайдено елементи з ID certAmount або certId в SVG');
+            let amountElement = svgDoc.getElementById('CertAmount') || svgDoc.getElementById('certAmount');
+            let idElement = svgDoc.getElementById('CertId') || svgDoc.getElementById('certId');
+            
+            if (!amountElement) {
+                const textElements = svgDoc.querySelectorAll('text');
+                textElements.forEach(el => {
+                    if (el.textContent.includes('СУМА') || el.textContent.includes('Amount') || el.textContent.includes('1000')) {
+                        amountElement = el;
+                    }
+                });
+            }
+            
+            if (!idElement) {
+                const textElements = svgDoc.querySelectorAll('text');
+                textElements.forEach(el => {
+                    if (el.textContent.includes('ID:') || el.textContent.includes('Номер')) {
+                        idElement = el;
+                    }
+                });
+            }
+            
+            if (!amountElement) {
+                amountElement = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'text');
+                amountElement.setAttribute('x', '50%');
+                amountElement.setAttribute('y', '50%');
+                amountElement.setAttribute('text-anchor', 'middle');
+                amountElement.setAttribute('font-size', '48');
+                amountElement.setAttribute('fill', '#5a4470');
+                amountElement.setAttribute('font-weight', 'bold');
+                svgDoc.documentElement.appendChild(amountElement);
+            }
+            
+            if (!idElement) {
+                idElement = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'text');
+                idElement.setAttribute('x', '50%');
+                idElement.setAttribute('y', '60%');
+                idElement.setAttribute('text-anchor', 'middle');
+                idElement.setAttribute('font-size', '14');
+                idElement.setAttribute('fill', '#8b7ba5');
+                svgDoc.documentElement.appendChild(idElement);
             }
             
             amountElement.textContent = `${amount} ₴`;
@@ -2472,19 +2494,81 @@ function downloadCertificate(amount) {
             
             const serializer = new XMLSerializer();
             const modifiedSvg = serializer.serializeToString(svgDoc);
+            
+            // Сохраняем в localStorage для повторной загрузки
+            const certData = {
+                id: certId,
+                amount: amount,
+                svg: modifiedSvg,
+                date: new Date().toISOString()
+            };
+            
+            // Сохраняем список всех сертификатов
+            let allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
+            allCerts.push(certData);
+            localStorage.setItem('all_certificates', JSON.stringify(allCerts));
+            
+            // Универсальный способ скачивания для всех устройств
             const blob = new Blob([modifiedSvg], { type: 'image/svg+xml;charset=utf-8' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `certificate_${certId}.svg`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
             
-            localStorage.setItem(`cert_id_${amount}`, certId);
-            statusMsg.className = 'status-message success';
-            statusMsg.textContent = `✓ Сертифікат завантажено! ID: ${certId}`;
+            // Для мобильных устройств - открываем в новой вкладке
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                const newWindow = window.open(url, '_blank');
+                if (newWindow) {
+                    statusMsg.className = 'status-message success';
+                    statusMsg.innerHTML = `
+                        ✓ Сертифікат ID: ${certId}<br>
+                        <small style="opacity:0.7">Відкрито в новій вкладці. Утримуйте палець на зображенні та оберіть "Зберегти"</small><br>
+                        <button onclick="openCertificateInNewTab('${certId}')" 
+                                style="margin-top:8px; padding:8px 16px; background:#4caf50; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
+                            📥 Відкрити ще раз
+                        </button>
+                        <button onclick="showAllCertificates()" 
+                                style="margin-top:8px; margin-left:8px; padding:8px 16px; background:#9b7fd4; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
+                            📋 Всі сертифікати
+                        </button>
+                    `;
+                } else {
+                    // Если popup заблокирован
+                    statusMsg.className = 'status-message success';
+                    statusMsg.innerHTML = `
+                        ✓ Сертифікат готовий! ID: ${certId}<br>
+                        <button onclick="openCertificateInNewTab('${certId}')" 
+                                style="margin-top:8px; padding:8px 16px; background:#4caf50; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
+                            📥 Відкрити сертифікат
+                        </button>
+                        <button onclick="showAllCertificates()" 
+                                style="margin-top:8px; margin-left:8px; padding:8px 16px; background:#9b7fd4; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
+                            📋 Всі сертифікати
+                        </button>
+                    `;
+                }
+            } else {
+                // Для десктопа - обычное скачивание
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `certificate_${certId}.svg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                statusMsg.className = 'status-message success';
+                statusMsg.innerHTML = `
+                    ✓ Сертифікат завантажено! ID: ${certId}<br>
+                    <small style="opacity:0.7">Перевірте папку "Завантаження"</small><br>
+                    <button onclick="redownloadCertificate('${certId}')" 
+                            style="margin-top:8px; padding:8px 16px; background:#4caf50; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
+                        📥 Завантажити ще раз
+                    </button>
+                    <button onclick="showAllCertificates()" 
+                            style="margin-top:8px; margin-left:8px; padding:8px 16px; background:#9b7fd4; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
+                            📋 Всі сертифікати
+                    </button>
+                `;
+            }
+            
+            URL.revokeObjectURL(url);
         })
         .catch(error => {
             console.error('Certificate generation error:', error);
@@ -2493,21 +2577,89 @@ function downloadCertificate(amount) {
         });
 }
 
-// ===== ГЕНЕРАЦИЯ ID =====
-function generateCertificateId() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const segments = 4;
-    const segmentLength = 4;
+ function redownloadCertificate(certId) {
+    const allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
+    const cert = allCerts.find(c => c.id === certId);
     
-    let id = '';
-    for (let i = 0; i < segments; i++) {
-        if (i > 0) id += '-';
-        for (let j = 0; j < segmentLength; j++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+    if (!cert) {
+        alert('Помилка: сертифікат не знайдено');
+        return;
     }
     
-    return id;
+    const blob = new Blob([cert.svg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `certificate_${certId}.svg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+ // ===== ОТКРЫТИЕ В НОВОЙ ВКЛАДКЕ (для мобильных) =====
+function openCertificateInNewTab(certId) {
+    const allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
+    const cert = allCerts.find(c => c.id === certId);
+    
+    if (!cert) {
+        alert('Помилка: сертифікат не знайдено');
+        return;
+    }
+    
+    const blob = new Blob([cert.svg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+}
+
+// ===== ПОКАЗАТЬ ВСЕ СЕРТИФИКАТЫ =====
+function showAllCertificates() {
+    const allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
+    
+    if (allCerts.length === 0) {
+        alert('У вас поки немає сертифікатів');
+        return;
+    }
+    
+    const modal = document.getElementById('certModal');
+    const title = document.getElementById('modalTitle');
+    const modalImage = document.getElementById('modalImage');
+    const description = document.querySelector('.modal-description');
+    const btn = document.getElementById('modalActionBtn');
+    const statusMsg = document.getElementById('statusMessage');
+    
+    title.textContent = 'Ваші сертифікати';
+    modalImage.style.display = 'none';
+    description.style.display = 'none';
+    btn.style.display = 'none';
+    
+    let html = '<div style="max-height:300px; overflow-y:auto;">';
+    allCerts.reverse().forEach(cert => {
+        const date = new Date(cert.date).toLocaleDateString('uk-UA');
+        html += `
+            <div style="padding:12px; margin-bottom:8px; background:rgba(155,127,212,0.08); border-radius:8px; border:1px solid rgba(139,123,165,0.2);">
+                <div style="font-weight:600; margin-bottom:4px;">ID: ${cert.id}</div>
+                <div style="font-size:12px; color:#8b7ba5; margin-bottom:8px;">Сума: ${cert.amount} ₴ | Дата: ${date}</div>
+                <button onclick="openCertificateInNewTab('${cert.id}')" 
+                        style="padding:6px 12px; background:#4caf50; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px; margin-right:6px;">
+                    📥 Відкрити
+                </button>
+                ${!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? `
+                <button onclick="redownloadCertificate('${cert.id}')" 
+                        style="padding:6px 12px; background:#9b7fd4; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">
+                    💾 Завантажити
+                </button>
+                ` : ''}
+            </div>
+        `;
+    });
+    html += '</div>';
+    
+    statusMsg.className = 'status-message';
+    statusMsg.style.display = 'block';
+    statusMsg.innerHTML = html;
+    
+    modal.classList.add('active');
 }
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
