@@ -2571,33 +2571,41 @@ async function downloadCertificate(amount) {
             // Показываем сертификат
             modalImage.src = pngUrl;
 
-         // Добавляем обертку для шиммера
-modalImage.style.position = 'relative';
-modalImage.style.overflow = 'hidden';
+  // Добавляем шиммер поверх сертификата
+const shimmerWrapper = document.createElement('div');
+shimmerWrapper.style.cssText = `
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 12px;
+`;
 
-// Создаем шиммер элемент
 const shimmer = document.createElement('div');
 shimmer.style.cssText = `
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    top: -100%;
+    left: -100%;
+    width: 50%;
+    height: 300%;
     background: linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.3) 50%,
-        transparent 70%
+        120deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        transparent 100%
     );
-    animation: shimmer 3s infinite;
-    pointer-events: none;
-    z-index: 10;
+    animation: shimmer 3s ease-in-out infinite;
+    transform: rotate(45deg);
 `;
 
-// Вставляем шиммер после изображения
+shimmerWrapper.appendChild(shimmer);
+
+// Делаем родителя картинки относительным
 modalImage.parentElement.style.position = 'relative';
-modalImage.parentElement.style.overflow = 'hidden';
-modalImage.parentElement.appendChild(shimmer);
+modalImage.parentElement.appendChild(shimmerWrapper);
             // Убираем описание и заменяем на кнопку
             modalDescription.innerHTML = `
                 <a href="${pngUrl}" download="certificate_${certId}.png" 
