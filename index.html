@@ -1609,11 +1609,11 @@ background: rgba(123, 104, 168, 0.1);
              class="modal-image">
 
 
-     <input type="email" 
-       id="userEmail" 
-       placeholder="Ваш email для отримання сертифіката"
-       style="width: 100%; padding: 12px; border: 1px solid rgba(139, 123, 165, 0.3); border-radius: 8px; margin-bottom: 12px; font-size: 14px;"
-       required>
+     <input type="text" 
+   id="userName" 
+   placeholder="Ваше ім'я (буде на сертифікаті)"
+   style="width: 100%; padding: 12px; border: 1px solid rgba(139, 123, 165, 0.3); border-radius: 8px; margin-bottom: 12px; font-size: 14px;"
+   required>
 
      
         
@@ -2298,17 +2298,17 @@ function closeModal(event) {
 async function handlePayment() {
     const btn = document.getElementById('modalActionBtn');
     const statusMsg = document.getElementById('statusMessage');
-    const emailInput = document.getElementById('userEmail');
-    
-    // Проверка email
-    if (!emailInput.value || !emailInput.value.includes('@')) {
-        statusMsg.className = 'status-message error';
-        statusMsg.textContent = 'Будь ласка, введіть коректний email';
-        return;
-    }
-    
-    // Сохраняем email
-    localStorage.setItem(`email_${currentAmount}`, emailInput.value);
+    const nameInput = document.getElementById('userName');
+
+// Проверка имени
+if (!nameInput.value || nameInput.value.trim().length < 2) {
+    statusMsg.className = 'status-message error';
+    statusMsg.textContent = 'Будь ласка, введіть ваше ім\'я';
+    return;
+}
+
+// Сохраняем имя
+localStorage.setItem(`name_${currentAmount}`, nameInput.value.trim());
     
    
     
@@ -2492,106 +2492,73 @@ async function downloadCertificate(amount) {
     statusMsg.className = 'status-message loading';
     statusMsg.textContent = 'Генерація сертифікату...';
     
+    // ← ВСТАВЬТЕ ЗДЕСЬ
+    document.getElementById('userName').style.display = 'none';
+    
     try {
         const certId = generateCertificateId();
+        const userName = localStorage.getItem(`name_${amount}`) || 'Власник';
         
-        // Создаем canvas для сертификата
-        const canvas = document.createElement('canvas');
-        canvas.width = 800;
-        canvas.height = 600;
-        const ctx = canvas.getContext('2d');
+        // Скрываем поле имени
+        document.getElementById('userName').style.display = 'none';
         
-        // Загружаем фоновое изображение
-        const bgImg = new Image();
-        bgImg.crossOrigin = 'anonymous';
+        // Открываем certificate.html в iframe для генерации
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.left = '-9999px';
+        iframe.style.width = '800px';
+        iframe.style.height = '600px';
+        document.body.appendChild(iframe);
         
-        bgImg.onload = function() {
-            // Рисуем фон
-            ctx.drawImage(bgImg, 0, 0, 800, 600);
+        // Передаем данные через URL параметры
+        iframe.src = `certificate.html?amount=${amount}&id=${certId}&name=${encodeURIComponent(userName)}`;
+        
+        // Ждем загрузки iframe
+        iframe.onload = async function() {
+            // Даем время на рендеринг
+            await new Promise(resolve => setTimeout(resolve, 1000));
             
-            // Добавляем текст на сертификат
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#5a4470';
-            
-            // Сумма
-            ctx.font = 'bold 48px Arial, sans-serif';
-            ctx.fillText(`${amount} ₴`, 400, 340);
-            
-            // ID сертификата
-            ctx.font = '20px monospace';
-            ctx.fillStyle = '#8b7ba5';
-            ctx.fillText(certId, 400, 480);
+            // Используем html2canvas для захвата содержимого
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            const canvas = await html2canvas(iframeDoc.body, {
+                width: 800,
+                height: 600,
+                scale: 2,
+                backgroundColor: null
+            });
             
             // Конвертируем в PNG
             canvas.toBlob(function(pngBlob) {
                 const pngUrl = URL.createObjectURL(pngBlob);
                 
-                // ПОКАЗЫВАЕМ СЕРТИФИКАТ В МОДАЛКЕ
+                // Показываем в модалке
                 modalImage.src = pngUrl;
                 modalTitle.textContent = 'Ваш сертифікат готовий!';
                 modalDescription.innerHTML = `
+                    <strong>${userName}</strong><br>
                     <strong>ID: ${certId}</strong><br>
-                    <small style="opacity:0.7">Утримуйте палець на зображенні → "Зберегти зображення"<br>
-                    або натисніть ПКМ → "Сохранить изображение как..."</small>
+                    <small style="opacity:0.7">
+                        <strong>На мобільному:</strong> Утримуйте палець → "Зберегти"<br>
+                        <strong>На комп'ютері:</strong> ПКМ → "Сохранить как..."
+                    </small>
+                    <br><br>
+                    <a href="${pngUrl}" download="certificate_${certId}.png" 
+                       style="display:inline-block; padding:10px 20px; background:#4caf50; 
+                              color:white; text-decoration:none; border-radius:6px; margin-top:10px;">
+                        💾 Завантажити сертифікат
+                    </a>
                 `;
                 
                 statusMsg.className = 'status-message success';
-                statusMsg.innerHTML = `✓ Сертифікат створено!<br><small>Збережіть зображення вище</small>`;
+                statusMsg.innerHTML = `✓ Сертифікат створено!<br><small>Натисніть кнопку вище для завантаження</small>`;
                 
-                // Отправляем на email
-                sendCertificateToEmail(certId, amount, pngBlob);
+                // Удаляем iframe
+                document.body.removeChild(iframe);
                 
+                // Отправляем на email (если нужно)
+                // sendCertificateToEmail(certId, amount, pngBlob, userName);
             }, 'image/png', 1.0);
         };
-        
-        bgImg.onerror = function() {
-            // Если изображение не загрузилось, создаем простой сертификат
-            ctx.fillStyle = '#f8f5fa';
-            ctx.fillRect(0, 0, 800, 600);
-            
-            // Градиент
-            const gradient = ctx.createLinearGradient(0, 0, 800, 600);
-            gradient.addColorStop(0, 'rgba(155, 127, 212, 0.2)');
-            gradient.addColorStop(1, 'rgba(201, 160, 220, 0.2)');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 800, 600);
-            
-            // Текст
-            ctx.fillStyle = '#5a4470';
-            ctx.font = 'bold 32px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('ПОДАРУНКОВИЙ СЕРТИФІКАТ', 400, 150);
-            
-            ctx.font = 'bold 64px Arial';
-            ctx.fillText(`${amount} ₴`, 400, 300);
-            
-            ctx.font = '24px monospace';
-            ctx.fillStyle = '#8b7ba5';
-            ctx.fillText(`ID: ${certId}`, 400, 450);
-            
-            ctx.font = '18px Arial';
-            ctx.fillText('Мар\'яна | Кармолог | Регресолог', 400, 520);
-            
-            // Конвертируем в PNG
-            canvas.toBlob(function(pngBlob) {
-                const pngUrl = URL.createObjectURL(pngBlob);
-                
-                modalImage.src = pngUrl;
-                modalTitle.textContent = 'Ваш сертифікат готовий!';
-                modalDescription.innerHTML = `
-                    <strong>ID: ${certId}</strong><br>
-                    <small style="opacity:0.7">Утримуйте палець на зображенні → "Зберегти зображення"</small>
-                `;
-                
-                statusMsg.className = 'status-message success';
-                statusMsg.innerHTML = `✓ Сертифікат створено!<br><small>Збережіть зображення вище</small>`;
-                
-                sendCertificateToEmail(certId, amount, pngBlob);
-            }, 'image/png', 1.0);
-        };
-        
-        // Пытаемся загрузить фоновое изображение
-        bgImg.src = 'https://github.com/Vdffrfr333434/karma2/blob/main/DiamondCard.webp?raw=true';
         
     } catch (error) {
         console.error('Error:', error);
