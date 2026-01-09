@@ -2500,23 +2500,34 @@ async function downloadCertificate(amount) {
         const certId = generateCertificateId();
         const userName = localStorage.getItem(`name_${amount}`) || 'Власник';
         
-        // Создаем canvas для сертификата
+        // Создаем canvas для сертификата с ВЫСОКИМ РАЗРЕШЕНИЕМ
+        const scale = 3; // Увеличиваем разрешение в 3 раза
         const canvas = document.createElement('canvas');
-        canvas.width = 800;
-        canvas.height = 600;
+        canvas.width = 800 * scale;
+        canvas.height = 600 * scale;
         const ctx = canvas.getContext('2d');
         
-        // Фон с градиентом на весь сертификат (розовый → голубой → лиловый → фиолетовый)
+        // Масштабируем контекст для четкости
+        ctx.scale(scale, scale);
+        
+        // Включаем сглаживание
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        
+        // ПЛАВНЫЙ градиент на весь сертификат (больше остановок)
         const bgGradient = ctx.createLinearGradient(0, 0, 800, 600);
-        bgGradient.addColorStop(0, '#FFB6C1');    // розовый
-        bgGradient.addColorStop(0.33, '#ADD8E6'); // голубой
-        bgGradient.addColorStop(0.66, '#DDA0DD'); // лиловый
-        bgGradient.addColorStop(1, '#9370DB');    // фиолетовый
+        bgGradient.addColorStop(0, '#FFB6C1');      // розовый
+        bgGradient.addColorStop(0.15, '#FFC5D0');   // светло-розовый
+        bgGradient.addColorStop(0.33, '#ADD8E6');   // голубой
+        bgGradient.addColorStop(0.5, '#C4B5E8');    // светло-лиловый
+        bgGradient.addColorStop(0.66, '#DDA0DD');   // лиловый
+        bgGradient.addColorStop(0.83, '#B994D4');   // средне-фиолетовый
+        bgGradient.addColorStop(1, '#9370DB');      // фиолетовый
         ctx.fillStyle = bgGradient;
         ctx.fillRect(0, 0, 800, 600);
         
-        // Единый светлый цвет для всего текста
-        const textColor = '#FFFFFF'; // белый
+        // Желтоватый цвет для всего текста (светло-золотистый)
+        const textColor = '#FFF8DC'; // cornsilk - светлый желтоватый
         
         // Заголовок
         ctx.fillStyle = textColor;
@@ -2550,7 +2561,7 @@ async function downloadCertificate(amount) {
         ctx.fillText("Мар'яна | Кармолог | Регресолог", 400, 550);
         ctx.fillText('@karmolog_mariana', 400, 575);
         
-        // Конвертируем в PNG
+        // Конвертируем в PNG с МАКСИМАЛЬНЫМ качеством
         canvas.toBlob(function(pngBlob) {
             const pngUrl = URL.createObjectURL(pngBlob);
             
@@ -2588,7 +2599,7 @@ async function downloadCertificate(amount) {
                 btn.onclick = handlePayment;
             };
             
-        }, 'image/png', 1.0);
+        }, 'image/png', 1.0); // качество 1.0 = максимальное
         
     } catch (error) {
         console.error('Error:', error);
