@@ -2296,14 +2296,14 @@ async function handlePayment() {
     statusMsg.className = 'status-message loading';
     statusMsg.textContent = 'Зачекайте, створюємо рахунок...';
     
-    const payload = {
-        amount: currentAmount * 100,
-        ccy: 980,
-        merchantPaymInfo: { 
-            destination: `Подарунковий сертифікат (${currentAmount} грн)` 
-        },
-        redirectUrl: window.location.href.split('?')[0] + `?payment=success&amount=${currentAmount}`
-    };
+  const payload = {
+    amount: currentAmount * 100,
+    ccy: 980,
+    merchantPaymInfo: { 
+        destination: `Подарунковий сертифікат (${currentAmount} грн)` 
+    },
+    redirectUrl: window.location.href.split('?')[0] + `?payment=success&amount=${currentAmount}&ts=${Date.now()}`
+};
     
     try {
         const res = await fetch(PROXY + encodeURIComponent(`${API_URL}/create`), {
@@ -2354,6 +2354,10 @@ async function checkPaymentStatus() {
     const amount = params.get('amount');
     const invoiceId = localStorage.getItem(`invoice_${amount}`);
     
+    // ВАЖНО: Сразу удаляем invoiceId из localStorage, чтобы не использовать его повторно
+    localStorage.removeItem(`invoice_${amount}`);
+    localStorage.removeItem(`payment_pending_${amount}`);
+    
     if (!invoiceId) {
         console.log('Invoice ID not found');
         return;
@@ -2390,8 +2394,7 @@ async function checkPaymentStatus() {
         
        if (data.status === 'success') {
     // Оплата успешна!
-    localStorage.removeItem(`invoice_${amount}`);
-    localStorage.removeItem(`payment_pending_${amount}`);
+    
     
     // ВАЖНО: Очищаем invoiceId чтобы можно было создать новый счёт
     currentInvoiceId = null;
