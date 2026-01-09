@@ -99,5 +99,21 @@
             @karmolog_mariana
         </div>
     </div>
+
+    <script>
+    // Читаем параметры из URL
+    const params = new URLSearchParams(window.location.search);
+    const amount = params.get('amount') || '1000';
+    const certId = params.get('id') || 'ABC123-XYZ789';
+    const userName = params.get('name') || 'Власник';
+    
+    // Обновляем содержимое
+    document.getElementById('certAmount').textContent = amount + ' ₴';
+    document.getElementById('certId').textContent = certId;
+    
+    // Можно добавить имя, если хотите показывать его на сертификате
+    // Например, добавьте <div id="userName" class="subtitle"></div> в HTML
+    // И тогда: document.getElementById('userName').textContent = userName;
+</script>
 </body>
 </html>
