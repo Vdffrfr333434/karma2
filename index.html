@@ -2481,6 +2481,7 @@ function generateCertificateId() {
 }
 // ===== СКАЧИВАНИЕ СЕРТИФИКАТА =====
 // ===== СКАЧИВАНИЕ СЕРТИФИКАТА =====
+// ===== СКАЧИВАНИЕ СЕРТИФИКАТА =====
 function downloadCertificate(amount) {
     const statusMsg = document.getElementById('statusMessage');
     
@@ -2556,16 +2557,70 @@ function downloadCertificate(amount) {
             allCerts.push(certData);
             localStorage.setItem('all_certificates', JSON.stringify(allCerts));
             
-            // Отправляем PNG на email
-            sendCertificateToEmail(certId, amount, modifiedSvg);
+            // КОНВЕРТИРУЕМ SVG В PNG И ОТКРЫВАЕМ В НОВОМ ОКНЕ
+            const canvas = document.createElement('canvas');
+            canvas.width = 1200;
+            canvas.height = 1200;
+            const ctx = canvas.getContext('2d');
             
-            // Показываем успешное сообщение
-            statusMsg.className = 'status-message success';
-            statusMsg.innerHTML = `
-                ✓ Сертифікат ID: ${certId}<br>
-                <small style="opacity:0.7">PNG-сертифікат відправлено на ${localStorage.getItem(`email_${amount}`)}</small><br>
-                <small style="opacity:0.6; display:block; margin-top:8px;">Перевірте папку "Вхідні" або "Спам"</small>
-            `;
+            const img = new Image();
+            const svgBlob = new Blob([modifiedSvg], { type: 'image/svg+xml;charset=utf-8' });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            
+            img.onload = function() {
+                // Рисуем фон
+                ctx.fillStyle = '#f8f5fa';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                URL.revokeObjectURL(svgUrl);
+                
+                // Конвертируем в PNG
+                canvas.toBlob(function(pngBlob) {
+                    const pngUrl = URL.createObjectURL(pngBlob);
+                    
+                    // Пытаемся открыть в новом окне
+                    const newWindow = window.open(pngUrl, '_blank');
+                    
+                    if (newWindow) {
+                        // Окно открылось успешно
+                        statusMsg.className = 'status-message success';
+                        statusMsg.innerHTML = `
+                            ✓ Сертифікат ID: ${certId}<br>
+                            <small style="opacity:0.7">Відкрито в новій вкладці. Утримуйте палець на зображенні → "Зберегти зображення"</small><br>
+                            <small style="opacity:0.6; display:block; margin-top:8px;">Також відправлено на ${localStorage.getItem(`email_${amount}`)}</small>
+                        `;
+                    } else {
+                        // Popup заблокирован - принудительно скачиваем
+                        const link = document.createElement('a');
+                        link.download = `Certificate_${certId}.png`;
+                        link.href = pngUrl;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        statusMsg.className = 'status-message success';
+                        statusMsg.innerHTML = `
+                            ✓ Сертифікат ID: ${certId}<br>
+                            <small style="opacity:0.7">Завантажено на ваш пристрій</small><br>
+                            <small style="opacity:0.6; display:block; margin-top:8px;">Також відправлено на ${localStorage.getItem(`email_${amount}`)}</small>
+                        `;
+                    }
+                    
+                    // Отправляем на email (запасной вариант)
+                    sendCertificateToEmail(certId, amount, pngBlob);
+                    
+                    // Очищаем URL через 10 секунд
+                    setTimeout(() => URL.revokeObjectURL(pngUrl), 10000);
+                    
+                }, 'image/png', 1.0);
+            };
+            
+            img.onerror = function() {
+                statusMsg.className = 'status-message error';
+                statusMsg.textContent = 'Помилка завантаження SVG';
+            };
+            
+            img.src = svgUrl;
         })
         .catch(error => {
             console.error('Certificate generation error:', error);
@@ -2576,7 +2631,8 @@ function downloadCertificate(amount) {
 
 // ===== ОТПРАВКА PNG СЕРТИФИКАТА НА EMAIL =====
 // ===== ОТПРАВКА PDF СЕРТИФИКАТА НА EMAIL =====
-async function sendCertificateToEmail(certId, amount, svgContent) {
+// ===== ОТПРАВКА PNG СЕРТИФИКАТА НА EMAIL =====
+async function sendCertificateToEmail(certId, amount, pngBlob) {
     const userEmail = localStorage.getItem(`email_${amount}`);
     
     if (!userEmail) {
@@ -2585,34 +2641,6 @@ async function sendCertificateToEmail(certId, amount, svgContent) {
     }
     
     try {
-        // Конвертируем SVG в PNG через canvas
-        const canvas = document.createElement('canvas');
-        canvas.width = 1200;
-        canvas.height = 1200;
-        const ctx = canvas.getContext('2d');
-        
-        // Создаём временный SVG image
-        const img = new Image();
-        const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
-        const svgUrl = URL.createObjectURL(svgBlob);
-        
-        await new Promise((resolve, reject) => {
-            img.onload = () => {
-                ctx.fillStyle = '#f8f5fa';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                URL.revokeObjectURL(svgUrl);
-                resolve();
-            };
-            img.onerror = reject;
-            img.src = svgUrl;
-        });
-        
-        // Конвертируем canvas в PNG blob
-        const pngBlob = await new Promise(resolve => {
-            canvas.toBlob(resolve, 'image/png', 1.0);
-        });
-        
         // Отправляем через Web3Forms
         const formData = new FormData();
         formData.append('access_key', 'cf1489dc-9d06-40a8-9437-e6a64e7ee02a');
@@ -2628,7 +2656,7 @@ async function sendCertificateToEmail(certId, amount, svgContent) {
 🆔 ID сертифіката: ${certId}
 📅 Дата: ${new Date().toLocaleDateString('uk-UA')}
 
-Сертифікат у вкладенні (PNG-зображення). Збережіть його та пред'явіть при записі на консультацію.
+Сертифікат у вкладенні (PNG-зображення високої якості). Збережіть його та пред'явіть при записі на консультацію.
 
 З повагою,
 Мар'яна
