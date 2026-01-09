@@ -2554,68 +2554,21 @@ function downloadCertificate(amount) {
             // Сохраняем список всех сертификатов
             let allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
             allCerts.push(certData);
-            localStorage.setItem('all_certificates', JSON.stringify(allCerts));
-         // Отправляем сертификат на email
-sendCertificateToEmail(certId, amount, modifiedSvg);
+           localStorage.setItem('all_certificates', JSON.stringify(allCerts));
+            
+            // Отправляем PDF на email
+            sendCertificateToEmail(certId, amount, modifiedSvg);
             
             // Универсальный способ скачивания для всех устройств
            // Универсальный способ скачивания для всех устройств
-            const blob = new Blob([modifiedSvg], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            
-            // Для мобильных устройств - открываем в новой вкладке
-            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                const newWindow = window.open(url, '_blank');
-                if (newWindow) {
-                    statusMsg.className = 'status-message success';
-                    statusMsg.innerHTML = `
-                        ✓ Сертифікат ID: ${certId}<br>
-                        <small style="opacity:0.7">Відкрито в новій вкладці. Утримуйте палець на зображенні та оберіть "Зберегти"</small><br>
-                        <button onclick="openCertificateInNewTab('${certId}')" 
-                                style="margin-top:8px; padding:8px 16px; background:#4caf50; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
-                            📥 Відкрити ще раз
-                        </button>
-                    `;
-                } else {
-                    // Если popup заблокирован
-                    statusMsg.className = 'status-message success';
-                    statusMsg.innerHTML = `
-                        ✓ Сертифікат готовий! ID: ${certId}<br>
-                        <button onclick="openCertificateInNewTab('${certId}')" 
-                                style="margin-top:8px; padding:8px 16px; background:#4caf50; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
-                            📥 Відкрити сертифікат
-                        </button>
-                        <button onclick="showAllCertificates()" 
-                                style="margin-top:8px; margin-left:8px; padding:8px 16px; background:#9b7fd4; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
-                            📋 Всі сертифікати
-                        </button>
-                    `;
-                }
-            } else {
-                // Для десктопа - обычное скачивание
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `certificate_${certId}.svg`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                
-                statusMsg.className = 'status-message success';
-                statusMsg.innerHTML = `
-                    ✓ Сертифікат завантажено! ID: ${certId}<br>
-                    <small style="opacity:0.7">Перевірте папку "Завантаження"</small><br>
-                    <button onclick="redownloadCertificate('${certId}')" 
-                            style="margin-top:8px; padding:8px 16px; background:#4caf50; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
-                        📥 Завантажити ще раз
-                    </button>
-                    <button onclick="showAllCertificates()" 
-                            style="margin-top:8px; margin-left:8px; padding:8px 16px; background:#9b7fd4; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
-                            📋 Всі сертифікати
-                    </button>
-                `;
-            }
-            
-            setTimeout(() => URL.revokeObjectURL(url), 1000);;
+          // Показываем успешное сообщение
+            statusMsg.className = 'status-message success';
+            statusMsg.innerHTML = `
+                ✓ Сертифікат ID: ${certId}<br>
+                <small style="opacity:0.7">PDF-сертифікат відправлено на ${localStorage.getItem(`email_${amount}`)}</small><br>
+                <small style="opacity:0.6; display:block; margin-top:8px;">Перевірте папку "Вхідні" або "Спам"</small>
+            `;
+          
         })
         .catch(error => {
             console.error('Certificate generation error:', error);
@@ -2624,49 +2577,13 @@ sendCertificateToEmail(certId, amount, modifiedSvg);
         });
 }
 
- function redownloadCertificate(certId) {
-    const allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
-    const cert = allCerts.find(c => c.id === certId);
-    
-    if (!cert) {
-        alert('Помилка: сертифікат не знайдено');
-        return;
-    }
-    
-    const blob = new Blob([cert.svg], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `certificate_${certId}.svg`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
+ 
 
- // ===== ОТКРЫТИЕ В НОВОЙ ВКЛАДКЕ (для мобильных) =====
-function openCertificateInNewTab(certId) {
-    const allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
-    const cert = allCerts.find(c => c.id === certId);
-    
-    if (!cert) {
-        alert('Помилка: сертифікат не знайдено');
-        return;
-    }
-    
-    const blob = new Blob([cert.svg], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const newWindow = window.open(url, '_blank');
-    
-    if (!newWindow) {
-        alert('Дозвольте спливаючі вікна для відкриття сертифіката');
-    }
-    
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
+ 
 
 // ===== ПОКАЗАТЬ ВСЕ СЕРТИФИКАТЫ =====
  // ===== ОТПРАВКА СЕРТИФИКАТА НА EMAIL =====
+// ===== ОТПРАВКА PDF СЕРТИФИКАТА НА EMAIL =====
 async function sendCertificateToEmail(certId, amount, svgContent) {
     const userEmail = localStorage.getItem(`email_${amount}`);
     
@@ -2676,8 +2593,37 @@ async function sendCertificateToEmail(certId, amount, svgContent) {
     }
     
     try {
+        // Конвертируем SVG в PNG через canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 1200;
+        const ctx = canvas.getContext('2d');
+        
+        // Создаём временный SVG image
+        const img = new Image();
+        const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+        const svgUrl = URL.createObjectURL(svgBlob);
+        
+        await new Promise((resolve, reject) => {
+            img.onload = () => {
+                ctx.fillStyle = '#f8f5fa';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                URL.revokeObjectURL(svgUrl);
+                resolve();
+            };
+            img.onerror = reject;
+            img.src = svgUrl;
+        });
+        
+        // Конвертируем canvas в PNG blob
+        const pngBlob = await new Promise(resolve => {
+            canvas.toBlob(resolve, 'image/png', 1.0);
+        });
+        
+        // Отправляем через Web3Forms
         const formData = new FormData();
-        formData.append('access_key', 'cf1489dc-9d06-40a8-9437-e6a64e7ee02a'); // ← ЗАМЕНИТЕ НА ВАШ КЛЮЧ
+        formData.append('access_key', 'cf1489dc-9d06-40a8-9437-e6a64e7ee02a');
         formData.append('subject', `Подарунковий сертифікат №${certId}`);
         formData.append('from_name', 'Мар\'яна | Кармолог');
         formData.append('email', userEmail);
@@ -2690,15 +2636,14 @@ async function sendCertificateToEmail(certId, amount, svgContent) {
 🆔 ID сертифіката: ${certId}
 📅 Дата: ${new Date().toLocaleDateString('uk-UA')}
 
-Сертифікат у вкладенні. Збережіть його та пред'явіть при записі на консультацію.
+Сертифікат у вкладенні (PNG-зображення). Збережіть його та пред'явіть при записі на консультацію.
 
 З повагою,
 Мар'яна
         `);
         
-        // Конвертируем SVG в файл
-        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
-        formData.append('file', blob, `certificate_${certId}.svg`);
+        // Добавляем PNG файл
+        formData.append('file', pngBlob, `certificate_${certId}.png`);
         
         const response = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
