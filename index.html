@@ -2488,77 +2488,113 @@ async function downloadCertificate(amount) {
     const modalImage = document.getElementById('modalImage');
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.querySelector('.modal-description');
+    const btn = document.getElementById('modalActionBtn');
     
     statusMsg.className = 'status-message loading';
     statusMsg.textContent = 'Генерація сертифікату...';
     
-    // ← ВСТАВЬТЕ ЗДЕСЬ
+    // Скрываем поле имени
     document.getElementById('userName').style.display = 'none';
     
     try {
         const certId = generateCertificateId();
         const userName = localStorage.getItem(`name_${amount}`) || 'Власник';
         
-        // Скрываем поле имени
-        document.getElementById('userName').style.display = 'none';
+        // Создаем canvas для сертификата
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
         
-        // Открываем certificate.html в iframe для генерации
-        const iframe = document.createElement('iframe');
-        iframe.style.position = 'absolute';
-        iframe.style.left = '-9999px';
-        iframe.style.width = '800px';
-        iframe.style.height = '600px';
-        document.body.appendChild(iframe);
+        // Фон
+        const gradient = ctx.createLinearGradient(0, 0, 800, 600);
+        gradient.addColorStop(0, '#f8f5fa');
+        gradient.addColorStop(1, '#e8e0f0');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 800, 600);
         
-        // Передаем данные через URL параметры
-        iframe.src = `certificate.html?amount=${amount}&id=${certId}&name=${encodeURIComponent(userName)}`;
+        // Белая карточка
+        ctx.fillStyle = 'white';
+        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+        ctx.shadowBlur = 60;
+        ctx.fillRect(25, 25, 750, 550);
+        ctx.shadowBlur = 0;
         
-        // Ждем загрузки iframe
-        iframe.onload = async function() {
-            // Даем время на рендеринг
-            await new Promise(resolve => setTimeout(resolve, 1000));
+        // Фиолетовая рамка
+        ctx.strokeStyle = '#9b7fd4';
+        ctx.lineWidth = 15;
+        ctx.strokeRect(25, 25, 750, 550);
+        
+        // Заголовок
+        ctx.fillStyle = '#9b7fd4';
+        ctx.font = 'bold 48px Georgia';
+        ctx.textAlign = 'center';
+        ctx.fillText('ПОДАРУНКОВИЙ СЕРТИФІКАТ', 400, 120);
+        
+        // Подзаголовок
+        ctx.fillStyle = '#8b7ba5';
+        ctx.font = '20px Georgia';
+        ctx.fillText('на консультацію', 400, 160);
+        
+        // Имя получателя (на сертификате)
+        ctx.fillStyle = '#5a4470';
+        ctx.font = 'italic 24px Georgia';
+        ctx.fillText(userName, 400, 220);
+        
+        // Сумма
+        ctx.fillStyle = '#5a4470';
+        ctx.font = 'bold 72px Georgia';
+        ctx.fillText(`${amount} ₴`, 400, 320);
+        
+        // Описание
+        ctx.fillStyle = '#8b7ba5';
+        ctx.font = '16px Georgia';
+        ctx.fillText('Цей сертифікат дає право на консультацію', 400, 380);
+        ctx.fillText('з кармології, нумерології або регресивної терапії', 400, 410);
+        
+        // ID сертификата (на сертификате)
+        ctx.fillStyle = '#b0a0c0';
+        ctx.font = '14px monospace';
+        ctx.fillText(`ID: ${certId}`, 400, 480);
+        
+        // Футер
+        ctx.fillStyle = '#c0b0d0';
+        ctx.font = '12px Georgia';
+        ctx.fillText("Мар'яна | Кармолог | Регресолог", 400, 530);
+        ctx.fillText('@karmolog_mariana', 400, 550);
+        
+        // Конвертируем в PNG
+        canvas.toBlob(function(pngBlob) {
+            const pngUrl = URL.createObjectURL(pngBlob);
             
-            // Используем html2canvas для захвата содержимого
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            const canvas = await html2canvas(iframeDoc.body, {
-                width: 800,
-                height: 600,
-                scale: 2,
-                backgroundColor: null
-            });
+            // Меняем заголовок НАД сертификатом
+            modalTitle.textContent = '✓ Сертифікат створено!';
             
-            // Конвертируем в PNG
-            canvas.toBlob(function(pngBlob) {
-                const pngUrl = URL.createObjectURL(pngBlob);
-                
-                // Показываем в модалке
-                modalImage.src = pngUrl;
-                modalTitle.textContent = 'Ваш сертифікат готовий!';
-                modalDescription.innerHTML = `
-                    <strong>${userName}</strong><br>
-                    <strong>ID: ${certId}</strong><br>
-                    <small style="opacity:0.7">
-                        <strong>На мобільному:</strong> Утримуйте палець → "Зберегти"<br>
-                        <strong>На комп'ютері:</strong> ПКМ → "Сохранить как..."
-                    </small>
-                    <br><br>
-                    <a href="${pngUrl}" download="certificate_${certId}.png" 
-                       style="display:inline-block; padding:10px 20px; background:#4caf50; 
-                              color:white; text-decoration:none; border-radius:6px; margin-top:10px;">
-                        💾 Завантажити сертифікат
-                    </a>
-                `;
-                
-                statusMsg.className = 'status-message success';
-                statusMsg.innerHTML = `✓ Сертифікат створено!<br><small>Натисніть кнопку вище для завантаження</small>`;
-                
-                // Удаляем iframe
-                document.body.removeChild(iframe);
-                
-                // Отправляем на email (если нужно)
-                // sendCertificateToEmail(certId, amount, pngBlob, userName);
-            }, 'image/png', 1.0);
-        };
+            // Показываем сертификат
+            modalImage.src = pngUrl;
+            
+            // Убираем описание и заменяем на кнопку
+            modalDescription.innerHTML = `
+                <a href="${pngUrl}" download="certificate_${certId}.png" 
+                   class="btn-gold" 
+                   style="display: block; text-decoration: none; margin-top: 10px; background: rgba(76, 175, 80, 0.1); border-color: #4caf50; color: #2e7d32;">
+                    Завантажити сертифікат
+                </a>
+            `;
+            
+            // Убираем сообщение о загрузке
+            statusMsg.style.display = 'none';
+            
+            // Меняем кнопку "Перейти к оплате" на "Купить ещё один"
+            btn.textContent = 'Купити ще один';
+            btn.disabled = false;
+            btn.onclick = function() {
+                closeModal();
+                // Небольшая задержка для плавности
+                setTimeout(() => openCertModal(amount), 300);
+            };
+            
+        }, 'image/png', 1.0);
         
     } catch (error) {
         console.error('Error:', error);
