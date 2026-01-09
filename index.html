@@ -2506,12 +2506,6 @@ async function downloadCertificate(amount) {
         canvas.height = 600;
         const ctx = canvas.getContext('2d');
         
-        // Загружаем кастомный шрифт
-        const customFont = new FontFace('CaslonSwash', 'url(https://github.com/Vdffrfr333434/karma2/raw/main/caslonbeckerno540swashrus_italic.otf)');
-        
-        await customFont.load();
-        document.fonts.add(customFont);
-        
         // Фон с градиентом (розовый → голубой → лиловый → фиолетовый)
         const bgGradient = ctx.createLinearGradient(0, 0, 800, 600);
         bgGradient.addColorStop(0, '#FFB6C1');    // розовый
@@ -2535,28 +2529,28 @@ async function downloadCertificate(amount) {
         
         // Заголовок (уменьшен на 25%: 48px → 36px)
         ctx.fillStyle = '#D4AF37'; // золотой текст
-        ctx.font = '36px CaslonSwash, Georgia';
+        ctx.font = 'italic 36px Georgia, serif';
         ctx.textAlign = 'center';
         ctx.fillText('ПОДАРУНКОВИЙ СЕРТИФІКАТ', 400, 120);
         
         // Подзаголовок
         ctx.fillStyle = '#B8860B'; // темно-золотой
-        ctx.font = '20px Georgia';
+        ctx.font = '20px Georgia, serif';
         ctx.fillText('на консультацію', 400, 160);
         
         // Имя получателя (на сертификате)
         ctx.fillStyle = '#8B7500'; // оливково-золотой
-        ctx.font = 'italic 24px Georgia';
+        ctx.font = 'italic 24px Georgia, serif';
         ctx.fillText(userName, 400, 220);
         
         // Сумма
         ctx.fillStyle = '#DAA520'; // золотистый
-        ctx.font = 'bold 72px Georgia';
+        ctx.font = 'bold 72px Georgia, serif';
         ctx.fillText(`${amount} ₴`, 400, 320);
         
         // Описание
         ctx.fillStyle = '#B8860B';
-        ctx.font = '16px Georgia';
+        ctx.font = '16px Georgia, serif';
         ctx.fillText('Цей сертифікат дає право на консультацію', 400, 380);
         ctx.fillText('з кармології, нумерології або регресивної терапії', 400, 410);
         
@@ -2567,7 +2561,7 @@ async function downloadCertificate(amount) {
         
         // Футер
         ctx.fillStyle = '#D4AF37';
-        ctx.font = '12px Georgia';
+        ctx.font = '12px Georgia, serif';
         ctx.fillText("Мар'яна | Кармолог | Регресолог", 400, 530);
         ctx.fillText('@karmolog_mariana', 400, 550);
         
