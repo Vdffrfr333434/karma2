@@ -2249,6 +2249,11 @@ let currentInvoiceId = null;
 // ===== ОТКРЫТИЕ МОДАЛЬНОГО ОКНА =====
 function openCertModal(amount) {
     currentAmount = amount;
+
+  // Очищаем старый invoiceId при открытии модалки
+    localStorage.removeItem(`invoice_${amount}`);
+    localStorage.removeItem(`payment_pending_${amount}`);
+    currentInvoiceId = null;
     
     const modal = document.getElementById('certModal');
     const title = document.getElementById('modalTitle');
@@ -2388,8 +2393,20 @@ async function checkPaymentStatus() {
     localStorage.removeItem(`invoice_${amount}`);
     localStorage.removeItem(`payment_pending_${amount}`);
     
+    // ВАЖНО: Очищаем invoiceId чтобы можно было создать новый счёт
+    currentInvoiceId = null;
+    
     // Очищаем URL
     window.history.replaceState({}, document.title, window.location.pathname);
+    
+    // Генерируем и показываем сертификат
+    setTimeout(() => {
+        openCertModal(parseInt(amount));
+        // Автоматически генерируем сертификат
+        setTimeout(() => {
+            downloadCertificate(parseInt(amount));
+        }, 500);
+    }, 800);
     
     // Генерируем и показываем сертификат
     setTimeout(() => {
