@@ -2570,7 +2570,34 @@ async function downloadCertificate(amount) {
             
             // Показываем сертификат
             modalImage.src = pngUrl;
-            
+
+         // Добавляем обертку для шиммера
+modalImage.style.position = 'relative';
+modalImage.style.overflow = 'hidden';
+
+// Создаем шиммер элемент
+const shimmer = document.createElement('div');
+shimmer.style.cssText = `
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 70%
+    );
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+    z-index: 10;
+`;
+
+// Вставляем шиммер после изображения
+modalImage.parentElement.style.position = 'relative';
+modalImage.parentElement.style.overflow = 'hidden';
+modalImage.parentElement.appendChild(shimmer);
             // Убираем описание и заменяем на кнопку
             modalDescription.innerHTML = `
                 <a href="${pngUrl}" download="certificate_${certId}.png" 
