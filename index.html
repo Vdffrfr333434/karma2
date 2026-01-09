@@ -2506,11 +2506,19 @@ async function downloadCertificate(amount) {
         canvas.height = 600;
         const ctx = canvas.getContext('2d');
         
-        // Фон
-        const gradient = ctx.createLinearGradient(0, 0, 800, 600);
-        gradient.addColorStop(0, '#f8f5fa');
-        gradient.addColorStop(1, '#e8e0f0');
-        ctx.fillStyle = gradient;
+        // Загружаем кастомный шрифт
+        const customFont = new FontFace('CaslonSwash', 'url(https://github.com/Vdffrfr333434/karma2/raw/main/caslonbeckerno540swashrus_italic.otf)');
+        
+        await customFont.load();
+        document.fonts.add(customFont);
+        
+        // Фон с градиентом (розовый → голубой → лиловый → фиолетовый)
+        const bgGradient = ctx.createLinearGradient(0, 0, 800, 600);
+        bgGradient.addColorStop(0, '#FFB6C1');    // розовый
+        bgGradient.addColorStop(0.33, '#ADD8E6'); // голубой
+        bgGradient.addColorStop(0.66, '#DDA0DD'); // лиловый
+        bgGradient.addColorStop(1, '#9370DB');    // фиолетовый
+        ctx.fillStyle = bgGradient;
         ctx.fillRect(0, 0, 800, 600);
         
         // Белая карточка
@@ -2520,45 +2528,45 @@ async function downloadCertificate(amount) {
         ctx.fillRect(25, 25, 750, 550);
         ctx.shadowBlur = 0;
         
-        // Фиолетовая рамка
-        ctx.strokeStyle = '#9b7fd4';
+        // ЗОЛОТАЯ рамка
+        ctx.strokeStyle = '#D4AF37'; // золотой цвет
         ctx.lineWidth = 15;
         ctx.strokeRect(25, 25, 750, 550);
         
-        // Заголовок
-        ctx.fillStyle = '#9b7fd4';
-        ctx.font = 'bold 48px Georgia';
+        // Заголовок (уменьшен на 25%: 48px → 36px)
+        ctx.fillStyle = '#D4AF37'; // золотой текст
+        ctx.font = '36px CaslonSwash, Georgia';
         ctx.textAlign = 'center';
         ctx.fillText('ПОДАРУНКОВИЙ СЕРТИФІКАТ', 400, 120);
         
         // Подзаголовок
-        ctx.fillStyle = '#8b7ba5';
+        ctx.fillStyle = '#B8860B'; // темно-золотой
         ctx.font = '20px Georgia';
         ctx.fillText('на консультацію', 400, 160);
         
         // Имя получателя (на сертификате)
-        ctx.fillStyle = '#5a4470';
+        ctx.fillStyle = '#8B7500'; // оливково-золотой
         ctx.font = 'italic 24px Georgia';
         ctx.fillText(userName, 400, 220);
         
         // Сумма
-        ctx.fillStyle = '#5a4470';
+        ctx.fillStyle = '#DAA520'; // золотистый
         ctx.font = 'bold 72px Georgia';
         ctx.fillText(`${amount} ₴`, 400, 320);
         
         // Описание
-        ctx.fillStyle = '#8b7ba5';
+        ctx.fillStyle = '#B8860B';
         ctx.font = '16px Georgia';
         ctx.fillText('Цей сертифікат дає право на консультацію', 400, 380);
         ctx.fillText('з кармології, нумерології або регресивної терапії', 400, 410);
         
         // ID сертификата (на сертификате)
-        ctx.fillStyle = '#b0a0c0';
+        ctx.fillStyle = '#D4AF37';
         ctx.font = '14px monospace';
         ctx.fillText(`ID: ${certId}`, 400, 480);
         
         // Футер
-        ctx.fillStyle = '#c0b0d0';
+        ctx.fillStyle = '#D4AF37';
         ctx.font = '12px Georgia';
         ctx.fillText("Мар'яна | Кармолог | Регресолог", 400, 530);
         ctx.fillText('@karmolog_mariana', 400, 550);
@@ -2588,10 +2596,17 @@ async function downloadCertificate(amount) {
             // Меняем кнопку "Перейти к оплате" на "Купить ещё один"
             btn.textContent = 'Купити ще один';
             btn.disabled = false;
+            btn.className = 'btn-modal-action';
             btn.onclick = function() {
-                closeModal();
-                // Небольшая задержка для плавности
-                setTimeout(() => openCertModal(amount), 300);
+                // Сбрасываем состояние модалки
+                document.getElementById('userName').style.display = 'block';
+                document.getElementById('userName').value = '';
+                modalImage.src = 'https://github.com/Vdffrfr333434/karma2/blob/main/DiamondCard.webp?raw=true';
+                modalTitle.textContent = `Сертифікат на ${amount} ₴`;
+                modalDescription.innerHTML = 'Цей сертифікат можна використати для будь-якої консультації або сеансу';
+                statusMsg.style.display = 'none';
+                btn.textContent = 'Перейти до оплати';
+                btn.onclick = handlePayment;
             };
             
         }, 'image/png', 1.0);
