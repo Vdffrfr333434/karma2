@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            width: 800px;
+            height: 600px;
+            background: linear-gradient(135deg, #f8f5fa 0%, #e8e0f0 100%);
+            font-family: 'Georgia', serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .certificate {
+            width: 750px;
+            height: 550px;
+            background: white;
+            border: 15px solid #9b7fd4;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            text-align: center;
+        }
+        .ornament {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            opacity: 0.1;
+        }
+        .ornament.top-left { top: 20px; left: 20px; }
+        .ornament.top-right { top: 20px; right: 20px; transform: rotate(90deg); }
+        .ornament.bottom-left { bottom: 20px; left: 20px; transform: rotate(-90deg); }
+        .ornament.bottom-right { bottom: 20px; right: 20px; transform: rotate(180deg); }
+        .title {
+            font-size: 48px;
+            color: #9b7fd4;
+            margin-bottom: 20px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+        .subtitle {
+            font-size: 20px;
+            color: #8b7ba5;
+            margin-bottom: 40px;
+        }
+        .amount {
+            font-size: 72px;
+            color: #5a4470;
+            font-weight: bold;
+            margin: 30px 0;
+        }
+        .description {
+            font-size: 16px;
+            color: #8b7ba5;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .cert-id {
+            font-size: 14px;
+            color: #b0a0c0;
+            margin-top: 40px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            font-size: 12px;
+            color: #c0b0d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <img class="ornament top-left" src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" alt="">
+        <img class="ornament top-right" src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" alt="">
+        <img class="ornament bottom-left" src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" alt="">
+        <img class="ornament bottom-right" src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" alt="">
+        
+        <div class="title">ПОДАРУНКОВИЙ СЕРТИФІКАТ</div>
+        <div class="subtitle">на консультацію</div>
+        
+        <div class="amount" id="certAmount">1000 ₴</div>
+        
+        <div class="description">
+            Цей сертифікат дає право на консультацію<br>
+            з кармології, нумерології або регресивної терапії
+        </div>
+        
+        <div class="cert-id" id="certId">ABC123-XYZ789</div>
+        
+        <div class="footer">
+            Мар'яна | Кармолог | Регресолог<br>
+            @karmolog_mariana
+        </div>
+    </div>
+</body>
+</html>
