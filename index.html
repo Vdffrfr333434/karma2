@@ -1607,6 +1607,15 @@ background: rgba(123, 104, 168, 0.1);
              src="https://github.com/Vdffrfr333434/karma2/blob/main/DiamondCard.webp?raw=true" 
              alt="Certificate" 
              class="modal-image">
+
+
+     <input type="email" 
+       id="userEmail" 
+       placeholder="Ваш email для отримання сертифіката"
+       style="width: 100%; padding: 12px; border: 1px solid rgba(139, 123, 165, 0.3); border-radius: 8px; margin-bottom: 12px; font-size: 14px;"
+       required>
+
+     
         
         <p class="modal-description">
             Цей сертифікат можна використати для будь-якої консультації або сеансу
@@ -2289,6 +2298,19 @@ function closeModal(event) {
 async function handlePayment() {
     const btn = document.getElementById('modalActionBtn');
     const statusMsg = document.getElementById('statusMessage');
+    const emailInput = document.getElementById('userEmail');
+    
+    // Проверка email
+    if (!emailInput.value || !emailInput.value.includes('@')) {
+        statusMsg.className = 'status-message error';
+        statusMsg.textContent = 'Будь ласка, введіть коректний email';
+        return;
+    }
+    
+    // Сохраняем email
+    localStorage.setItem(`email_${currentAmount}`, emailInput.value);
+    
+   
     
     btn.disabled = true;
     btn.textContent = 'Генерація рахунку...';
@@ -2533,6 +2555,8 @@ function downloadCertificate(amount) {
             let allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
             allCerts.push(certData);
             localStorage.setItem('all_certificates', JSON.stringify(allCerts));
+         // Отправляем сертификат на email
+sendCertificateToEmail(certId, amount, modifiedSvg);
             
             // Универсальный способ скачивания для всех устройств
            // Универсальный способ скачивания для всех устройств
@@ -2642,7 +2666,60 @@ function openCertificateInNewTab(certId) {
 }
 
 // ===== ПОКАЗАТЬ ВСЕ СЕРТИФИКАТЫ =====
- 
+ // ===== ОТПРАВКА СЕРТИФИКАТА НА EMAIL =====
+async function sendCertificateToEmail(certId, amount, svgContent) {
+    const userEmail = localStorage.getItem(`email_${amount}`);
+    
+    if (!userEmail) {
+        console.log('Email не найден');
+        return;
+    }
+    
+    try {
+        const formData = new FormData();
+        formData.append('access_key', 'cf1489dc-9d06-40a8-9437-e6a64e7ee02a'); // ← ЗАМЕНИТЕ НА ВАШ КЛЮЧ
+        formData.append('subject', `Подарунковий сертифікат №${certId}`);
+        formData.append('from_name', 'Мар\'яна | Кармолог');
+        formData.append('email', userEmail);
+        formData.append('message', `
+Вітаємо!
+
+Ваш подарунковий сертифікат успішно оплачено!
+
+💎 Сума: ${amount} грн
+🆔 ID сертифіката: ${certId}
+📅 Дата: ${new Date().toLocaleDateString('uk-UA')}
+
+Сертифікат у вкладенні. Збережіть його та пред'явіть при записі на консультацію.
+
+З повагою,
+Мар'яна
+        `);
+        
+        // Конвертируем SVG в файл
+        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+        formData.append('file', blob, `certificate_${certId}.svg`);
+        
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log('✓ Сертифікат відправлено на:', userEmail);
+            localStorage.removeItem(`email_${amount}`);
+        } else {
+            console.error('Помилка відправки:', data.message);
+        }
+        
+    } catch (error) {
+        console.error('Помилка:', error);
+    }
+}
+
+// ===== ИНИЦИАЛИЗАЦИЯ =====
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 window.addEventListener('load', () => {
