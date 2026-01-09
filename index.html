@@ -2431,6 +2431,7 @@ async function checkPaymentStatus() {
     }
 }
 // ===== ГЕНЕРАЦИЯ ID СЕРТИФИКАТА =====
+// ===== ГЕНЕРАЦИЯ ID СЕРТИФИКАТА =====
 function generateCertificateId() {
     const timestamp = Date.now().toString(36);
     const random = Math.random().toString(36).substring(2, 7);
@@ -2514,6 +2515,7 @@ function downloadCertificate(amount) {
             localStorage.setItem('all_certificates', JSON.stringify(allCerts));
             
             // Универсальный способ скачивания для всех устройств
+           // Универсальный способ скачивания для всех устройств
             const blob = new Blob([modifiedSvg], { type: 'image/svg+xml;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             
@@ -2528,10 +2530,6 @@ function downloadCertificate(amount) {
                         <button onclick="openCertificateInNewTab('${certId}')" 
                                 style="margin-top:8px; padding:8px 16px; background:#4caf50; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
                             📥 Відкрити ще раз
-                        </button>
-                        <button onclick="showAllCertificates()" 
-                                style="margin-top:8px; margin-left:8px; padding:8px 16px; background:#9b7fd4; color:white; border:none; border-radius:6px; cursor:pointer; font-size:14px;">
-                            📋 Всі сертифікати
                         </button>
                     `;
                 } else {
@@ -2573,7 +2571,7 @@ function downloadCertificate(amount) {
                 `;
             }
             
-            URL.revokeObjectURL(url);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);;
         })
         .catch(error => {
             console.error('Certificate generation error:', error);
@@ -2614,58 +2612,17 @@ function openCertificateInNewTab(certId) {
     
     const blob = new Blob([cert.svg], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
+    const newWindow = window.open(url, '_blank');
+    
+    if (!newWindow) {
+        alert('Дозвольте спливаючі вікна для відкриття сертифіката');
+    }
+    
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // ===== ПОКАЗАТЬ ВСЕ СЕРТИФИКАТЫ =====
-function showAllCertificates() {
-    const allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
-    
-    if (allCerts.length === 0) {
-        alert('У вас поки немає сертифікатів');
-        return;
-    }
-    
-    const modal = document.getElementById('certModal');
-    const title = document.getElementById('modalTitle');
-    const modalImage = document.getElementById('modalImage');
-    const description = document.querySelector('.modal-description');
-    const btn = document.getElementById('modalActionBtn');
-    const statusMsg = document.getElementById('statusMessage');
-    
-    title.textContent = 'Ваші сертифікати';
-    modalImage.style.display = 'none';
-    description.style.display = 'none';
-    btn.style.display = 'none';
-    
-    let html = '<div style="max-height:300px; overflow-y:auto;">';
-    allCerts.reverse().forEach(cert => {
-        const date = new Date(cert.date).toLocaleDateString('uk-UA');
-        html += `
-            <div style="padding:12px; margin-bottom:8px; background:rgba(155,127,212,0.08); border-radius:8px; border:1px solid rgba(139,123,165,0.2);">
-                <div style="font-weight:600; margin-bottom:4px;">ID: ${cert.id}</div>
-                <div style="font-size:12px; color:#8b7ba5; margin-bottom:8px;">Сума: ${cert.amount} ₴ | Дата: ${date}</div>
-                <button onclick="openCertificateInNewTab('${cert.id}')" 
-                        style="padding:6px 12px; background:#4caf50; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px; margin-right:6px;">
-                    📥 Відкрити
-                </button>
-                ${!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? `
-                <button onclick="redownloadCertificate('${cert.id}')" 
-                        style="padding:6px 12px; background:#9b7fd4; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">
-                    💾 Завантажити
-                </button>
-                ` : ''}
-            </div>
-        `;
-    });
-    html += '</div>';
-    
-    statusMsg.className = 'status-message';
-    statusMsg.style.display = 'block';
-    statusMsg.innerHTML = html;
-    
-    modal.classList.add('active');
-}
+ 
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 window.addEventListener('load', () => {
