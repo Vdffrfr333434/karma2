@@ -2506,7 +2506,7 @@ async function downloadCertificate(amount) {
         canvas.height = 600;
         const ctx = canvas.getContext('2d');
         
-        // Фон с градиентом (розовый → голубой → лиловый → фиолетовый)
+        // Фон с градиентом на весь сертификат (розовый → голубой → лиловый → фиолетовый)
         const bgGradient = ctx.createLinearGradient(0, 0, 800, 600);
         bgGradient.addColorStop(0, '#FFB6C1');    // розовый
         bgGradient.addColorStop(0.33, '#ADD8E6'); // голубой
@@ -2515,55 +2515,40 @@ async function downloadCertificate(amount) {
         ctx.fillStyle = bgGradient;
         ctx.fillRect(0, 0, 800, 600);
         
-        // Белая карточка
-        ctx.fillStyle = 'white';
-        ctx.shadowColor = 'rgba(0,0,0,0.3)';
-        ctx.shadowBlur = 60;
-        ctx.fillRect(25, 25, 750, 550);
-        ctx.shadowBlur = 0;
+        // Единый светлый цвет для всего текста
+        const textColor = '#FFFFFF'; // белый
         
-        // ЗОЛОТАЯ рамка
-        ctx.strokeStyle = '#D4AF37'; // золотой цвет
-        ctx.lineWidth = 15;
-        ctx.strokeRect(25, 25, 750, 550);
-        
-        // Заголовок (уменьшен на 25%: 48px → 36px)
-        ctx.fillStyle = '#D4AF37'; // золотой текст
+        // Заголовок
+        ctx.fillStyle = textColor;
         ctx.font = 'italic 36px Georgia, serif';
         ctx.textAlign = 'center';
         ctx.fillText('ПОДАРУНКОВИЙ СЕРТИФІКАТ', 400, 120);
         
         // Подзаголовок
-        ctx.fillStyle = '#B8860B'; // темно-золотой
         ctx.font = '20px Georgia, serif';
-        ctx.fillText('на консультацію', 400, 160);
+        ctx.fillText('на консультацію', 400, 170);
         
-        // Имя получателя (на сертификате)
-        ctx.fillStyle = '#8B7500'; // оливково-золотой
-        ctx.font = 'italic 24px Georgia, serif';
-        ctx.fillText(userName, 400, 220);
+        // Имя получателя
+        ctx.font = 'italic 28px Georgia, serif';
+        ctx.fillText(userName, 400, 240);
         
         // Сумма
-        ctx.fillStyle = '#DAA520'; // золотистый
-        ctx.font = 'bold 72px Georgia, serif';
-        ctx.fillText(`${amount} ₴`, 400, 320);
+        ctx.font = 'bold 84px Georgia, serif';
+        ctx.fillText(`${amount} ₴`, 400, 350);
         
         // Описание
-        ctx.fillStyle = '#B8860B';
-        ctx.font = '16px Georgia, serif';
-        ctx.fillText('Цей сертифікат дає право на консультацію', 400, 380);
-        ctx.fillText('з кармології, нумерології або регресивної терапії', 400, 410);
+        ctx.font = '18px Georgia, serif';
+        ctx.fillText('Цей сертифікат дає право на консультацію', 400, 420);
+        ctx.fillText('з кармології, нумерології або регресивної терапії', 400, 450);
         
-        // ID сертификата (на сертификате)
-        ctx.fillStyle = '#D4AF37';
-        ctx.font = '14px monospace';
-        ctx.fillText(`ID: ${certId}`, 400, 480);
+        // ID сертификата
+        ctx.font = '16px monospace';
+        ctx.fillText(`ID: ${certId}`, 400, 510);
         
         // Футер
-        ctx.fillStyle = '#D4AF37';
-        ctx.font = '12px Georgia, serif';
-        ctx.fillText("Мар'яна | Кармолог | Регресолог", 400, 530);
-        ctx.fillText('@karmolog_mariana', 400, 550);
+        ctx.font = '14px Georgia, serif';
+        ctx.fillText("Мар'яна | Кармолог | Регресолог", 400, 550);
+        ctx.fillText('@karmolog_mariana', 400, 575);
         
         // Конвертируем в PNG
         canvas.toBlob(function(pngBlob) {
@@ -2611,7 +2596,6 @@ async function downloadCertificate(amount) {
         statusMsg.textContent = 'Помилка: ' + error.message;
     }
 }
-
 // ===== ОТПРАВКА PNG СЕРТИФИКАТА НА EMAIL =====
 // ===== ОТПРАВКА PDF СЕРТИФИКАТА НА EMAIL =====
 // ===== ОТПРАВКА PNG СЕРТИФИКАТА НА EMAIL =====
