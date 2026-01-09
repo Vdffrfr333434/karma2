@@ -2480,94 +2480,62 @@ function generateCertificateId() {
     return `${timestamp}-${random}`.toUpperCase();
 }
 // ===== СКАЧИВАНИЕ СЕРТИФИКАТА =====
-function downloadCertificate(amount) {
-    const statusMsg = document.getElementById('statusMessage');
+// ОТКРЫВАЕМ PDF В НОВОМ ОКНЕ
+const canvas = document.createElement('canvas');
+canvas.width = 1200;
+canvas.height = 1200;
+const ctx = canvas.getContext('2d');
+
+const img = new Image();
+const svgBlob = new Blob([modifiedSvg], { type: 'image/svg+xml;charset=utf-8' });
+const svgUrl = URL.createObjectURL(svgBlob);
+
+img.onload = function() {
+    // Рисуем фон
+    ctx.fillStyle = '#f8f5fa';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(svgUrl);
     
-    statusMsg.className = 'status-message loading';
-    statusMsg.textContent = 'Генерація сертифікату...';
-    
-    const SVG_TEMPLATE_URL = 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/3b43daea1a32099640c01f503f44af5f6be30d0d/CertSVG.SVG';
-    
-    fetch(SVG_TEMPLATE_URL)
-        .then(response => response.text())
-        .then(svgText => {
-            const certId = generateCertificateId();
-            const parser = new DOMParser();
-            const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
-            
-            let amountElement = svgDoc.getElementById('CertAmount') || svgDoc.getElementById('certAmount');
-            let idElement = svgDoc.getElementById('CertId') || svgDoc.getElementById('certId');
-            
-            if (!amountElement) {
-                const textElements = svgDoc.querySelectorAll('text');
-                textElements.forEach(el => {
-                    if (el.textContent.includes('СУМА') || el.textContent.includes('Amount') || el.textContent.includes('1000')) {
-                        amountElement = el;
-                    }
-                });
-            }
-            
-            if (!idElement) {
-                const textElements = svgDoc.querySelectorAll('text');
-                textElements.forEach(el => {
-                    if (el.textContent.includes('ID:') || el.textContent.includes('Номер')) {
-                        idElement = el;
-                    }
-                });
-            }
-            
-            if (!amountElement) {
-                amountElement = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'text');
-                amountElement.setAttribute('x', '50%');
-                amountElement.setAttribute('y', '50%');
-                amountElement.setAttribute('text-anchor', 'middle');
-                amountElement.setAttribute('font-size', '48');
-                amountElement.setAttribute('fill', '#5a4470');
-                amountElement.setAttribute('font-weight', 'bold');
-                svgDoc.documentElement.appendChild(amountElement);
-            }
-            
-            if (!idElement) {
-                idElement = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'text');
-                idElement.setAttribute('x', '50%');
-                idElement.setAttribute('y', '60%');
-                idElement.setAttribute('text-anchor', 'middle');
-                idElement.setAttribute('font-size', '14');
-                idElement.setAttribute('fill', '#8b7ba5');
-                svgDoc.documentElement.appendChild(idElement);
-            }
-            
-            amountElement.textContent = `${amount} ₴`;
-            idElement.textContent = `ID: ${certId}`;
-            
-            const serializer = new XMLSerializer();
-            const modifiedSvg = serializer.serializeToString(svgDoc);
-            
-            // Сохраняем в localStorage для повторной загрузки
-            const certData = {
-                id: certId,
-                amount: amount,
-                svg: modifiedSvg,
-                date: new Date().toISOString()
-            };
-            
-            // Сохраняем список всех сертификатов
-            let allCerts = JSON.parse(localStorage.getItem('all_certificates') || '[]');
-            allCerts.push(certData);
-           localStorage.setItem('all_certificates', JSON.stringify(allCerts));
-            
-            // Отправляем PDF на email
-            sendCertificateToEmail(certId, amount, modifiedSvg);
-            
-            // Универсальный способ скачивания для всех устройств
-           // Универсальный способ скачивания для всех устройств
-          // Показываем успешное сообщение
+    // Получаем PNG
+    canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        
+        // Открываем в новом окне
+        const newWindow = window.open(url, '_blank');
+        
+        if (newWindow) {
             statusMsg.className = 'status-message success';
             statusMsg.innerHTML = `
                 ✓ Сертифікат ID: ${certId}<br>
-                <small style="opacity:0.7">PDF-сертифікат відправлено на ${localStorage.getItem(`email_${amount}`)}</small><br>
-                <small style="opacity:0.6; display:block; margin-top:8px;">Перевірте папку "Вхідні" або "Спам"</small>
+                <small style="opacity:0.7">Відкрито в новому вікні. Збережіть його (ПКМ → "Зберегти зображення як...")</small>
             `;
+        } else {
+            // Если окно заблокировано - скачиваем
+            const link = document.createElement('a');
+            link.download = `Certificate_${certId}.png`;
+            link.href = url;
+            link.click();
+            
+            statusMsg.className = 'status-message success';
+            statusMsg.innerHTML = `
+                ✓ Сертифікат ID: ${certId}<br>
+                <small style="opacity:0.7">Завантажено на ваш пристрій</small>
+            `;
+        }
+        
+        // Очищаем через 5 секунд
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        
+    }, 'image/png', 1.0);
+};
+
+img.onerror = function() {
+    statusMsg.className = 'status-message error';
+    statusMsg.textContent = 'Помилка завантаження SVG';
+};
+
+img.src = svgUrl;
           
         })
         .catch(error => {
