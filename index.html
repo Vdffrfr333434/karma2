@@ -2430,7 +2430,12 @@ async function checkPaymentStatus() {
         alert('Помилка перевірки статусу. Перезавантажте сторінку.');
     }
 }
-
+// ===== ГЕНЕРАЦИЯ ID СЕРТИФИКАТА =====
+function generateCertificateId() {
+    const timestamp = Date.now().toString(36);
+    const random = Math.random().toString(36).substring(2, 7);
+    return `${timestamp}-${random}`.toUpperCase();
+}
 // ===== СКАЧИВАНИЕ СЕРТИФИКАТА =====
 function downloadCertificate(amount) {
     const statusMsg = document.getElementById('statusMessage');
