@@ -2475,6 +2475,14 @@ async function checkPaymentStatus() {
 // ===== ГЕНЕРАЦИЯ ID СЕРТИФИКАТА =====
 // ===== ГЕНЕРАЦИЯ ID СЕРТИФИКАТА =====
 // ===== ГЕНЕРАЦИЯ И ПОКАЗ СЕРТИФИКАТА =====
+
+
+ function generateCertificateId() {
+    const timestamp = Date.now().toString(36);
+    const random = Math.random().toString(36).substring(2, 7);
+    return `${timestamp}-${random}`.toUpperCase();
+}
+// ===== ГЕНЕРАЦИЯ И ПОКАЗ СЕРТИФИКАТА =====
 async function downloadCertificate(amount) {
     const statusMsg = document.getElementById('statusMessage');
     const modalImage = document.getElementById('modalImage');
@@ -2589,47 +2597,6 @@ async function downloadCertificate(amount) {
         console.error('Error:', error);
         statusMsg.className = 'status-message error';
         statusMsg.textContent = 'Помилка: ' + error.message;
-    }
-}
-
-// ===== ОТПРАВКА НА EMAIL =====
-async function sendCertificateToEmail(certId, amount, pngBlob) {
-    const userEmail = localStorage.getItem(`email_${amount}`);
-    
-    if (!userEmail) return;
-    
-    try {
-        const formData = new FormData();
-        formData.append('access_key', 'cf1489dc-9d06-40a8-9437-e6a64e7ee02a');
-        formData.append('subject', `Подарунковий сертифікат №${certId}`);
-        formData.append('from_name', 'Мар\'яна | Кармолог');
-        formData.append('email', userEmail);
-        formData.append('message', `
-Вітаємо!
-
-Ваш подарунковий сертифікат успішно оплачено!
-
-💎 Сума: ${amount} грн
-🆔 ID: ${certId}
-📅 Дата: ${new Date().toLocaleDateString('uk-UA')}
-
-Сертифікат у вкладенні.
-
-З повагою,
-Мар'яна
-        `);
-        
-        formData.append('file', pngBlob, `certificate_${certId}.png`);
-        
-        await fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            body: formData
-        });
-        
-        localStorage.removeItem(`email_${amount}`);
-        
-    } catch (error) {
-        console.error('Email error:', error);
     }
 }
 
