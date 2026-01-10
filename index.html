@@ -1483,7 +1483,10 @@ background: rgba(123, 104, 168, 0.1);
  <!-- ПОДАРОЧНАЯ КАРТА -->
 <section class="reveal">
   <div class="glass card reviews-container no-diamond" style="padding: 24px;">
-    <h3 style="text-align:center; margin-bottom:20px">ПОДАРУНКОВИЙ СЕРТИФIКАТ</h3>
+   <h3 style="text-align:center; margin-bottom:12px">ПОДАРУНКОВИЙ СЕРТИФIКАТ</h3>
+<p style="text-align:center; font-size:13px; color: var(--text-muted); margin-bottom:20px; line-height:1.5;">
+  Оберіть номінал і придбайте сертифікат у подарунок. Ідеальний презент для близьких! 🎁
+</p>
     
     <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
       <!-- Изображение карты -->
@@ -2446,6 +2449,21 @@ async function downloadCertificate(amount) {
             modalImage.src = pngUrl;
 
   // Добавляем шиммер поверх сертификата
+// Добавляем шиммер ТОЛЬКО на картинку сертификата
+const imageWrapper = document.createElement('div');
+imageWrapper.style.cssText = `
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+`;
+
+// Переносим картинку в wrapper
+const parent = modalImage.parentElement;
+parent.insertBefore(imageWrapper, modalImage);
+imageWrapper.appendChild(modalImage);
+
+// Создаём шиммер
 const shimmerWrapper = document.createElement('div');
 shimmerWrapper.style.cssText = `
     position: absolute;
@@ -2456,6 +2474,7 @@ shimmerWrapper.style.cssText = `
     overflow: hidden;
     pointer-events: none;
     border-radius: 12px;
+    z-index: 5;
 `;
 
 const shimmer = document.createElement('div');
@@ -2476,10 +2495,10 @@ shimmer.style.cssText = `
 `;
 
 shimmerWrapper.appendChild(shimmer);
+imageWrapper.appendChild(shimmerWrapper);
 
-// Делаем родителя картинки относительным
-modalImage.parentElement.style.position = 'relative';
-modalImage.parentElement.appendChild(shimmerWrapper);
+
+         
             // Убираем описание и заменяем на кнопку
             modalDescription.innerHTML = `
                 <a href="${pngUrl}" download="certificate_${certId}.png" 
