@@ -122,6 +122,8 @@
 
 .modal-image {
     width: 100%;
+    height: auto;
+    display: block;
     border-radius: 12px;
     margin-bottom: 16px;
     box-shadow: 0 8px 24px rgba(139, 123, 165, 0.15);
@@ -809,8 +811,20 @@ background: rgba(123, 104, 168, 0.1);
 }
 
 @keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
+  0% { 
+    left: -100%; 
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% { 
+    left: 100%; 
+    opacity: 0;
+  }
 }
 
     /* Instagram gradient button */
@@ -2462,7 +2476,7 @@ imageWrapper.style.cssText = `
 const parent = modalImage.parentElement;
 parent.insertBefore(imageWrapper, modalImage);
 imageWrapper.appendChild(modalImage);
-
+modalImage.style.marginBottom = '0';
 // Создаём шиммер
 const shimmerWrapper = document.createElement('div');
 shimmerWrapper.style.cssText = `
@@ -2482,15 +2496,17 @@ shimmer.style.cssText = `
     position: absolute;
     top: -100%;
     left: -100%;
-    width: 50%;
+    width: 60%;
     height: 300%;
     background: linear-gradient(
         120deg,
         transparent 0%,
+        rgba(255, 255, 255, 0.15) 30%,
         rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.15) 70%,
         transparent 100%
     );
-    animation: shimmer 3s ease-in-out infinite;
+    animation: shimmer 4s ease-in-out infinite;
     transform: rotate(45deg);
 `;
 
