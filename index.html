@@ -932,8 +932,20 @@ background: rgba(123, 104, 168, 0.1);
       }
     }
      /* Инверсия иконок контактов для светлой темы */
-.grid-4 img {
-  filter: invert(0.7) sepia(1) saturate(1.5) hue-rotate(240deg);  /* фиолетовый оттенок */
+/* Все SVG иконки используют var(--text) напрямую через fill */
+.grid-4 svg {
+  fill: var(--text) !important;
+}
+
+/* Иконки в модалке контактов */
+#contactModal svg {
+  fill: var(--text) !important;
+}
+
+/* Убираем любые фильтры с SVG иконок */
+.grid-4 svg,
+#contactModal svg {
+  filter: none !important;
 }
 
 /* Стеклянный эффект для контактов */
@@ -1511,13 +1523,13 @@ background: rgba(123, 104, 168, 0.1);
       <!-- Кнопки номиналов поверх карты -->
       <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; display: flex; gap: 7px; justify-content: center;">
         
-        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(50)">50₴</button>
+        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(1000)">1 000₴</button>
         
-        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(100)">100₴</button>
+        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(3000)">3 000₴</button>
         
-        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(250)">250₴</button>
+        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(5000)">5 000₴</button>
         
-        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(450)">450₴</button>
+        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(10000)">10 000₴</button>
         
       </div>
     </div>
@@ -1647,11 +1659,31 @@ background: rgba(123, 104, 168, 0.1);
  <div class="glass card no-diamond" style="align-items:center; gap:12px; padding:20px">
     <h3>Як зі мною зв'язатися</h3>
     <div class="grid-4" style="grid-template-columns:repeat(5,1fr)">
-      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://www.instagram.com/karmolog_mariana"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I1.png?raw=true" alt="" width="25"></a>
-      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://www.threads.com/@karmolog_mariana"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I2.png?raw=true" alt="" width="25"></a>
-      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://t.me/karmolog_ya"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I3.png?raw=true" alt="" width="25"></a>
-      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="mailto:zhidkikhmariana@icloud.com"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/I4.png?raw=true" alt="" width="25"></a>
-      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="tel:+380938479723"><img src="https://github.com/Vdffrfr333434/karma2/blob/main/PhonePNG.png?raw=true" alt="" width="25"></a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://www.instagram.com/karmolog_mariana">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+        </svg>
+      </a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://www.threads.com/@karmolog_mariana">
+        <svg width="24" height="24" viewBox="0 0 192 192" fill="var(--text)" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.925-10.815 21.24-10.815h.229c7.416.054 13.32 2.16 17.544 6.255 3.319 3.218 5.644 7.772 6.918 13.55a93.003 93.003 0 0 0-11.816-.768c-22.864 0-37.134 9.867-37.134 25.672 0 7.862 3.013 14.447 8.72 19.071 5.092 4.125 11.97 6.285 19.888 6.285 10.24 0 18.896-3.447 25.005-9.962 5.318-5.672 8.447-13.42 9.325-23.042 6.762 3.676 11.824 8.822 14.637 14.887 3.68 7.933 4.464 21.627-4.905 32.438-9.23 10.646-22.003 16.04-37.939 16.04-17.65 0-32.014-6.135-42.7-18.23-10.516-11.89-15.857-28.44-15.857-49.19 0-20.742 5.34-37.29 15.87-49.19C66.088 26.127 80.452 20 98.1 20c17.742 0 32.165 6.13 42.87 18.22 7.387 8.338 12.332 19.45 14.704 33.054l14.828-3.582c-2.916-16.743-9.03-30.808-18.19-41.812C139.1 11.42 120.767 4 98.1 4 73.416 4 56.08 11.425 43.835 26.283 31.755 40.94 25.5 60.59 25.5 84.38c0 23.796 6.256 43.446 18.603 58.404C56.082 157.42 73.416 165 98.1 165c19.355 0 35.457-6.67 47.836-19.82 13.547-14.38 12.322-33.72 7.25-44.303-4.24-8.844-11.527-16.303-21.649-22.19zm-32.088 31.32c-5.43 5.787-12.886 8.818-21.58 8.818-5.996 0-10.807-1.485-14.305-4.41-3.22-2.69-4.854-6.13-4.854-10.22 0-8.688 7.537-13.2 21.778-13.2 2.65 0 5.39.184 8.14.545-1.12 6.992-1.16 14.002 1.82 18.467z"/>
+        </svg>
+      </a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://t.me/karmolog_ya">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+        </svg>
+      </a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="mailto:zhidkikhmariana@icloud.com">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>
+      </a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="tel:+380938479723">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+      </a>
     </div>
   </div> 
 </section>
@@ -1660,8 +1692,8 @@ background: rgba(123, 104, 168, 0.1);
 
 <!-- CERT LIGHTBOX -->
 <div id="certLightbox" class="lightbox" onclick="closeCert()">
-  <div class="cert-lightbox-container" onclick="event.stopPropagation()">
-    <img id="certLightboxImg" src="" style="width:100%; height:100%; object-fit:cover; border-radius:20px;">
+  <div class="cert-lightbox-container" onclick="event.stopPropagation()" style="max-width: 90vw; max-height: 90vh; width: auto; height: auto;">
+    <img id="certLightboxImg" src="" style="width: auto; height: auto; max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 20px; display: block;">
   </div>
 </div>
 
@@ -1677,19 +1709,29 @@ background: rgba(123, 104, 168, 0.1);
         
         <div style="display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap;">
           <a class="glass card no-diamond" style="width: 50px; height: 50px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 10px;" href="https://www.instagram.com/karmolog_mariana" target="_blank">
-            <img src="https://github.com/Vdffrfr333434/karma2/blob/main/I1.png?raw=true" alt="Instagram" width="24" style="filter: invert(0.4) sepia(1) saturate(2) hue-rotate(240deg) brightness(0.9);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+            </svg>
           </a>
           <a class="glass card no-diamond" style="width: 50px; height: 50px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 10px;" href="https://www.threads.com/@karmolog_mariana" target="_blank">
-            <img src="https://github.com/Vdffrfr333434/karma2/blob/main/I2.png?raw=true" alt="Threads" width="24" style="filter: invert(0.4) sepia(1) saturate(2) hue-rotate(240deg) brightness(0.9);">
+            <svg width="23" height="23" viewBox="0 0 192 192" fill="var(--text)" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+              <path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.925-10.815 21.24-10.815h.229c7.416.054 13.32 2.16 17.544 6.255 3.319 3.218 5.644 7.772 6.918 13.55a93.003 93.003 0 0 0-11.816-.768c-22.864 0-37.134 9.867-37.134 25.672 0 7.862 3.013 14.447 8.72 19.071 5.092 4.125 11.97 6.285 19.888 6.285 10.24 0 18.896-3.447 25.005-9.962 5.318-5.672 8.447-13.42 9.325-23.042 6.762 3.676 11.824 8.822 14.637 14.887 3.68 7.933 4.464 21.627-4.905 32.438-9.23 10.646-22.003 16.04-37.939 16.04-17.65 0-32.014-6.135-42.7-18.23-10.516-11.89-15.857-28.44-15.857-49.19 0-20.742 5.34-37.29 15.87-49.19C66.088 26.127 80.452 20 98.1 20c17.742 0 32.165 6.13 42.87 18.22 7.387 8.338 12.332 19.45 14.704 33.054l14.828-3.582c-2.916-16.743-9.03-30.808-18.19-41.812C139.1 11.42 120.767 4 98.1 4 73.416 4 56.08 11.425 43.835 26.283 31.755 40.94 25.5 60.59 25.5 84.38c0 23.796 6.256 43.446 18.603 58.404C56.082 157.42 73.416 165 98.1 165c19.355 0 35.457-6.67 47.836-19.82 13.547-14.38 12.322-33.72 7.25-44.303-4.24-8.844-11.527-16.303-21.649-22.19zm-32.088 31.32c-5.43 5.787-12.886 8.818-21.58 8.818-5.996 0-10.807-1.485-14.305-4.41-3.22-2.69-4.854-6.13-4.854-10.22 0-8.688 7.537-13.2 21.778-13.2 2.65 0 5.39.184 8.14.545-1.12 6.992-1.16 14.002 1.82 18.467z"/>
+            </svg>
           </a>
           <a class="glass card no-diamond" style="width: 50px; height: 50px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 10px;" href="https://t.me/karmolog_ya" target="_blank">
-            <img src="https://github.com/Vdffrfr333434/karma2/blob/main/I3.png?raw=true" alt="Telegram" width="24" style="filter: invert(0.4) sepia(1) saturate(2) hue-rotate(240deg) brightness(0.9);">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+            </svg>
           </a>
           <a class="glass card no-diamond" style="width: 50px; height: 50px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 10px;" href="mailto:zhidkikhmariana@icloud.com">
-            <img src="https://github.com/Vdffrfr333434/karma2/blob/main/I4.png?raw=true" alt="Email" width="24" style="filter: invert(0.4) sepia(1) saturate(2) hue-rotate(240deg) brightness(0.9);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
           </a>
           <a class="glass card no-diamond" style="width: 50px; height: 50px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 10px;" href="tel:+380938479723">
-            <img src="https://github.com/Vdffrfr333434/karma2/blob/main/PhonePNG.png?raw=true" alt="Phone" width="24" style="filter: invert(0.4) sepia(1) saturate(2) hue-rotate(240deg) brightness(0.9);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+            </svg>
           </a>
         </div>
     </div>
@@ -1719,6 +1761,16 @@ background: rgba(123, 104, 168, 0.1);
         <p class="modal-description">
             Цей сертифікат можна використати для будь-якої консультації або сеансу
         </p>
+        
+        <!-- Уведомление о проблемах с провайдером -->
+        <div style="padding: 12px; background: rgba(155, 127, 212, 0.1); border: 1px solid rgba(139, 123, 165, 0.3); border-radius: 8px; margin-bottom: 16px;">
+          <p style="font-size: 12px; color: var(--text); margin: 0 0 8px 0; text-align: center; line-height: 1.4;">
+            ⚠️ Зараз спостерігаються проблеми на стороні провайдера онлайн-оплати
+          </p>
+          <button onclick="closeModal(); openContactModal();" style="width: 100%; padding: 8px; background: rgba(155, 127, 212, 0.15); border: 1px solid rgba(139, 123, 165, 0.3); border-radius: 6px; color: var(--text); font-size: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(155, 127, 212, 0.25)'" onmouseout="this.style.background='rgba(155, 127, 212, 0.15)'">
+            Купити особисто
+          </button>
+        </div>
         
         <button id="modalActionBtn" class="btn-modal-action" onclick="handlePayment()">
             Перейти до оплати
@@ -1871,7 +1923,7 @@ background: rgba(123, 104, 168, 0.1);
 
 
 // ===============================
-// ===== GALLERY DATA (6 slides)
+// ===== GALLERY DATA (3 slides)
 // ===============================
 // URL для превью (верхней картинки в стопке)
 var previewImage = 'https://github.com/Vdffrfr333434/karma2/blob/main/Matrix.webp?raw=true';
@@ -1891,28 +1943,10 @@ var gallerySlides = [
     description: 'Регресія — це метод глибинної роботи з підсвідомістю, який дає змогу здійснити подорож до витоків нинішніх проблем. Через стан легкого трансу або спрямованої медитації людина звертається до пам’яті свого минулого — подій раннього дитинства, внутрішньоутробного періоду або минулих втілень. Це допомагає виявити ті моменти, де виникли перші страхи, психосоматичні блоки чи обмежувальні обітниці, які й надалі впливають на життя в теперішньому.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G3.png',
-    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K3.png',
-    title: 'НУМЕРОЛОГИЯ',
-    description: 'Нумерология — это система анализа личности и судьбы через математические вибрации чисел. В основе метода лежит идея о том, что дата рождения и имя человека содержат уникальный цифровой код, определяющий его потенциал, скрытые таланты и жизненные задачи. С помощью нумерологических расчетов можно расшифровать индивидуальную «дорожную карту», которая помогает принимать верные решения в карьере, финансах и личных отношениях.'
-  },
-  {
     image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G4.png',
     icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K4.png',
     title: 'МАТРИЦЯ ДОЛI',
     description: 'Матриця долі — це система самопізнання, що поєднує нумерологію та архетипічну психологію. Метод ґрунтується на розрахунку індивідуальної діаграми за датою народження, де кожна точка відповідає певній енергії (одному з 22 вищих арканів). Це дає змогу скласти детальний психологічний портрет і побачити графічне втілення життєвого шляху людини.'
-  },
-  {
-    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G5.png',
-    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K5.png',
-    title: 'ГЕШТАЛЬТ-ТЕРАПIЯ',
-    description: 'Гештальт-терапія — це напрям гуманістичної психології, заснований на принципах цілісності та усвідомленості. Головна ідея методу полягає в тому, що психіка людини завжди прагне до завершеності (створення цілісного образу — гештальту). Якщо важлива ситуація, потреба чи емоція не були прожиті до кінця, вони залишаються «незавершеними гештальтами», які забирають енергію та проявляються у вигляді тривоги, незадоволеності або тілесних затисків.'
-  },
-  {
-    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G6.png',
-    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/I2.png',
-    title: 'ГИПНОТЕРАПIЯ',
-    description: 'Гіпнотерапія — це метод психотерапії, що використовує стан глибокої зосередженості та підвищеної навіюваності (терапевтичний гіпноз) для роботи з підсвідомими процесами. У цьому стані свідомий контроль послаблюється, що дає змогу безпечно отримати доступ до глибинних переконань, емоцій і автоматичних реакцій, які формувалися протягом життя. Основна ідея гіпнотерапії полягає в тому, що багато страхів, фобій, психосоматичних симптомів і деструктивних сценаріїв мають підсвідоме походження. Це сприяє зниженню тривожності, відновленню емоційної рівноваги та підвищенню якості життя.'
   }
 ];
 
@@ -2073,43 +2107,43 @@ var reviewPreviewImage3 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Rev
 // Массив всех отзывов для галереи (с заголовками и текстом)
 var reviewsGallerySlides = [
   {
-    title: 'ВІДГУК №1',
+    title: 'КОНСУЛЬТАЦІЯ',
     description: 'Добрий день! Мар\'яна, хочу подякувати вам за консультацію, яку ви провели для мене вчора безкоштовно. Я отримала відповідь на свій запит і декілька варіантів рішення своєї проблеми! В мене зараз навіть не виникає сумнівів що це може не вийде! Ви наче вселили в мене цю віру, розказали що треба зробити аби здійснити свою мрію! А ще ви дуже проста, світла і добра! Мені було дуже легко з вами спілкуватися! Ви дали набагато більше інформації, ніж я очікувала! Дякую вам велике!!!'
   },
   {
-    title: 'ВАЛЕРІЯ - РЕГРЕС',
+    title: 'РЕГРЕСІЯ',
     description: 'Добрий вечір. Дякую тобі, за розбір. Це було цікаво і корисно, ти показала мені мій запит зовсім з іншої сторони з якої я не дивилась. Направила мій фокус уваги саме туди де потрібна енергія. Дякуючи нашій взаємодії, я відмітила за собою речі які потребують роботи. Дякую за велику кількість практик. Вже почала пороблять деякі. Буду спостерігати за змінами в полі. Дякую за роботу. Бажаю найкращої реалізації твого потенціалу.'
   },
   {
-    title: 'ВІДГУК ПРО РЕГРЕСІЮ',
+    title: 'РЕГРЕСІЯ',
     description: 'Це був неймовірний досвід! Вперше побувавши на сеансі регресу, я навіть не очікувала, що настільки глибоко зможу зануритися у свої відчуття. Спочатку було трохи хвилювання — усе ж таки щось нове й незнайоме. Але вже через кілька хвилин я відчула спокій і довіру. Під час сеансу спливли спогади, емоції, які допомогли мені краще зрозуміти себе, свої реакції та навіть деякі життєві ситуації. Було відчуття, ніби відкриваєш закриті двері в глибини своєї душі. Після сеансу з\'явилося легке відчуття ясності, звільнення та внутрішньої гармонії. Наче частинка мене нарешті стала на своє місце. Дуже вдячна за цей досвід і за делікатний, уважний підхід тебе, як прекрасного спеціаліста.'
   },
   {
-    title: 'ВІДГУК ПРО РЕГРЕСІЮ',
+    title: 'РЕГРЕСІЯ',
     description: 'Спасибо, Марьяша, за регресс!!! Это был для меня прекрасный опыт. Он мне дал, понять суть моей проблемы в этой жизни. Узнав, что было не так в прошлой жизни и исправив ход событий, я получила, душевное облегчение. Мне стало легче, я теперь знаю, что мне делать дальше. Огромное, тебе спасибо, люблю.'
   },
   {
-    title: 'ВІДГУК ПРО РЕГРЕСІЮ',
+    title: 'РЕГРЕСІЯ',
     description: 'Привіт, ділюсь враженнями. Вчора цілий день боліла голова і взагалі не могла думати. А сьогодні почали приходити усвідомлення. Про багатьох людей, яких я раніше призирала і думала що лише скромність це достоїнство. А зараз я почала їх приймати і навіть хотіти бути такою ж. Мати гарний одяг, а не скромний. І всі атрибути багатого життя. А під вечір в мені таке тепло розкрилось що я хочу помагати людям, що хочу зробити їм щось добре... і що свою роботу буду цьому посвячувати і з цією думкою і почуттями буду передавати знання свої проявлятись в інстаграмі проводити зустрічі і т.д. І мені прям хочеться робити з такої мотивації.'
   },
   {
-    title: 'ВІДГУК ПРО РЕГРЕСІЮ',
+    title: 'РЕГРЕСІЯ',
     description: 'Марьяна, благодарю за регресс. Я даже не ожидала, что будет так глубоко и мощно, но в то же время с бережным и заботливым твоим сопровождением. Это такой потрясающий опыт! Хоть ещё впереди много работы с собой, но у меня ощущение, что я пробила главную стену, и почувствовала свежий воздух и запах моря (ты понимаешь, о чём я). Да, я устала, потому что много моральных сил ушло на процесс, но после - ощущение громадного облегчения и ликования, что я это сделала! Благодарю тебя за сегодня, я уверена, что у тебя впереди - многочисленные кейсы от клиентов. Буду рекомендовать тебя обязательно, а я сама к тебе ещё приду точно.'
   },
   {
-    title: 'ВІДГУК ПРО КОНСУЛЬТАЦІЮ',
+    title: 'КОНСУЛЬТАЦІЯ',
     description: 'Мар\'яно, дуже дякую вам за консультацію! Ви так тонко й точно підкреслили мої сильні сторони і водночас м\'яко вказали на моменти, над якими мені варто попрацювати. Це було не повчально, а якось підтримувально, наче людина подивилась на мене збоку й допомогла побачити себе під іншим кутом. Особливо вразило, що багато ваших слів відгукнулися у мені, нібі ви сформулювала те, що я відчувала, але не могла чітко описати. Після консультації в душі залишилося відчуття легкості, ясності та натхнення рухатися далі! Дуже цінний, теплий і глибокий досвід. Ще раз дякую!'
   },
   {
-    title: 'СВІТЛАНА',
+    title: 'КОНСУЛЬТАЦІЯ',
     description: 'Дорогая Моя Марьяночка, Человек Мой Хороший. Спасибо Тебе за уделенное Мне время. За всю информацию которую Ты смогла Мне донести. На самом деле Я услышала и поняла для Себя намного больше чем хотела, поговорив с Тобой каждая ситуация происходящего ранее в Моей жизни стала ясна и понятна почему произошло именно так. Я поняла, что Я с правильным запросом к Тебе обратилась и что именно здесь и заложено зерно всех Моих страхов, сомнений неуверенности чувство я сама я должна, я помогу, я спасу, вытащу, заглушая и теряя при этом собственное Я. Благодарю Тебя. Ты невероятная молодец. Обнимаю Тебя крепко всем сердцем.'
   },
   {
-    title: 'ВІДГУК ПРО РЕГРЕСІЮ',
+    title: 'РЕГРЕСІЯ',
     description: 'Сьогодні був настрій аж на сторінку написати! Окрема вдячність @Maryasha777 за сьогоднішній регрес! Я досі під враженням! Такого повороту я не очікувала! Було дуже легко, просто, безпечно! Жодних хвилювань лише цікавість і бажання щоб все вийшло! І все вийшло! А той ліфт ц світло від нього досі перед очима! Після сеансу відчула що я можу все, якщо я можу переписати минуле життя, то новий сценарій реальності мені точно під силу! Я велика, я всемогутня, я міняю життя своє і інших на краще! Дякую за цей досвід!'
   },
   {
-    title: 'ВІДГУК ПРО ПРАКТИКУ',
+    title: 'ПРАКТИКА',
     description: 'Марьяночка, дівчинка моя, я безмежно вдячна тобі за сьогоднішній та цю прекрасну практику у моєму житті. Єдине що, я як вибігла о 11:45 і тільки потрапила додому (ну не знала що не можна в цей день багато робити). Наразі почуваюся прекрасно морально і не дуже фізично, оскільки прихватили чи то почки, чи спина. Чоловік готує вечерю і вчить з малим уроки, а я лягла (він в шоці що мені так погано). Я сьогодні відпочину, а завтра обов\'язково напишу відгук і (якщо можна) наберу тебе на пару слів. Ще раз щиро дякую тобі.'
   }
 ];
