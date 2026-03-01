@@ -1,0 +1,3227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+ <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/Diamond.ico">
+<link rel="shortcut icon" href="https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/Diamond.ico" type="image/x-icon">
+ 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Марьяна | Кармолог | Регресолог</title>
+   
+   <style> 
+    /* MOBILE FIRST - LIGHT THEME */
+  :root{
+  --bg1:#9b7fd4;  /* фиолетовый вместо золотого */
+  --bg2:#c9a0dc;  /* остается лавандовый */
+  --bg3:#8b7ba5;  /* фиолетово-серый вместо коричневого */
+  --glass:rgba(139, 123, 165, 0.08);  /* фиолетовый оттенок */
+  --border:rgba(139, 123, 165, 0.2);  /* фиолетовый оттенок */
+  --text:#5a4470;  /* темно-фиолетовый вместо коричневого */
+  --text-muted:#8b7ba5;  /* приглушенный фиолетовый */
+  --gold:#9b7fd4;  /* фиолетовый вместо золотого */
+  --lavender:#c9a0dc;  /* остается */
+}
+
+    *{box-sizing:border-box}
+ body {
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont,Inter,system-ui,sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  position: relative;
+  background: #f8f5fa;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Wrapper для всего контента */
+.content-wrapper {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  z-index: 2;
+}
+
+
+
+/* PRODUCT MODAL */
+.product-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(248, 245, 250, 0.95);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.product-modal-overlay.active {
+    display: flex;
+}
+
+.product-modal-content {
+    background: rgba(250, 245, 255, 0.95);
+    border: 1px solid rgba(139, 123, 165, 0.2);
+    border-radius: 20px;
+    padding: 20px 18px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 20px 60px rgba(139, 123, 165, 0.3);
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Стилізований скролбар */
+.product-modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.product-modal-content::-webkit-scrollbar-track {
+    background: rgba(139, 123, 165, 0.1);
+    border-radius: 10px;
+}
+
+.product-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(155, 127, 212, 0.5);
+    border-radius: 10px;
+}
+
+.product-modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(155, 127, 212, 0.7);
+}
+
+.product-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(139, 123, 165, 0.1);
+    border-radius: 50%;
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    line-height: 28px;
+    z-index: 1;
+}
+
+.product-modal-close:hover {
+    background: rgba(139, 123, 165, 0.2);
+    transform: rotate(90deg);
+}
+
+.product-modal-image {
+    width: 100%;
+    height: auto;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 24px rgba(139, 123, 165, 0.15);
+    padding: 15px;
+}
+
+.product-modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.product-modal-description {
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.product-modal-tariffs {
+    margin-bottom: 12px;
+}
+
+.product-modal-tariff {
+    background: rgba(155, 127, 212, 0.05);
+    border: 1px solid rgba(139, 123, 165, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.product-modal-tariff:hover {
+    background: rgba(155, 127, 212, 0.1);
+    border-color: rgba(139, 123, 165, 0.3);
+}
+
+.product-modal-tariff.selected {
+    background: rgba(155, 127, 212, 0.15);
+    border-color: var(--gold);
+    box-shadow: 0 2px 8px rgba(139, 123, 165, 0.2);
+}
+
+.product-modal-tariff-name {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 2px;
+    color: var(--text);
+}
+
+.product-modal-tariff-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+.product-modal-tariff-desc {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+
+    /* ===== МОДАЛЬНОЕ ОКНО ===== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(248, 245, 250, 0.95);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: rgba(250, 245, 255, 0.95);
+    border: 1px solid rgba(139, 123, 165, 0.2);
+    border-radius: 20px;
+    padding: 30px 24px;
+    width: 90%;
+    max-width: 360px;
+    box-shadow: 0 20px 60px rgba(139, 123, 165, 0.3);
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: center;
+    position: relative;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(139, 123, 165, 0.1);
+    border-radius: 50%;
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    line-height: 28px;
+}
+
+.modal-close:hover {
+    background: rgba(139, 123, 165, 0.2);
+    transform: rotate(90deg);
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 20px;
+}
+
+.modal-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(139, 123, 165, 0.15);
+}
+
+.modal-description {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.btn-modal-action {
+    width: 100%;
+    padding: 14px 20px;
+    border: 1px solid #8b7ba5;
+    color: #5a4470;
+    background: rgba(155, 127, 212, 0.05);
+    box-shadow: 0 4px 15px rgba(155, 127, 212, 0.2);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-modal-action:hover {
+    background: rgba(155, 127, 212, 0.15);
+    box-shadow: 0 6px 20px rgba(155, 127, 212, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-modal-action:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-download {
+    background: rgba(76, 175, 80, 0.1);
+    border-color: #4caf50;
+    color: #2e7d32;
+}
+
+.btn-download:hover {
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.status-message {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    display: none;
+}
+
+.status-message.success {
+    display: block;
+    background: rgba(76, 175, 80, 0.1);
+    color: #2e7d32;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-message.error {
+    display: block;
+    background: rgba(244, 67, 54, 0.1);
+    color: #c62828;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.status-message.loading {
+    display: block;
+    background: rgba(155, 127, 212, 0.1);
+    color: var(--text);
+    border: 1px solid rgba(139, 123, 165, 0.3);
+}
+
+
+/* REVIEWS GALLERY - отдельная от методов */
+.reviews-gallery-container {
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+}
+
+.reviews-photo-stack {
+  position: relative;
+  width: 100%;
+  max-width: 150px;
+  height: calc(150px * 1.5);
+  margin: 0 auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.reviews-photo-stack:hover {
+  transform: scale(1.02);
+}
+
+.reviews-photo-stack-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(139, 123, 165, 0.2);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: transparent;
+  border: none;
+}
+
+.reviews-photo-stack.opening .reviews-photo-stack-item:nth-child(1) {
+  transform: rotate(-5deg) translate(calc(15px * 6), calc(15px * -0.5));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.opening .reviews-photo-stack-item:nth-child(2) {
+  transform: rotate(3deg) translate(calc(15px * -7), calc(15px * -0.3));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.opening .reviews-photo-stack-item:nth-child(3) {
+  transform: rotate(-2deg) translate(0, calc(15px * -0.7));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.closing .reviews-photo-stack-item:nth-child(1) {
+  transform: rotate(-5deg) translate(calc(15px * 6), calc(15px * -0.5));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.closing .reviews-photo-stack-item:nth-child(2) {
+  transform: rotate(3deg) translate(calc(15px * -7), calc(15px * -0.3));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack.closing .reviews-photo-stack-item:nth-child(3) {
+  transform: rotate(-2deg) translate(0, calc(15px * -0.7));
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.reviews-photo-stack-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reviews-photo-stack-item:nth-child(1) {
+  z-index: 3;
+  transform: rotate(-3deg) translate(calc(15px * -0.8), calc(15px * -0.8));
+}
+
+.reviews-photo-stack-item:nth-child(2) {
+  z-index: 2;
+  transform: rotate(2deg) translate(calc(15px * 0.4), calc(15px * 0.4));
+}
+
+.reviews-photo-stack-item:nth-child(3) {
+  z-index: 1;
+  transform: rotate(-1.5deg) translate(15px, 15px);
+  opacity: 0.9;
+}
+
+/* REVIEWS LIGHTBOX */
+.reviews-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(250, 248, 245, 0);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.reviews-lightbox.active {
+  display: flex;
+  background: rgba(248, 245, 250, 0.95);
+}
+
+.reviews-lightbox-image-container {
+  position: relative;
+  width: 85%;
+  max-width: 320px;
+  aspect-ratio: 2 / 3;
+  max-height: 90vh;
+  margin: 0 auto;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #f8f5fa;
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.25);
+  border-radius: 20px;
+}
+
+.reviews-lightbox.active .reviews-lightbox-image-container {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reviews-lightbox-content-overlay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.reviews-lightbox-text {
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5a4470;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.reviews-lightbox-description {
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: #5a4470;
+  width: 100%;
+}
+
+.reviews-lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(155, 127, 212, 0.15);
+  border: 1px solid rgba(139, 123, 165, 0.2);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 26px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10000;
+}
+
+.reviews-lightbox.active .reviews-lightbox-arrow {
+  opacity: 1;
+}
+
+.reviews-lightbox-arrow:hover {
+  background: rgba(155, 127, 212, 0.25);
+  box-shadow: 0 4px 16px rgba(139, 123, 165, 0.15);
+}
+
+.reviews-lightbox-arrow.prev { left: 20px; }
+.reviews-lightbox-arrow.next { right: 20px; }
+
+@media (max-width: 768px) {
+  .reviews-lightbox-image-container {
+    width: 90%;
+    max-width: 280px;
+  }
+  
+  .reviews-lightbox-description {
+    font-size: 11px;
+  }
+  
+  .reviews-lightbox-text {
+    font-size: 14px;
+  }
+}
+
+
+     
+
+/* Morphing gradient background */
+/* Static gradient background - MUCH lighter! */
+/* Static gradient background - MUCH lighter! */
+#gradient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: 
+    radial-gradient(ellipse 500px 500px at 20% 30%, rgba(120, 100, 200, 0.5), transparent 70%),
+    radial-gradient(ellipse 450px 450px at 80% 20%, rgba(155, 127, 212, 0.45), transparent 70%),
+    radial-gradient(ellipse 550px 550px at 50% 70%, rgba(201, 160, 220, 0.5), transparent 70%),
+    radial-gradient(ellipse 400px 400px at 10% 80%, rgba(139, 123, 165, 0.4), transparent 70%),
+    radial-gradient(ellipse 480px 480px at 90% 60%, rgba(180, 140, 230, 0.45), transparent 70%),
+    radial-gradient(ellipse 420px 420px at 60% 40%, rgba(155, 127, 212, 0.4), transparent 70%),
+    radial-gradient(ellipse 450px 450px at 30% 60%, rgba(201, 160, 220, 0.4), transparent 70%);
+  filter: blur(100px);
+  opacity: 0.5;
+}
+.glass.diamond-bottom::before {
+  top: auto !important;
+  bottom: 0 !important;
+  background-position: 110px 130px, 85px 115px, 75px 140px, 55px 125px, 95px 100px, 65px 95px !important;
+  -webkit-mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 120px 120px at bottom right, black 0%, transparent 100%) !important;
+}
+    
+/* Static CSS noise - no animation! */
+#noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  opacity: 0.015;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+    .gallery-img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+    h1,h2,h3,p{margin:0; line-height:1.35}
+    h2{font-size:20px}
+    h3{font-size:16px}
+    p{font-size:14px}
+    .muted{font-size:8px; color: var(--text-muted)}
+    section{padding:20px 16px}
+
+    /* glass */
+.glass{
+  position: relative;
+ background: rgba(250, 245, 255, 0.65);  /* фиолетовый оттенок */
+  border: 1px solid rgba(139, 123, 165, 0.15);
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.08);
+  border-radius: 10px;
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  overflow: hidden;
+   
+}
+
+/* Паттерн бриллиантов */
+/* Паттерн бриллиантов с fade-out градиентом */
+.glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 140px;
+  height: 140px;
+
+  filter: grayscale(1) brightness(2) contrast(3) invert(1); /* ← ДОБАВЛЕН invert(1) */
+
+background-image: 
+  url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+  url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+  url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+  url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+  url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif"),
+  url("https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif");
+background-size: 36px 36px, 27px 27px, 30px 30px, 24px 24px, 33px 33px, 28.5px 28.5px;
+background-position: 100px 5px, 70px 30px, 65px -5px, 45px 20px, 80px 50px, 50px 55px;
+background-repeat: no-repeat;
+
+  mix-blend-mode: overlay;
+  pointer-events: none;
+
+  -webkit-mask-image: radial-gradient(ellipse 120px 120px at top right, black 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 120px 120px at top right, black 0%, transparent 100%);
+
+  opacity: 0.8;
+}
+
+.prism-bg::before {
+  content: none;
+}
+
+.no-diamond::before {
+  content: none !important;
+}
+
+    /* animations */
+    .reveal{opacity:0; transform:translateY(32px); transition:.8s ease}
+    .reveal.show{opacity:1; transform:none}
+
+    /* about */
+    .about{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    /* Hero section */
+/* Hero section */
+.hero-section {
+  padding: 0 16px;
+  margin: 0;
+}
+
+.hero-video-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Изменено с cover на contain */
+}
+
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: #5a4470;
+}
+
+.hero-content .muted {
+  font-size: 12px;
+  opacity: 0.7;
+  color: #5a4470;
+}
+
+.hero-content p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+ color: #5a4470;
+}
+
+.img-container {
+  position: relative;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.img-container video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+    
+    .about .img-container{
+      position:relative;
+      width:100%;
+      height:100%;
+      min-height:200px;
+      overflow:hidden;
+      border-radius:10px;
+    }
+    .about img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      position:absolute;
+      top:0;
+      left:0;
+    }
+
+    /* grids */
+    .grid-3, .grid-2, .grid-4{
+      display:grid;
+      gap:12px;
+    }
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+
+    /* cards */
+    .card{
+      padding:14px;
+      min-height:auto;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    /* service cards */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.service-card h3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 6px;
+  text-align: center;
+  color: var(--text);
+}
+
+.service-card p {
+  font-size: 10px;
+  line-height: 1.4;
+  margin: 0;
+  text-align: left;
+  color: var(--text);
+}
+
+.service-card .for-who {
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-align: left;
+}
+
+    /* price */
+.price{font-size:22px; font-weight:600; margin:8px 0; color: var(--gold)}
+.price-card{
+  display: flex;
+  flex-direction: column;
+}
+.price-card ul{
+  margin:0;
+  padding-left:18px;
+  font-size:12px;
+  line-height:1.5;
+  color: var(--text);
+  flex-grow: 1;
+}
+.price-card ul li{
+  margin-bottom:4px;
+}
+.price-card .btn-gold{
+  margin-top: auto;
+}
+
+/* Золотистая кнопка "Записаться" с коричневой надписью */
+/* Золотистая кнопка "Записаться" с прозрачным фоном */
+/* Золотистая кнопка "Записаться" с коричневой рамкой */
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  
+  padding: 10px 20px;
+ 
+ 
+  transition: all 0.3s ease;
+
+  border: 1px solid #8b7ba5;  /* фиолетовая рамка */
+  color: #5a4470;  /* фиолетовый текст */
+  background: rgba(155, 127, 212, 0.05);  /* светло-фиолетовый фон */
+  box-shadow: 0 4px 15px rgba(155, 127, 212, 0.2);
+}
+
+.btn-gold:hover {
+ background: rgba(155, 127, 212, 0.05);
+  box-shadow: 0 6px 20px rgba(155, 127, 212, 0.3);
+  transform: translateY(-2px);
+  
+}
+
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.05),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+ /* Коричневые кнопки номиналов сертификата */
+.btn-certificate {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #7b68a8;  /* темно-фиолетовая рамка */
+  color: #7b68a8;  /* темно-фиолетовый текст */
+  background: rgba(123, 104, 168, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  
+  padding: 10px 20px;
+ 
+  transition: all 0.3s ease;
+}
+
+.btn-certificate:hover {
+background: rgba(123, 104, 168, 0.1);
+  box-shadow: 0 4px 16px rgba(123, 104, 168, 0.2);
+  transform: translateY(-2px);
+
+}
+     
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: white; /* ← ДОБАВЬТЕ ЭТУ СТРОКУ */
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+ background: rgba(155, 127, 212, 0.25);  /* фиолетовый hover */
+  box-shadow: 0 4px 16px rgba(139, 123, 165, 0.15);
+  transform: translateY(-2px);
+
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+ background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(155, 127, 212, 0.3),  /* фиолетовый shimmer */
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { 
+    left: -100%; 
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% { 
+    left: 100%; 
+    opacity: 0;
+  }
+}
+
+    /* Instagram gradient button */
+.instagram-gradient {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+
+.instagram-gradient::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+}
+
+.instagram-gradient:hover {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+/* Чистый стеклянный эффект */
+.glass-clean {
+  position: relative;
+ background: rgba(250, 245, 255, 0.7);  /* фиолетовый оттенок */
+  border: 1px solid rgba(139, 123, 165, 0.2);
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+.glass-clean::before {
+  content: none !important;
+}
+
+    /* mobile overflow rows */
+    .grid-3,.grid-4{
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      padding-bottom:8px;
+    }
+    .grid-3 > div,.grid-4 > div{
+      scroll-snap-align:start;
+      min-width:70%;
+    }
+    .grid-2 > div{min-width:100%}
+
+    /* reviews slider */
+    .reviews-container{
+      position:relative;
+      overflow:hidden;
+      padding:20px;
+    }
+    .reviews-track{
+      display:flex;
+      gap:16px;
+      transition:transform 0.6s ease;
+      align-items:stretch;
+    }
+    .glass.reviews-container {
+ background: rgba(250, 245, 255, 0.75);  /* фиолетовый оттенок */
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}
+    
+    .review-card{
+      min-width:100%;
+      max-width:100%;
+      flex-shrink:0;
+     background:rgba(155, 127, 212, 0.08);  /* светло-фиолетовый фон */
+      border-radius:6px;
+      color: var(--text);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .review-card:hover{
+      background:rgba(155, 127, 212, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 123, 165, 0.2);
+    }
+    
+    .review-card-image{
+      width: 120px;
+      height: 120px;
+      min-width: 120px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: rgba(155, 127, 212, 0.15);
+    }
+    
+    .review-card-content{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .review-card-content strong{
+      text-align: center;
+      font-size: 16px;
+    }
+    
+    .review-card-content p{
+      position: relative;
+      max-height: 60px;
+      overflow: hidden;
+      line-height: 1.5;
+      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
+    }
+    .review-dots{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:16px;
+    }
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+     background:rgba(139, 123, 165, 0.3);  /* фиолетовые точки */
+      cursor:pointer;
+      transition:.3s;
+    }
+    .dot.active{
+   background:rgba(155, 127, 212, 0.9);  /* активная фиолетовая */
+      width:24px;
+      border-radius:4px;
+    }
+
+    @media(min-width:640px){
+      .review-card{
+        min-width:calc(50% - 8px);
+        max-width:calc(50% - 8px);
+      }
+      
+      .review-card-image{
+        width: 140px;
+        height: 140px;
+        min-width: 140px;
+      }
+    }
+     /* Инверсия иконок контактов для светлой темы */
+/* Все SVG иконки используют var(--text) напрямую через fill */
+.grid-4 svg {
+  fill: var(--text) !important;
+}
+
+/* Иконки в модалке контактов */
+#contactModal svg {
+  fill: var(--text) !important;
+}
+
+/* Убираем любые фильтры с SVG иконок */
+.grid-4 svg,
+#contactModal svg {
+  filter: none !important;
+}
+
+/* Стеклянный эффект для контактов */
+.glass.service-card {
+   background: rgba(250, 245, 255, 0.7);  /* фиолетовый оттенок */
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  padding: 20px;
+}
+
+ /* PRISMATIC GRAIN BACKGROUND - LIGHT */
+/* PRISMATIC GRAIN BACKGROUND - LIGHT */
+.prism-bg {
+  position: relative;  /* ← ДОБАВЬТЕ */
+  width: 100%;  /* ← ДОБАВЬТЕ */
+  border-radius: 10px;
+  height: 100%;  /* ← ДОБАВЬТЕ (или можно удалить, если не нужна) */
+  background-clip: padding-box;
+  background-color: #fdfbfe;  /* очень светлый фиолетовый */
+
+  background-image:
+    radial-gradient(
+      at 15% 25%,
+      rgba(155, 127, 212, 0.15),  /* фиолетовый */
+      transparent 55%
+    ),
+    radial-gradient(
+      at 85% 20%,
+      rgba(201, 160, 220, 0.15),  /* лавандовый */
+      transparent 60%
+    ),
+    radial-gradient(
+      at 70% 80%,
+      rgba(155, 127, 212, 0.2),  /* фиолетовый */
+      transparent 55%
+    ),
+    radial-gradient(
+      at 30% 75%,
+      rgba(201, 160, 220, 0.18),  /* лавандовый */
+      transparent 60%
+    ),
+    radial-gradient(
+      at 55% 55%,
+      rgba(139, 123, 165, 0.1),  /* серо-фиолетовый */
+      transparent 65%
+    );
+
+  background-size: 200% 200%;
+  animation: prism-drift 45s ease-in-out infinite;
+
+  filter: saturate(1.1) contrast(1.02);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.12);
+}
+     
+.prism-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+@keyframes prism-drift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+  .gallery-container {
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+  }
+
+  :root {
+    --card-width: 150px;
+    --card-aspect: 1.5;
+    --card-rotation-1: -3deg;
+    --card-rotation-2: 2deg;
+    --card-rotation-3: -1.5deg;
+    --card-offset-x: 15px;
+    --card-offset-y: 15px;
+    --card-border: 2px;
+    --card-radius: 6px;
+  }
+
+  .photo-stack {
+    position: relative;
+    width: 100%;
+    max-width: var(--card-width);
+    height: calc(var(--card-width) * var(--card-aspect));
+    margin: 0 auto;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .photo-stack:hover {
+    transform: scale(1.02);
+  }
+
+  .photo-stack-item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+     box-shadow: 0 4px 12px rgba(139, 123, 165, 0.2);  /* фиолетовая тень */
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: transparent;
+    border: none;
+  }
+
+  .photo-stack.opening .photo-stack-item:nth-child(1) {
+    transform: rotate(-5deg) translate(calc(var(--card-offset-x) * 6), calc(var(--card-offset-y) * -0.5));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.opening .photo-stack-item:nth-child(2) {
+    transform: rotate(3deg) translate(calc(var(--card-offset-x) * -7), calc(var(--card-offset-y) * -0.3));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.opening .photo-stack-item:nth-child(3) {
+    transform: rotate(-2deg) translate(0, calc(var(--card-offset-y) * -0.7));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.closing .photo-stack-item:nth-child(1) {
+    transform: rotate(-5deg) translate(calc(var(--card-offset-x) * 6), calc(var(--card-offset-y) * -0.5));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.closing .photo-stack-item:nth-child(2) {
+    transform: rotate(3deg) translate(calc(var(--card-offset-x) * -7), calc(var(--card-offset-y) * -0.3));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack.closing .photo-stack-item:nth-child(3) {
+    transform: rotate(-2deg) translate(0, calc(var(--card-offset-y) * -0.7));
+    opacity: 1;
+    transition: all 0.4s ease;
+  }
+
+  .photo-stack-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-stack-item:nth-child(1) {
+    z-index: 3;
+    transform: rotate(var(--card-rotation-1)) translate(calc(var(--card-offset-x) * -0.8), calc(var(--card-offset-y) * -0.8));
+  }
+
+  .photo-stack-item:nth-child(2) {
+    z-index: 2;
+    transform: rotate(var(--card-rotation-2)) translate(calc(var(--card-offset-x) * 0.4), calc(var(--card-offset-y) * 0.4));
+  }
+
+  .photo-stack-item:nth-child(3) {
+    z-index: 1;
+    transform: rotate(var(--card-rotation-3)) translate(var(--card-offset-x), var(--card-offset-y));
+    opacity: 0.9;
+  }
+
+/* LIGHTBOX - LIGHT THEME */
+/* LIGHTBOX - LIGHT THEME */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(250, 248, 245, 0);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.lightbox.active {
+  display: flex;
+ background: rgba(248, 245, 250, 0.95);  /* светло-фиолетовый фон */
+}
+
+.lightbox-image-container {
+  position: relative;
+  width: 85%;
+  max-width: 320px;
+  aspect-ratio: 2 / 3;
+  max-height: 90vh;
+  margin: 0 auto;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+ background: #f8f5fa;  /* светло-фиолетовый */
+  box-shadow: 0 8px 32px rgba(139, 123, 165, 0.25);
+  border-radius: 20px;
+}
+
+.lightbox.active .lightbox-image-container {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Контент слайда */
+.lightbox-content-overlay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.lightbox-text {
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+ color: #5a4470;  /* темно-фиолетовый */
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.lightbox-description {
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  text-align: center;
+   color: #5a4470;  /* темно-фиолетовый */
+  width: 100%;
+}
+
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+   background: rgba(155, 127, 212, 0.15);  /* фиолетовый фон */
+  border: 1px solid rgba(139, 123, 165, 0.2);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 26px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10000;
+}
+
+.lightbox.active .lightbox-arrow {
+  opacity: 1;
+}
+
+.lightbox-arrow:hover {
+ background: rgba(155, 127, 212, 0.25);
+  box-shadow: 0 4px 16px rgba(139, 123, 165, 0.15);
+}
+
+.lightbox-arrow.prev { left: 20px; }
+.lightbox-arrow.next { right: 20px; }
+
+@media (max-width: 768px) {
+  .lightbox-image-container {
+    width: 90%;
+    max-width: 280px;
+  }
+  
+  .lightbox-description {
+    font-size: 11px;
+  }
+  
+  .lightbox-text {
+    font-size: 14px;
+  }
+}
+
+
+/* CERTIFICATES */
+/* CERTIFICATES */
+/* CERTIFICATES */
+/* CERTIFICATES */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.cert-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.45;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.cert-img-wrapper::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 70%
+  );
+  animation: cert-shimmer 6s infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cert-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+
+@keyframes cert-shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+.cert-img-wrapper:hover {
+  transform: scale(1.03);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .cert-grid {
+    grid-template-columns: 1fr;
+  }
+}
+     
+
+  </style>
+</head>
+<body>
+
+<!-- Morphing gradient canvases -->
+<!-- Static gradient background -->
+<div id="gradient-bg"></div>
+<div id="noise-overlay"></div>
+<br><br>
+<div class="content-wrapper">
+ <br><br>  <!-- добавьте ещё один или два <br> здесь -->
+ 
+<section class="about reveal hero-section">
+  <div class="hero-video-container">
+    <video autoplay muted loop playsinline class="hero-video" preload="auto" poster="https://github.com/Vdffrfr333434/karma2/blob/main/Final4Poster10.webp?raw=true">
+  <source src="https://github.com/Vdffrfr333434/karma2/blob/main/Final4PSTR3_1.webm?raw=true" type="video/webm">
+</video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h2>Мар’яна</h2>
+      <p class="muted">Кармолог ∙ Регресолог</p>
+      <p>Допомагаю людям зрозуміти свій шлях, знайти відповіді на важливі питання та звільнитися від кармічних блоків.</p>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+<!-- SERVICES -->
+<!-- SERVICES -->
+<section class="reveal">
+  <div class="prism-bg  diamond-bottom" style="padding: 20px;">
+    <h3 style="text-align:center; margin-bottom:20px">Які методи я використовую</h3> <br>
+    
+    <div class="gallery-container">
+      <div class="photo-stack" id="photoStack" onclick="openLightbox(0)">
+        <!-- Карточки будут добавлены через JavaScript -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<!-- Lightbox -->
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+  <button class="lightbox-arrow prev" onclick="changeImage(-1)">‹</button>
+
+  <div class="lightbox-image-container">
+    <div class="lightbox-content-overlay">
+      <div id="lightboxTitle" class="lightbox-text"></div>
+      <div id="lightboxDescription" class="lightbox-description"></div>
+    </div>
+  </div>
+
+  <button class="lightbox-arrow next" onclick="changeImage(1)">›</button>
+</div>
+
+
+ 
+</section>
+
+<!-- О ПРАКТИКЕ -->
+<section class="reveal">
+  <div class="glass card reviews-container" style="padding: 24px;">
+    <h3 style="text-align:center; margin-bottom:16px">Про мою практику</h3>
+    <p style="margin-bottom: 12px; line-height: 1.6;">
+      Я допомагаю людям знаходити відповіді на найважливіші питання: про сенс життя, призначення, стосунки і внутрішню гармонію. У моїй роботі поєднуються глибокі знання кармології, регресу та сучасної ментальної терапії.
+    </p>
+    <p style="margin-bottom: 16px; line-height: 1.6;">
+      Кожна консультація — це індивідуальний підхід, де я враховую вашу унікальну історію і допомагаю розкрити внутрішній потенціал.
+    </p>
+    <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTA3MDAyMDc5MTYxNzc4/?story_media_id=3440164543306763721#" target="_blank" style="text-decoration: none;">
+  <button class="btn instagram-gradient" style="width: 100%;">більше в моїх сторіс</button>
+</a>
+  </div>
+</section>
+
+
+<!-- МОИ СЕРТИФИКАТЫ -->
+<!-- МОИ СЕРТИФИКАТЫ -->
+<section class="reveal">
+  <div class="glass card no-diamond" style="padding:24px;">
+    
+    <h3 style="text-align:center; margin-bottom:8px;">
+      Мої сертифікати
+    </h3>
+
+    <p style="text-align:center; font-size:12px; opacity:0.75; margin-bottom:16px;">
+     Кожен із них це не просто документ, це окремий етап у моєму житті.
+    </p>
+
+    <div class="cert-grid">
+      <div class="cert-img-wrapper" onclick="openCert('https://github.com/Vdffrfr333434/karma2/blob/main/Sert1.JPG?raw=true')">
+        <img 
+          src="https://github.com/Vdffrfr333434/karma2/blob/main/Sert1.JPG?raw=true" 
+          alt="Сертификат 1"
+          class="cert-img"
+        >
+      </div>
+      <div class="cert-img-wrapper" onclick="openCert('https://github.com/Vdffrfr333434/karma2/blob/main/Sert2.PNG?raw=true')">
+        <img 
+          src="https://github.com/Vdffrfr333434/karma2/blob/main/Sert2.PNG?raw=true" 
+          alt="Сертификат 2"
+          class="cert-img"
+        >
+      </div>
+    </div>
+
+  </div>
+</section>
+  
+
+<!-- СТАТИСТИКА -->
+<section class="reveal">
+  <div class="glass-clean" style="padding: 24px;">
+    <h3 style="text-align:center; margin-bottom:20px">Трохи статистики в цифрах</h3>
+    <div class="grid-2" style="gap: 16px;">
+      <div class="glass card" style="padding: 20px; text-align: center; min-height: auto;">
+        <div class="stat-number" data-target="92" style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">0</div>
+        <p style="font-size: 12px; margin: 0;">клієнтів залишають позитивні відгуки</p>
+      </div>
+      
+      <div class="glass card" style="padding: 20px; text-align: center; min-height: auto;">
+        <div class="stat-number" data-target="85" style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">0</div>
+        <p style="font-size: 12px; margin: 0;">зазначають покращення вже після першої сесії</p>
+      </div>
+      
+      <div class="glass card" style="padding: 20px; text-align: center; min-height: auto;">
+        <div class="stat-number" data-target="80" style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">0</div>
+        <p style="font-size: 12px; margin: 0;">проведених консультацій і сеансів</p>
+      </div>
+      
+      <div class="glass card" style="padding: 20px; text-align: center; min-height: auto;">
+        <div class="stat-number" data-target="12" style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">0</div>
+        <p style="font-size: 12px; margin: 0;">місяців теорії та практики</p>
+      </div>
+    </div>
+  </div>
+</section>
+  
+<!-- PRODUCTS SLIDER -->
+
+ <!-- ОТЗЫВЫ МОИХ КЛИЕНТОВ -->
+<section class="reveal">
+  <div class="prism-bg diamond-bottom" style="padding: 20px;">
+    <h3 style="text-align:center; margin-bottom:20px">Відгуки моїх клієнтів</h3> <br>
+    
+    <div class="reviews-gallery-container">
+      <div class="reviews-photo-stack" id="reviewsPhotoStack" onclick="openReviewsLightbox(0)">
+        <!-- Карточки будут добавлены через JavaScript -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews Lightbox -->
+<div id="reviewsLightbox" class="reviews-lightbox">
+  <button class="reviews-lightbox-arrow prev" onclick="changeReviewImage(-1)">‹</button>
+
+  <div class="reviews-lightbox-image-container">
+    <div class="reviews-lightbox-content-overlay">
+      <div id="reviewsLightboxTitle" class="reviews-lightbox-text"></div>
+      <div id="reviewsLightboxDescription" class="reviews-lightbox-description"></div>
+    </div>
+  </div>
+
+  <button class="reviews-lightbox-arrow next" onclick="changeReviewImage(1)">›</button>
+</div>
+
+<!-- PRODUCTS SLIDER -->
+<section class="reveal">
+  <div class="glass card reviews-container">
+    <h3 style="text-align:center; margin-bottom:12px">Створи своє майбутнє</h3>
+    <div class="reviews-track" id="productsTrack">
+      <div class="card review-card" onclick="openProductModal('car')">
+        <div class="review-card-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #FFB6C1 0%, #FFC5D0 100%);">
+          <img src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" style="width: 70px; height: 70px; filter: brightness(1.2) contrast(1.1) hue-rotate(330deg);">
+        </div>
+        <div class="review-card-content">
+          <strong>Створити машину</strong>
+          <p>Практика для матеріалізації автомобіля вашої мрії. Працюємо з енергією достатку та впевненості у власних можливостях.</p>
+        </div>
+      </div>
+      <div class="card review-card" onclick="openProductModal('apartment')">
+        <div class="review-card-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ADD8E6 0%, #B0E0E6 100%);">
+          <img src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" style="width: 70px; height: 70px; filter: brightness(1.2) contrast(1.1) hue-rotate(180deg);">
+        </div>
+        <div class="review-card-content">
+          <strong>Створити квартиру</strong>
+          <p>Енергетична робота для залучення власного житла. Розблоковуємо канали достатку та формуємо намір на ідеальний простір.</p>
+        </div>
+      </div>
+      <div class="card review-card" onclick="openProductModal('travel')">
+        <div class="review-card-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #C4B5E8 0%, #D8BFD8 100%);">
+          <img src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" style="width: 70px; height: 70px; filter: brightness(1.2) contrast(1.1) hue-rotate(260deg);">
+        </div>
+        <div class="review-card-content">
+          <strong>Створити подорожі</strong>
+          <p>Відкриваємо потік для мандрівок та нових вражень. Працюємо з енергією свободи, розширення та можливостей.</p>
+        </div>
+      </div>
+      <div class="card review-card" onclick="openProductModal('money')">
+        <div class="review-card-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #DDA0DD 0%, #EE82EE 100%);">
+          <img src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" style="width: 70px; height: 70px; filter: brightness(1.2) contrast(1.1) hue-rotate(290deg);">
+        </div>
+        <div class="review-card-content">
+          <strong>Створити гроші</strong>
+          <p>Глибинна робота з фінансовими блоками. Трансформуємо обмежувальні переконання та активуємо канали достатку.</p>
+        </div>
+      </div>
+      <div class="card review-card" onclick="openProductModal('business')">
+        <div class="review-card-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #B994D4 0%, #C9A0DC 100%);">
+          <img src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" style="width: 70px; height: 70px; filter: brightness(1.2) contrast(1.1) hue-rotate(270deg);">
+        </div>
+        <div class="review-card-content">
+          <strong>Створити бізнес</strong>
+          <p>Енергетична підтримка для запуску або розвитку справи. Працюємо з впевненістю, ресурсністю та реалізацією.</p>
+        </div>
+      </div>
+      <div class="card review-card" onclick="openProductModal('family')">
+        <div class="review-card-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #9370DB 0%, #9B7FD4 100%);">
+          <img src="https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif" style="width: 70px; height: 70px; filter: brightness(1.2) contrast(1.1) hue-rotate(250deg);">
+        </div>
+        <div class="review-card-content">
+          <strong>Створити сім'ю</strong>
+          <p>Практика для залучення гармонійних стосунків. Очищаємо родові сценарії та формуємо простір для любові.</p>
+        </div>
+      </div>
+    </div>
+    <div class="review-dots" id="productDots"></div>
+  </div>
+</section>
+
+  
+
+ <!-- ПОДАРОЧНАЯ КАРТА -->
+<section class="reveal">
+  <div class="glass card reviews-container no-diamond" style="padding: 24px;">
+   <h3 style="text-align:center; margin-bottom:12px">ПОДАРУНКОВИЙ СЕРТИФIКАТ</h3>
+<p style="text-align:center; font-size:13px; color: var(--text-muted); margin-bottom:20px; line-height:1.5;">
+  Оберіть номінал і придбайте сертифікат у подарунок. Ідеальний презент для близьких! 
+</p>
+    
+    <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
+      <!-- Изображение карты -->
+      <img src="https://github.com/Vdffrfr333434/karma2/blob/main/DiamondCard.webp?raw=true"  
+           alt="Gift Card" 
+           style="width: 100%; border-radius: 12px; display: block;">
+      
+      <!-- Кнопки номиналов поверх карты -->
+      <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; display: flex; gap: 7px; justify-content: center;">
+        
+        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(1000)">1 000₴</button>
+        
+        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(3000)">3 000₴</button>
+        
+        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(5000)">5 000₴</button>
+        
+        <button class="btn-certificate" style="padding: 3px 4px; font-size: 11px; min-width: 60px; white-space: nowrap;" onclick="openCertModal(10000)">10 000₴</button>
+        
+      </div>
+    </div>
+    
+    <p style="text-align: center; margin-top: 16px; font-size: 12px; opacity: 0.8;">
+     Внутрішній баланс і рівновага — ідеальний подарунок для близьких на будь-яке свято.
+    </p>
+  </div>
+</section>
+
+<!-- PRICES -->
+<section class="reveal">
+  <div class="grid-2">
+    <div class="glass card price-card">
+      <h3>Консультація</h3>
+     <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+  <div class="price">2 500₴</div>
+  <div style="font-size: 16px; color: #8b7ba5; text-decoration: line-through;">5 000₴</div>
+</div>
+      <ul>
+        <li>2 години особистого часу</li>
+        <li>Аналіз вашої ситуації</li>
+        <li>Рекомендації та практики</li>
+        <li>Відповіді на запитання</li>
+      </ul>
+      <button class="btn-gold" onclick="openContactModal()">Записатися</button>
+    </div>
+    
+    <div class="glass card price-card">
+      <h3>Регресія</h3>
+  <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+  <div class="price">3 000₴</div>
+  <div style="font-size: 16px; color: #8b7ba5; text-decoration: line-through;">8 000₴</div>
+</div>
+      <ul>
+        <li>2 години глибинної роботи</li>
+        <li>Безпечне занурення</li>
+        <li>Опрацювання травм і блоків</li>
+      </ul>
+      <br>
+      <button class="btn-gold" onclick="openContactModal()">Записатися</button>
+    </div>
+  </div>
+  
+  <!-- Матриця долі на всю ширину -->
+  <div class="glass card price-card" style="margin-top: 12px;">
+    <h3>Матриця долі</h3>
+    <ul style="margin-bottom: 16px;">
+      <li>Повний нумерологічний розрахунок</li>
+      <li>Аналіз усіх енергій</li>
+      <li>Аудіо-звіт</li>
+    </ul>
+    
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(155, 127, 212, 0.05); border-radius: 6px; gap: 4px;">
+        <span style="font-size: 9px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Повний розбір (Дорослий)</span>
+        <span style="font-size: 11px; font-weight: 600; color: var(--gold); white-space: nowrap; flex-shrink: 0;">2 500₴</span>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(155, 127, 212, 0.05); border-radius: 6px; gap: 4px;">
+        <span style="font-size: 9px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Прогностика на рік</span>
+        <span style="font-size: 11px; font-weight: 600; color: var(--gold); white-space: nowrap; flex-shrink: 0;">5 000₴</span>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(155, 127, 212, 0.05); border-radius: 6px; gap: 4px;">
+        <span style="font-size: 9px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Повний розбір (Дитячий)</span>
+        <span style="font-size: 11px; font-weight: 600; color: var(--gold); white-space: nowrap; flex-shrink: 0;">1 500₴</span>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(155, 127, 212, 0.05); border-radius: 6px; gap: 4px;">
+        <span style="font-size: 9px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Прогностика на місяць</span>
+        <span style="font-size: 11px; font-weight: 600; color: var(--gold); white-space: nowrap; flex-shrink: 0;">2 000₴</span>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(155, 127, 212, 0.05); border-radius: 6px; gap: 4px;">
+        <span style="font-size: 9px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Сумісність з партнером</span>
+        <span style="font-size: 11px; font-weight: 600; color: var(--gold); white-space: nowrap; flex-shrink: 0;">3 000₴</span>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(155, 127, 212, 0.05); border-radius: 6px; gap: 4px;">
+        <span style="font-size: 9px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Прогностика на день</span>
+        <span style="font-size: 11px; font-weight: 600; color: var(--gold); white-space: nowrap; flex-shrink: 0;">500₴</span>
+      </div>
+    </div>
+    
+    <button class="btn-gold" onclick="openContactModal()">Записатися</button>
+  </div>
+  
+  <!-- Наставництво и СодЖонг рядом -->
+  <div class="grid-2" style="margin-top: 12px;">
+    <div class="glass card price-card">
+      <h3>Наставництво</h3>
+    <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+  <div class="price">10 000₴</div>
+  <div style="font-size: 16px; color: #8b7ba5; text-decoration: line-through;">22 500₴</div>
+</div>
+      <ul>
+        <li>Чотири консультації</li>
+        <li>Один сеанс регресу</li>
+        <li>Персональні практики</li>
+        <li>Одна практика «СодЖонг»</li>
+        <li>Підтримка 24/7</li>
+      </ul>
+      <button class="btn-gold" onclick="openContactModal()">Записатися</button>
+    </div>
+    
+    <div class="glass card price-card">
+      <h3>СодЖонг</h3>
+    <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+  <div class="price">1 000₴</div>
+</div>
+      <ul>
+        <li>Практика, яка послаблює кармічні зерна</li>
+      </ul>
+      <br><br><br>
+      <button class="btn-gold" onclick="openContactModal()">Записатися</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section class="reveal">
+ <div class="glass card no-diamond" style="align-items:center; gap:12px; padding:20px">
+    <h3>Як зі мною зв'язатися</h3>
+    <div class="grid-4" style="grid-template-columns:repeat(5,1fr)">
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://www.instagram.com/karmolog_mariana">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+        </svg>
+      </a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://www.threads.com/@karmolog_mariana">
+        <svg width="24" height="24" viewBox="0 0 457.917771 532.295428" fill="var(--text)" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <g transform="translate(-320.880764,576.708839) scale(0.100000,-0.100000)">
+            <path d="M5240 5759 c-545 -60 -970 -245 -1303 -568 -406 -393 -641 -949 -712 -1686 -27 -273 -20 -685 16 -950 74 -556 256 -1019 537 -1366 81 -101 259 -270 359 -342 282 -201 596 -322 1003 -384 166 -25 656 -25 820 1 272 42 472 103 677 206 501 253 847 700 919 1190 31 212 10 463 -56 660 -104 316 -346 584 -680 755 -82 42 -111 61 -114 78 -2 12 -9 67 -15 122 -55 529 -357 906 -812 1015 -251 60 -529 48 -757 -31 -201 -70 -375 -197 -508 -370 l-44 -58 191 -131 191 -132 15 23 c44 66 147 150 236 194 125 60 231 79 392 72 343 -16 535 -170 616 -493 12 -46 19 -87 17 -90 -3 -2 -36 0 -74 6 -189 29 -502 33 -697 9 -435 -53 -770 -279 -892 -602 -95 -253 -59 -550 93 -774 53 -78 171 -189 262 -245 366 -227 916 -218 1269 21 235 160 400 434 471 781 11 54 20 108 20 119 0 12 6 21 14 21 22 0 137 -93 206 -167 82 -87 132 -172 172 -293 31 -92 32 -100 33 -270 0 -153 -3 -185 -23 -255 -105 -366 -440 -687 -861 -825 -190 -62 -401 -90 -678 -90 -615 0 -1083 187 -1395 560 -319 381 -480 929 -480 1635 0 706 161 1254 480 1635 262 313 636 495 1131 551 139 15 524 6 651 -15 703 -122 1146 -498 1376 -1169 24 -72 45 -132 47 -133 1 -1 99 24 217 55 145 39 216 62 218 72 5 26 -98 312 -158 436 -325 681 -869 1078 -1647 1204 -147 24 -594 35 -743 18z m820 -2739 c41 -5 99 -15 129 -21 l54 -11 -7 -70 c-3 -38 -16 -113 -27 -166 -68 -316 -216 -492 -469 -559 -94 -25 -321 -24 -410 2 -160 45 -276 131 -328 242 -23 49 -27 71 -27 148 0 82 3 97 33 157 78 159 271 262 537 287 112 11 414 6 515 -9z"/>
+          </g>
+        </svg>
+      </a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="https://t.me/karmolog_ya">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+        </svg>
+      </a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="mailto:zhidkikhmariana@icloud.com">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>
+      </a>
+      <a class="glass card no-diamond" style="aspect-ratio:1/1; align-items:center; justify-content:center; text-decoration:none" href="tel:+380938479723">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+      </a>
+    </div>
+  </div> 
+</section>
+
+</div>
+
+<!-- CERT LIGHTBOX -->
+<div id="certLightbox" class="lightbox" onclick="closeCert()">
+  <div class="cert-lightbox-container" onclick="event.stopPropagation()" style="max-width: 90vw; max-height: 90vh; width: auto; height: auto;">
+    <img id="certLightboxImg" src="" style="width: auto; height: auto; max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 20px; display: block;">
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div id="productModal" class="product-modal-overlay" onclick="closeProductModal(event)">
+    <div class="product-modal-content" onclick="event.stopPropagation()">
+        <button class="product-modal-close" onclick="closeProductModal()">×</button>
+        
+        <h2 class="product-modal-title" id="productModalTitle"></h2>
+        
+        <div id="productModalImage" class="product-modal-image"></div>
+        
+        <p class="product-modal-description" id="productModalDescription"></p>
+        
+        <div class="product-modal-tariffs" id="productModalTariffs"></div>
+        
+        <button class="btn-gold" style="width: 100%;" onclick="buyProduct()">Купити</button>
+    </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО КОНТАКТОВ -->
+<div id="contactModal" class="modal-overlay" onclick="closeContactModal(event)" style="background: rgba(0, 0, 0, 0.7);">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        
+        <h2 class="modal-title">Зв'яжіться зручним способом</h2>
+        
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; text-align: center; line-height: 1.5;">
+          Якщо вас цікавить консультація, регресія або будь-яка інша послуга — ось способи зі мною зв'язатися
+        </p>
+        
+        <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: nowrap; overflow-x: auto;">
+          <a class="glass card no-diamond" style="width: 48px; height: 48px; min-width: 48px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 8px; flex-shrink: 0;" href="https://www.instagram.com/karmolog_mariana" target="_blank">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+            </svg>
+          </a>
+          <a class="glass card no-diamond" style="width: 48px; height: 48px; min-width: 48px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 8px; flex-shrink: 0;" href="https://www.threads.com/@karmolog_mariana" target="_blank">
+            <svg width="23" height="23" viewBox="0 0 457.917771 532.295428" fill="var(--text)" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+              <g transform="translate(-320.880764,576.708839) scale(0.100000,-0.100000)">
+                <path d="M5240 5759 c-545 -60 -970 -245 -1303 -568 -406 -393 -641 -949 -712 -1686 -27 -273 -20 -685 16 -950 74 -556 256 -1019 537 -1366 81 -101 259 -270 359 -342 282 -201 596 -322 1003 -384 166 -25 656 -25 820 1 272 42 472 103 677 206 501 253 847 700 919 1190 31 212 10 463 -56 660 -104 316 -346 584 -680 755 -82 42 -111 61 -114 78 -2 12 -9 67 -15 122 -55 529 -357 906 -812 1015 -251 60 -529 48 -757 -31 -201 -70 -375 -197 -508 -370 l-44 -58 191 -131 191 -132 15 23 c44 66 147 150 236 194 125 60 231 79 392 72 343 -16 535 -170 616 -493 12 -46 19 -87 17 -90 -3 -2 -36 0 -74 6 -189 29 -502 33 -697 9 -435 -53 -770 -279 -892 -602 -95 -253 -59 -550 93 -774 53 -78 171 -189 262 -245 366 -227 916 -218 1269 21 235 160 400 434 471 781 11 54 20 108 20 119 0 12 6 21 14 21 22 0 137 -93 206 -167 82 -87 132 -172 172 -293 31 -92 32 -100 33 -270 0 -153 -3 -185 -23 -255 -105 -366 -440 -687 -861 -825 -190 -62 -401 -90 -678 -90 -615 0 -1083 187 -1395 560 -319 381 -480 929 -480 1635 0 706 161 1254 480 1635 262 313 636 495 1131 551 139 15 524 6 651 -15 703 -122 1146 -498 1376 -1169 24 -72 45 -132 47 -133 1 -1 99 24 217 55 145 39 216 62 218 72 5 26 -98 312 -158 436 -325 681 -869 1078 -1647 1204 -147 24 -594 35 -743 18z m820 -2739 c41 -5 99 -15 129 -21 l54 -11 -7 -70 c-3 -38 -16 -113 -27 -166 -68 -316 -216 -492 -469 -559 -94 -25 -321 -24 -410 2 -160 45 -276 131 -328 242 -23 49 -27 71 -27 148 0 82 3 97 33 157 78 159 271 262 537 287 112 11 414 6 515 -9z"/>
+              </g>
+            </svg>
+          </a>
+          <a class="glass card no-diamond" style="width: 48px; height: 48px; min-width: 48px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 8px; flex-shrink: 0;" href="https://t.me/karmolog_ya" target="_blank">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+            </svg>
+          </a>
+          <a class="glass card no-diamond" style="width: 48px; height: 48px; min-width: 48px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 8px; flex-shrink: 0;" href="mailto:zhidkikhmariana@icloud.com">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </a>
+          <a class="glass card no-diamond" style="width: 48px; height: 48px; min-width: 48px; display: flex; align-items:center; justify-content:center; text-decoration:none; padding: 8px; flex-shrink: 0;" href="tel:+380938479723">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--text)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+            </svg>
+          </a>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО -->
+<div id="certModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        
+        <h2 class="modal-title" id="modalTitle">Подарунковий сертифікат</h2>
+        
+        <img id="modalImage" 
+             src="https://github.com/Vdffrfr333434/karma2/blob/main/DiamondCard.webp?raw=true" 
+             alt="Certificate" 
+             class="modal-image">
+
+
+     <input type="text" 
+   id="userName" 
+   placeholder="Ваше ім'я (буде на сертифікаті)"
+   style="width: 100%; padding: 12px; border: 1px solid rgba(139, 123, 165, 0.3); border-radius: 8px; margin-bottom: 12px; font-size: 14px;"
+   required>
+
+     
+        
+        <p class="modal-description">
+            Цей сертифікат можна використати для будь-якої консультації або сеансу
+        </p>
+        
+        <!-- Уведомление о проблемах с провайдером -->
+        <div style="padding: 12px; background: rgba(155, 127, 212, 0.1); border: 1px solid rgba(139, 123, 165, 0.3); border-radius: 8px; margin-bottom: 16px;">
+          <p style="font-size: 12px; color: var(--text); margin: 0 0 8px 0; text-align: center; line-height: 1.4;">
+            ⚠️ Зараз спостерігаються проблеми на стороні провайдера онлайн-оплати
+          </p>
+          <button onclick="closeModal(); openContactModal();" style="width: 100%; padding: 8px; background: rgba(155, 127, 212, 0.15); border: 1px solid rgba(139, 123, 165, 0.3); border-radius: 6px; color: var(--text); font-size: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(155, 127, 212, 0.25)'" onmouseout="this.style.background='rgba(155, 127, 212, 0.15)'">
+            Купити особисто
+          </button>
+        </div>
+        
+        <button id="modalActionBtn" class="btn-modal-action" onclick="handlePayment()">
+            Перейти до оплати
+        </button>
+        
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+</div>
+  
+</body>
+<script>
+  // ===== MORPHING GRADIENT =====
+ 
+
+  // ===== СТАТИСТИКА АНИМАЦИЯ =====
+  const statNumbers = document.querySelectorAll('.stat-number');
+  let statsAnimated = false;
+
+  const statsObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !statsAnimated) {
+        statsAnimated = true;
+        animateStats();
+      }
+    });
+  }, { threshold: 0.8 });
+
+  statNumbers.forEach(stat => statsObserver.observe(stat));
+
+  function animateStats() {
+    statNumbers.forEach(stat => {
+      const target = parseInt(stat.getAttribute('data-target'));
+      const duration = 2000;
+      const increment = target / (duration / 16);
+      let current = 0;
+
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        
+        const displayValue = Math.floor(current);
+        if (target === 92 || target === 85) {
+          stat.textContent = displayValue + '%';
+        } else if (target === 80 || target === 12) {
+          stat.textContent = displayValue + '+';
+        } else {
+          stat.textContent = displayValue + '+';
+        }
+      }, 16);
+    });
+  }
+
+  // ===== REVEAL ANIMATION =====
+  const items=document.querySelectorAll('.reveal');
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+      }
+    });
+  },{threshold:0.4});
+  items.forEach(el=>io.observe(el));
+
+  // ===== PRODUCTS SLIDER =====
+  const productsTrack = document.getElementById('productsTrack');
+  const productDotsContainer = document.getElementById('productDots');
+  const products = productsTrack.querySelectorAll('.review-card');
+  let productCurrentIndex = 0;
+  let productAutoSlideInterval;
+
+  products.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToProductSlide(i));
+    productDotsContainer.appendChild(dot);
+  });
+
+  const productDots = productDotsContainer.querySelectorAll('.dot');
+
+  function goToProductSlide(index) {
+    productCurrentIndex = index;
+    const productWidth = products[0].offsetWidth;
+    const gap = 16;
+    const offset = (productWidth + gap) * productCurrentIndex;
+    productsTrack.style.transform = `translateX(-${offset}px)`;
+    
+    productDots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === productCurrentIndex);
+    });
+  }
+
+  function nextProductSlide() {
+    productCurrentIndex = (productCurrentIndex + 1) % products.length;
+    goToProductSlide(productCurrentIndex);
+  }
+
+  function startProductAutoSlide() {
+    productAutoSlideInterval = setInterval(nextProductSlide, 4000);
+  }
+
+  function stopProductAutoSlide() {
+    clearInterval(productAutoSlideInterval);
+  }
+
+  startProductAutoSlide();
+
+  productsTrack.addEventListener('mouseenter', stopProductAutoSlide);
+  productsTrack.addEventListener('mouseleave', startProductAutoSlide);
+
+  let productStartX = 0;
+  let productCurrentX = 0;
+  let productIsDragging = false;
+
+  productsTrack.addEventListener('touchstart', (e) => {
+    productStartX = e.touches[0].clientX;
+    productIsDragging = true;
+    stopProductAutoSlide();
+  });
+
+  productsTrack.addEventListener('touchmove', (e) => {
+    if (!productIsDragging) return;
+    productCurrentX = e.touches[0].clientX;
+  });
+
+  productsTrack.addEventListener('touchend', () => {
+    if (!productIsDragging) return;
+    const diff = productStartX - productCurrentX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && productCurrentIndex < products.length - 1) {
+        productCurrentIndex++;
+      } else if (diff < 0 && productCurrentIndex > 0) {
+        productCurrentIndex--;
+      }
+      goToProductSlide(productCurrentIndex);
+    }
+    productIsDragging = false;
+    startProductAutoSlide();
+  });
+
+  window.addEventListener('resize', () => {
+    goToProductSlide(productCurrentIndex);
+  });
+
+
+
+
+// ===============================
+// ===== GALLERY DATA (3 slides)
+// ===============================
+// URL для превью (верхней картинки в стопке)
+var previewImage = 'https://github.com/Vdffrfr333434/karma2/blob/main/Matrix.webp?raw=true';
+var previewImage2 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Matrix2.png?raw=true';  // добавьте эту строку
+var previewImage3 = 'https://github.com/Vdffrfr333434/karma2/blob/main/Matrix.webp?raw=true'; // ← ДОБАВЬТЕ
+var gallerySlides = [
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G1.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K1.png',
+    title: 'КАРМОЛОГIЯ',
+    description: 'Кармологія в роботі з ментальним здоров’ям. У контексті ментального благополуччя кармологія застосовується як інструмент глибинного психоаналізу та пошуку першопричин внутрішніх конфліктів. Вона доповнює традиційні підходи, пропонуючи погляд на ментальний стан крізь призму особистої відповідальності та системних зв’язків.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G2.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K2.png',
+    title: 'РЕГРЕСIЯ',
+    description: 'Регресія — це метод глибинної роботи з підсвідомістю, який дає змогу здійснити подорож до витоків нинішніх проблем. Через стан легкого трансу або спрямованої медитації людина звертається до пам’яті свого минулого — подій раннього дитинства, внутрішньоутробного періоду або минулих втілень. Це допомагає виявити ті моменти, де виникли перші страхи, психосоматичні блоки чи обмежувальні обітниці, які й надалі впливають на життя в теперішньому.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/G4.png',
+    icon:  'https://raw.githubusercontent.com/Vdffrfr333434/karma2/main/K4.png',
+    title: 'МАТРИЦЯ ДОЛI',
+    description: 'Матриця долі — це система самопізнання, що поєднує нумерологію та архетипічну психологію. Метод ґрунтується на розрахунку індивідуальної діаграми за датою народження, де кожна точка відповідає певній енергії (одному з 22 вищих арканів). Це дає змогу скласти детальний психологічний портрет і побачити графічне втілення життєвого шляху людини.'
+  }
+];
+
+
+
+var galleryCurrentIndex = 0;
+
+
+// ===============================
+// ===== STACK (preview cards)
+// ===============================
+
+function createStack() {
+    var stack = document.getElementById('photoStack');
+    stack.innerHTML = '';
+
+    // Создаем 3 карточки для стопки
+ var stackImages = [
+        previewImage3,          // Нижняя (из галереи) ← ВОТ ЭТА
+        previewImage2,                   // Средняя (второе превью)
+        previewImage                     // Верхняя (первое превью)
+    ];
+
+    // Добавляем карточки в обратном порядке
+    for (var i = stackImages.length - 1; i >= 0; i--) {
+        var item = document.createElement('div');
+        item.className = 'photo-stack-item';
+
+        var img = document.createElement('img');
+        img.src = stackImages[i];
+        img.alt = '';
+
+        item.appendChild(img);
+        stack.appendChild(item);
+    }
+}
+
+// ===============================
+// ===== LIGHTBOX CONTROL
+// ===============================
+
+function openLightbox(index) {
+    galleryCurrentIndex = index;
+    var stack = document.getElementById('photoStack');
+    var lightbox = document.getElementById('lightbox');
+
+    // Карточки раздвигаются
+    stack.classList.add('opening');
+
+    setTimeout(function() {
+        // Открываем галерею
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        updateLightbox();
+    }, 200);
+}
+
+function closeLightbox() {
+    var stack = document.getElementById('photoStack');
+    var lightbox = document.getElementById('lightbox');
+    
+    // Закрываем галерею
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+
+    // Убираем opening и добавляем closing
+    stack.classList.remove('opening');
+    stack.classList.add('closing');
+
+    setTimeout(function() {
+        // Убираем класс анимации
+        stack.classList.remove('closing');
+    }, 50);
+}
+  
+function changeImage(direction) {
+    galleryCurrentIndex += direction;
+
+    if (galleryCurrentIndex < 0) {
+        galleryCurrentIndex = gallerySlides.length - 1;
+    } else if (galleryCurrentIndex >= gallerySlides.length) {
+        galleryCurrentIndex = 0;
+    }
+
+    updateLightbox();
+}
+
+
+// ===============================
+// ===== UPDATE SLIDE CONTENT
+// ===============================
+
+function updateLightbox() {
+    var slide = gallerySlides[galleryCurrentIndex];
+    
+    document.getElementById('lightboxTitle').textContent = slide.title;
+    document.getElementById('lightboxDescription').textContent = slide.description;
+}
+
+
+
+// ===============================
+// ===== EVENTS
+// ===============================
+
+document.getElementById('lightbox').addEventListener('click', function (e) {
+    // Закрываем при клике на затемнённый фон (но не на контейнер слайда)
+    if (e.target === this) {
+        closeLightbox();
+    }
+});
+
+document.addEventListener('keydown', function (e) {
+    var lightbox = document.getElementById('lightbox');
+    if (!lightbox.classList.contains('active')) return;
+
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') changeImage(-1);
+    if (e.key === 'ArrowRight') changeImage(1);
+});
+
+
+// ===============================
+// ===== INIT
+// ===============================
+
+createStack();
+
+ 
+ 
+
+
+function openCert(src) {
+  const lb = document.getElementById('certLightbox');
+  const img = document.getElementById('certLightboxImg');
+  img.src = src;
+  lb.classList.add('active');
+}
+
+function closeCert() {
+  const lb = document.getElementById('certLightbox');
+  lb.classList.remove('active');
+}
+
+
+
+
+
+// ===============================
+// ===== REVIEWS GALLERY
+// ===============================
+
+// URL для превью стопки отзывов
+var reviewPreviewImage1 = 'https://github.com/Vdffrfr333434/karma2/blob/main/RevPrev1.png?raw=true';
+var reviewPreviewImage2 = 'https://github.com/Vdffrfr333434/karma2/blob/main/RevPrev2.png?raw=true';
+var reviewPreviewImage3 = 'https://github.com/Vdffrfr333434/karma2/blob/main/RevPrev1.png?raw=true';
+
+// Массив всех отзывов для галереи (с заголовками и текстом)
+var reviewsGallerySlides = [
+  {
+    title: 'КОНСУЛЬТАЦІЯ',
+    description: 'Добрий день! Мар\'яна, хочу подякувати вам за консультацію, яку ви провели для мене вчора безкоштовно. Я отримала відповідь на свій запит і декілька варіантів рішення своєї проблеми! В мене зараз навіть не виникає сумнівів що це може не вийде! Ви наче вселили в мене цю віру, розказали що треба зробити аби здійснити свою мрію! А ще ви дуже проста, світла і добра! Мені було дуже легко з вами спілкуватися! Ви дали набагато більше інформації, ніж я очікувала! Дякую вам велике!!!'
+  },
+  {
+    title: 'РЕГРЕСІЯ',
+    description: 'Добрий вечір. Дякую тобі, за розбір. Це було цікаво і корисно, ти показала мені мій запит зовсім з іншої сторони з якої я не дивилась. Направила мій фокус уваги саме туди де потрібна енергія. Дякуючи нашій взаємодії, я відмітила за собою речі які потребують роботи. Дякую за велику кількість практик. Вже почала пороблять деякі. Буду спостерігати за змінами в полі. Дякую за роботу. Бажаю найкращої реалізації твого потенціалу.'
+  },
+  {
+    title: 'РЕГРЕСІЯ',
+    description: 'Це був неймовірний досвід! Вперше побувавши на сеансі регресу, я навіть не очікувала, що настільки глибоко зможу зануритися у свої відчуття. Спочатку було трохи хвилювання — усе ж таки щось нове й незнайоме. Але вже через кілька хвилин я відчула спокій і довіру. Під час сеансу спливли спогади, емоції, які допомогли мені краще зрозуміти себе, свої реакції та навіть деякі життєві ситуації. Було відчуття, ніби відкриваєш закриті двері в глибини своєї душі. Після сеансу з\'явилося легке відчуття ясності, звільнення та внутрішньої гармонії. Наче частинка мене нарешті стала на своє місце. Дуже вдячна за цей досвід і за делікатний, уважний підхід тебе, як прекрасного спеціаліста.'
+  },
+  {
+    title: 'РЕГРЕСІЯ',
+    description: 'Спасибо, Марьяша, за регресс!!! Это был для меня прекрасный опыт. Он мне дал, понять суть моей проблемы в этой жизни. Узнав, что было не так в прошлой жизни и исправив ход событий, я получила, душевное облегчение. Мне стало легче, я теперь знаю, что мне делать дальше. Огромное, тебе спасибо, люблю.'
+  },
+  {
+    title: 'РЕГРЕСІЯ',
+    description: 'Привіт, ділюсь враженнями. Вчора цілий день боліла голова і взагалі не могла думати. А сьогодні почали приходити усвідомлення. Про багатьох людей, яких я раніше призирала і думала що лише скромність це достоїнство. А зараз я почала їх приймати і навіть хотіти бути такою ж. Мати гарний одяг, а не скромний. І всі атрибути багатого життя. А під вечір в мені таке тепло розкрилось що я хочу помагати людям, що хочу зробити їм щось добре... і що свою роботу буду цьому посвячувати і з цією думкою і почуттями буду передавати знання свої проявлятись в інстаграмі проводити зустрічі і т.д. І мені прям хочеться робити з такої мотивації.'
+  },
+  {
+    title: 'РЕГРЕСІЯ',
+    description: 'Марьяна, благодарю за регресс. Я даже не ожидала, что будет так глубоко и мощно, но в то же время с бережным и заботливым твоим сопровождением. Это такой потрясающий опыт! Хоть ещё впереди много работы с собой, но у меня ощущение, что я пробила главную стену, и почувствовала свежий воздух и запах моря (ты понимаешь, о чём я). Да, я устала, потому что много моральных сил ушло на процесс, но после - ощущение громадного облегчения и ликования, что я это сделала! Благодарю тебя за сегодня, я уверена, что у тебя впереди - многочисленные кейсы от клиентов. Буду рекомендовать тебя обязательно, а я сама к тебе ещё приду точно.'
+  },
+  {
+    title: 'КОНСУЛЬТАЦІЯ',
+    description: 'Мар\'яно, дуже дякую вам за консультацію! Ви так тонко й точно підкреслили мої сильні сторони і водночас м\'яко вказали на моменти, над якими мені варто попрацювати. Це було не повчально, а якось підтримувально, наче людина подивилась на мене збоку й допомогла побачити себе під іншим кутом. Особливо вразило, що багато ваших слів відгукнулися у мені, нібі ви сформулювала те, що я відчувала, але не могла чітко описати. Після консультації в душі залишилося відчуття легкості, ясності та натхнення рухатися далі! Дуже цінний, теплий і глибокий досвід. Ще раз дякую!'
+  },
+  {
+    title: 'КОНСУЛЬТАЦІЯ',
+    description: 'Дорогая Моя Марьяночка, Человек Мой Хороший. Спасибо Тебе за уделенное Мне время. За всю информацию которую Ты смогла Мне донести. На самом деле Я услышала и поняла для Себя намного больше чем хотела, поговорив с Тобой каждая ситуация происходящего ранее в Моей жизни стала ясна и понятна почему произошло именно так. Я поняла, что Я с правильным запросом к Тебе обратилась и что именно здесь и заложено зерно всех Моих страхов, сомнений неуверенности чувство я сама я должна, я помогу, я спасу, вытащу, заглушая и теряя при этом собственное Я. Благодарю Тебя. Ты невероятная молодец. Обнимаю Тебя крепко всем сердцем.'
+  },
+  {
+    title: 'РЕГРЕСІЯ',
+    description: 'Сьогодні був настрій аж на сторінку написати! Окрема вдячність @Maryasha777 за сьогоднішній регрес! Я досі під враженням! Такого повороту я не очікувала! Було дуже легко, просто, безпечно! Жодних хвилювань лише цікавість і бажання щоб все вийшло! І все вийшло! А той ліфт ц світло від нього досі перед очима! Після сеансу відчула що я можу все, якщо я можу переписати минуле життя, то новий сценарій реальності мені точно під силу! Я велика, я всемогутня, я міняю життя своє і інших на краще! Дякую за цей досвід!'
+  },
+  {
+    title: 'ПРАКТИКА',
+    description: 'Марьяночка, дівчинка моя, я безмежно вдячна тобі за сьогоднішній та цю прекрасну практику у моєму житті. Єдине що, я як вибігла о 11:45 і тільки потрапила додому (ну не знала що не можна в цей день багато робити). Наразі почуваюся прекрасно морально і не дуже фізично, оскільки прихватили чи то почки, чи спина. Чоловік готує вечерю і вчить з малим уроки, а я лягла (він в шоці що мені так погано). Я сьогодні відпочину, а завтра обов\'язково напишу відгук і (якщо можна) наберу тебе на пару слів. Ще раз щиро дякую тобі.'
+  }
+];
+
+var reviewsCurrentIndex = 0;
+
+// Создание стопки превью
+function createReviewsStack() {
+  var stack = document.getElementById('reviewsPhotoStack');
+  if (!stack) return;
+  
+  stack.innerHTML = '';
+
+  var stackImages = [
+    reviewPreviewImage3,
+    reviewPreviewImage2,
+    reviewPreviewImage1
+  ];
+
+  for (var i = stackImages.length - 1; i >= 0; i--) {
+    var item = document.createElement('div');
+    item.className = 'reviews-photo-stack-item';
+
+    var img = document.createElement('img');
+    img.src = stackImages[i];
+    img.alt = '';
+
+    item.appendChild(img);
+    stack.appendChild(item);
+  }
+}
+
+// Открытие лайтбокса
+function openReviewsLightbox(index) {
+  reviewsCurrentIndex = index;
+  var stack = document.getElementById('reviewsPhotoStack');
+  var lightbox = document.getElementById('reviewsLightbox');
+
+  stack.classList.add('opening');
+
+  setTimeout(function() {
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateReviewsLightbox();
+  }, 200);
+}
+
+// Закрытие лайтбокса
+function closeReviewsLightbox() {
+  var stack = document.getElementById('reviewsPhotoStack');
+  var lightbox = document.getElementById('reviewsLightbox');
+  
+  lightbox.classList.remove('active');
+  document.body.style.overflow = '';
+
+  stack.classList.remove('opening');
+  stack.classList.add('closing');
+
+  setTimeout(function() {
+    stack.classList.remove('closing');
+  }, 50);
+}
+
+// Переключение изображений
+function changeReviewImage(direction) {
+  reviewsCurrentIndex += direction;
+
+  if (reviewsCurrentIndex < 0) {
+    reviewsCurrentIndex = reviewsGallerySlides.length - 1;
+  } else if (reviewsCurrentIndex >= reviewsGallerySlides.length) {
+    reviewsCurrentIndex = 0;
+  }
+
+  updateReviewsLightbox();
+}
+
+// Обновление контента в лайтбоксе
+function updateReviewsLightbox() {
+  var slide = reviewsGallerySlides[reviewsCurrentIndex];
+  
+  document.getElementById('reviewsLightboxTitle').textContent = slide.title;
+  document.getElementById('reviewsLightboxDescription').textContent = slide.description;
+}
+
+// Инициализация
+createReviewsStack();
+
+// ===== PRODUCTS DATA =====
+const productsData = {
+  car: {
+    title: 'Створити машину',
+    image: 'https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif',
+    imageFilter: 'brightness(1.2) contrast(1.1) hue-rotate(330deg)',
+    imageBg: 'linear-gradient(135deg, #FFB6C1 0%, #FFC5D0 100%)',
+    description: 'Практика для матеріалізації автомобіля вашої мрії. Працюємо з енергією достатку та впевненості у власних можливостях. Ця практика допоможе вам розблокувати внутрішні обмеження та відкрити потік для залучення бажаного автомобіля.',
+    tariffs: [
+      { name: 'Базовий', price: '1 500₴', desc: 'Аудіо-практика + PDF-інструкція' },
+      { name: 'Стандарт', price: '3 000₴', desc: 'Базовий + персональна консультація' },
+      { name: 'Преміум', price: '5 000₴', desc: 'Стандарт + супровід 30 днів' }
+    ]
+  },
+  apartment: {
+    title: 'Створити квартиру',
+    image: 'https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif',
+    imageFilter: 'brightness(1.2) contrast(1.1) hue-rotate(180deg)',
+    imageBg: 'linear-gradient(135deg, #ADD8E6 0%, #B0E0E6 100%)',
+    description: 'Енергетична робота для залучення власного житла. Розблоковуємо канали достатку та формуємо намір на ідеальний простір. Практика включає роботу з підсвідомими блоками та активацію енергії процвітання.',
+    tariffs: [
+      { name: 'Базовий', price: '2 000₴', desc: 'Аудіо-практика + PDF-інструкція' },
+      { name: 'Стандарт', price: '4 000₴', desc: 'Базовий + персональна консультація' },
+      { name: 'Преміум', price: '6 000₴', desc: 'Стандарт + супровід 30 днів' }
+    ]
+  },
+  travel: {
+    title: 'Створити подорожі',
+    image: 'https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif',
+    imageFilter: 'brightness(1.2) contrast(1.1) hue-rotate(260deg)',
+    imageBg: 'linear-gradient(135deg, #C4B5E8 0%, #D8BFD8 100%)',
+    description: 'Відкриваємо потік для мандрівок та нових вражень. Працюємо з енергією свободи, розширення та можливостей. Ця практика допоможе зняти обмеження та відкрити двері до світу подорожей.',
+    tariffs: [
+      { name: 'Базовий', price: '1 500₴', desc: 'Аудіо-практика + PDF-інструкція' },
+      { name: 'Стандарт', price: '3 000₴', desc: 'Базовий + персональна консультація' },
+      { name: 'Преміум', price: '5 000₴', desc: 'Стандарт + супровід 30 днів' }
+    ]
+  },
+  money: {
+    title: 'Створити гроші',
+    image: 'https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif',
+    imageFilter: 'brightness(1.2) contrast(1.1) hue-rotate(290deg)',
+    imageBg: 'linear-gradient(135deg, #DDA0DD 0%, #EE82EE 100%)',
+    description: 'Глибинна робота з фінансовими блоками. Трансформуємо обмежувальні переконання та активуємо канали достатку. Працюємо з родовими програмами бідності та формуємо нову реальність процвітання.',
+    tariffs: [
+      { name: 'Базовий', price: '2 000₴', desc: 'Аудіо-практика + PDF-інструкція' },
+      { name: 'Стандарт', price: '4 000₴', desc: 'Базовий + персональна консультація' },
+      { name: 'Преміум', price: '7 000₴', desc: 'Стандарт + супровід 30 днів' }
+    ]
+  },
+  business: {
+    title: 'Створити бізнес',
+    image: 'https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif',
+    imageFilter: 'brightness(1.2) contrast(1.1) hue-rotate(270deg)',
+    imageBg: 'linear-gradient(135deg, #B994D4 0%, #C9A0DC 100%)',
+    description: 'Енергетична підтримка для запуску або розвитку справи. Працюємо з впевненістю, ресурсністю та реалізацією. Практика включає роботу зі страхами, сумнівами та активацію підприємницької енергії.',
+    tariffs: [
+      { name: 'Базовий', price: '2 500₴', desc: 'Аудіо-практика + PDF-інструкція' },
+      { name: 'Стандарт', price: '5 000₴', desc: 'Базовий + персональна консультація' },
+      { name: 'Преміум', price: '8 000₴', desc: 'Стандарт + супровід 30 днів' }
+    ]
+  },
+  family: {
+    title: 'Створити сім\'ю',
+    image: 'https://cdn.mcauto-images-production.sendgrid.net/e9e724d8ffb7cc23/082e2010-1b01-4660-9a4a-83bb4a90e7da/1000x1000.gif',
+    imageFilter: 'brightness(1.2) contrast(1.1) hue-rotate(250deg)',
+    imageBg: 'linear-gradient(135deg, #9370DB 0%, #9B7FD4 100%)',
+    description: 'Практика для залучення гармонійних стосунків. Очищаємо родові сценарії та формуємо простір для любові. Працюємо з внутрішніми блоками, які заважають створити щасливу сім\'ю.',
+    tariffs: [
+      { name: 'Базовий', price: '2 000₴', desc: 'Аудіо-практика + PDF-інструкція' },
+      { name: 'Стандарт', price: '4 000₴', desc: 'Базовий + персональна консультація' },
+      { name: 'Преміум', price: '6 000₴', desc: 'Стандарт + супровід 30 днів' }
+    ]
+  }
+};
+
+let selectedTariff = null;
+let currentProduct = null;
+
+// ===== OPEN PRODUCT MODAL =====
+function openProductModal(productId) {
+  const product = productsData[productId];
+  if (!product) return;
+  
+  currentProduct = productId;
+  selectedTariff = null;
+  
+  const modal = document.getElementById('productModal');
+  const imgContainer = document.getElementById('productModalImage');
+  
+  // Очищаємо контейнер
+  imgContainer.innerHTML = '';
+  
+  // Застосовуємо фон до контейнера
+  imgContainer.style.background = product.imageBg;
+  imgContainer.style.filter = 'none';
+  
+  // Створюємо img елемент для бриллианта
+  const img = document.createElement('img');
+  img.src = product.image;
+  img.style.width = '70px';
+  img.style.height = '70px';
+  img.style.filter = product.imageFilter;
+  
+  imgContainer.appendChild(img);
+  
+  document.getElementById('productModalTitle').textContent = product.title;
+  document.getElementById('productModalDescription').textContent = product.description;
+  
+  // Render tariffs без заголовка
+  const tariffsContainer = document.getElementById('productModalTariffs');
+  tariffsContainer.innerHTML = '';
+  
+  product.tariffs.forEach((tariff, index) => {
+    const tariffEl = document.createElement('div');
+    tariffEl.className = 'product-modal-tariff';
+    tariffEl.onclick = () => selectTariff(index);
+    tariffEl.innerHTML = `
+      <div class="product-modal-tariff-name">${tariff.name}</div>
+      <div class="product-modal-tariff-price">${tariff.price}</div>
+      <div class="product-modal-tariff-desc">${tariff.desc}</div>
+    `;
+    tariffsContainer.appendChild(tariffEl);
+  });
+  
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// ===== CLOSE PRODUCT MODAL =====
+function closeProductModal(event) {
+  if (event && event.target !== event.currentTarget && !event.target.classList.contains('product-modal-close')) {
+    return;
+  }
+  
+  const modal = document.getElementById('productModal');
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+  selectedTariff = null;
+  currentProduct = null;
+}
+
+// ===== SELECT TARIFF =====
+function selectTariff(index) {
+  selectedTariff = index;
+  
+  const tariffs = document.querySelectorAll('.product-modal-tariff');
+  tariffs.forEach((t, i) => {
+    if (i === index) {
+      t.classList.add('selected');
+    } else {
+      t.classList.remove('selected');
+    }
+  });
+}
+
+// ===== BUY PRODUCT =====
+function buyProduct() {
+  if (selectedTariff === null) {
+    alert('Будь ласка, оберіть тариф');
+    return;
+  }
+  
+  const product = productsData[currentProduct];
+  const tariff = product.tariffs[selectedTariff];
+  
+  // Здесь можно добавить логику оплаты или открыть модалку контактов
+  closeProductModal();
+  openContactModal();
+  
+  // Или можно сразу перейти к оплате
+  // alert(`Ви обрали: ${product.title} - ${tariff.name} (${tariff.price})`);
+}
+
+// ===== DEEP LINK TO PRODUCT =====
+// Приклади посилань для кожного товару:
+// ?product=car - Створити машину
+// ?product=apartment - Створити квартиру
+// ?product=travel - Створити подорожі
+// ?product=money - Створити гроші
+// ?product=business - Створити бізнес
+// ?product=family - Створити сім'ю
+
+function handleProductDeepLink() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('product');
+  
+  if (productId && productsData[productId]) {
+    // Ждем загрузки страницы
+    setTimeout(() => {
+      // 1. Находим секцию с товарами
+      const productsSection = document.querySelector('#productsTrack').closest('section');
+      
+      if (productsSection) {
+        // 2. Скроллим к секции товаров
+        productsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // 3. Ждем завершения скролла и скроллим слайдер к нужной карточке
+        setTimeout(() => {
+          const productIndex = Object.keys(productsData).indexOf(productId);
+          if (productIndex !== -1) {
+            goToProductSlide(productIndex);
+            
+            // 4. Ждем завершения скролла слайдера и открываем модалку
+            setTimeout(() => {
+              openProductModal(productId);
+            }, 800);
+          }
+        }, 1000);
+      }
+    }, 500);
+  }
+}
+
+// Запускаем обработку deep link при загрузке страницы
+window.addEventListener('DOMContentLoaded', handleProductDeepLink);ener('keydown', function (e) {
+    var reviewsLightbox = document.getElementById('reviewsLightbox');
+    if (!reviewsLightbox.classList.contains('active')) return;
+
+    if (e.key === 'Escape') closeReviewsLightbox();
+    if (e.key === 'ArrowLeft') changeReviewImage(-1);
+    if (e.key === 'ArrowRight') changeReviewImage(1);
+});
+
+// События
+document.getElementById('reviewsLightbox').addEventListener('click', function (e) {
+  if (e.target === this) {
+    closeReviewsLightbox();
+  }
+});
+
+// Инициализация
+createReviewsStack();
+// ===== КОНФИГУРАЦИЯ MONOBANK =====
+const MONO_TOKEN = "uQJ7XJ0WSnFxTa6cEg8QUV8dz9p190h-Px0cEI2nQIFI";
+const PROXY = "https://corsproxy.io/?";
+const API_URL = "https://api.monobank.ua/api/merchant/invoice";
+
+// Текущая сумма сертификата
+let currentAmount = 0;
+let currentInvoiceId = null;
+
+// ===== ОТКРЫТИЕ/ЗАКРЫТИЕ МОДАЛКИ КОНТАКТОВ =====
+function openContactModal() {
+    const modal = document.getElementById('contactModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeContactModal(event) {
+    if (event && event.target !== event.currentTarget && !event.target.classList.contains('modal-close')) {
+        return;
+    }
+    
+    const modal = document.getElementById('contactModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// ===== ОТКРЫТИЕ МОДАЛЬНОГО ОКНА =====
+function openCertModal(amount) {
+    currentAmount = amount;
+
+  // Очищаем старый invoiceId при открытии модалки
+    localStorage.removeItem(`invoice_${amount}`);
+    localStorage.removeItem(`payment_pending_${amount}`);
+    currentInvoiceId = null;
+    
+    const modal = document.getElementById('certModal');
+    const title = document.getElementById('modalTitle');
+    const btn = document.getElementById('modalActionBtn');
+    const statusMsg = document.getElementById('statusMessage');
+    
+    title.textContent = `Сертифікат на ${amount} ₴`;
+    
+    // Всегда показываем кнопку оплаты - позволяем покупать несколько сертификатов
+    btn.textContent = 'Перейти до оплати';
+    btn.className = 'btn-modal-action';
+    btn.onclick = handlePayment;
+    btn.disabled = false;
+    statusMsg.className = 'status-message';
+    statusMsg.textContent = '';
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// ===== ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА =====
+function closeModal(event) {
+    if (event && event.target !== event.currentTarget && !event.target.classList.contains('modal-close')) {
+        return;
+    }
+    
+    const modal = document.getElementById('certModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// ===== ОБРАБОТКА ОПЛАТЫ =====
+async function handlePayment() {
+    const btn = document.getElementById('modalActionBtn');
+    const statusMsg = document.getElementById('statusMessage');
+    const nameInput = document.getElementById('userName');
+
+// Проверка имени
+if (!nameInput.value || nameInput.value.trim().length < 2) {
+    statusMsg.className = 'status-message error';
+    statusMsg.textContent = 'Будь ласка, введіть ваше ім\'я';
+    return;
+}
+
+// Сохраняем имя
+localStorage.setItem(`name_${currentAmount}`, nameInput.value.trim());
+    
+   
+    
+    btn.disabled = true;
+    btn.textContent = 'Генерація рахунку...';
+    
+    statusMsg.className = 'status-message loading';
+    statusMsg.textContent = 'Зачекайте, створюємо рахунок...';
+    
+  const payload = {
+    amount: currentAmount * 100,
+    ccy: 980,
+    merchantPaymInfo: { 
+        destination: `Подарунковий сертифікат (${currentAmount} грн)` 
+    },
+    redirectUrl: window.location.href.split('?')[0] + `?payment=success&amount=${currentAmount}&ts=${Date.now()}`
+};
+    
+    try {
+        const res = await fetch(PROXY + encodeURIComponent(`${API_URL}/create`), {
+            method: 'POST',
+            headers: { 
+                'X-Token': MONO_TOKEN, 
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await res.json();
+        
+        if (data.pageUrl) {
+            currentInvoiceId = data.invoiceId;
+            localStorage.setItem(`invoice_${currentAmount}`, data.invoiceId); // ИЗМЕНЕНО: localStorage
+            localStorage.setItem(`payment_pending_${currentAmount}`, 'true'); // Маркер ожидания оплаты
+            
+            statusMsg.className = 'status-message success';
+            statusMsg.textContent = 'Рахунок створено! Перенаправлення...';
+            
+            setTimeout(() => {
+                window.location.href = data.pageUrl;
+            }, 1000);
+        } else {
+            throw new Error(data.errText || 'Помилка створення рахунку');
+        }
+    } catch (error) {
+        console.error('Payment error:', error);
+        
+        statusMsg.className = 'status-message error';
+        statusMsg.textContent = 'Помилка: ' + error.message;
+        
+        btn.disabled = false;
+        btn.textContent = 'Спробувати ще раз';
+    }
+}
+
+// ===== ПРОВЕРКА СТАТУСА ОПЛАТЫ =====
+async function checkPaymentStatus() {
+    const params = new URLSearchParams(window.location.search);
+    
+    // Проверяем, вернулись ли мы после оплаты
+    if (!params.has('payment') || !params.has('amount')) {
+        return;
+    }
+    
+    const amount = params.get('amount');
+    const invoiceId = localStorage.getItem(`invoice_${amount}`);
+    
+    // ВАЖНО: Сразу удаляем invoiceId из localStorage, чтобы не использовать его повторно
+    localStorage.removeItem(`invoice_${amount}`);
+    localStorage.removeItem(`payment_pending_${amount}`);
+    
+    if (!invoiceId) {
+        console.log('Invoice ID not found');
+        return;
+    }
+    
+    // Показываем индикатор загрузки
+    const loadingDiv = document.createElement('div');
+    loadingDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(250, 245, 255, 0.95);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(139, 123, 165, 0.3);
+        z-index: 10000;
+        text-align: center;
+    `;
+    loadingDiv.innerHTML = `
+        <div style="font-size: 18px; color: #5a4470; margin-bottom: 10px;">Перевірка оплати...</div>
+        <div style="font-size: 14px; color: #8b7ba5;">Зачекайте, будь ласка</div>
+    `;
+    document.body.appendChild(loadingDiv);
+    
+    try {
+        const res = await fetch(PROXY + encodeURIComponent(`${API_URL}/status?invoiceId=${invoiceId}`), {
+            headers: { 'X-Token': MONO_TOKEN }
+        });
+        
+        const data = await res.json();
+        
+        document.body.removeChild(loadingDiv);
+        
+       if (data.status === 'success') {
+    // Оплата успешна!
+    
+    
+    // ВАЖНО: Очищаем invoiceId чтобы можно было создать новый счёт
+    currentInvoiceId = null;
+    
+    // Очищаем URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    // Генерируем и показываем сертификат
+    setTimeout(() => {
+        openCertModal(parseInt(amount));
+        // Автоматически генерируем сертификат
+        setTimeout(() => {
+            downloadCertificate(parseInt(amount));
+        }, 500);
+    }, 800);
+    
+    // Генерируем и показываем сертификат
+    setTimeout(() => {
+        openCertModal(parseInt(amount));
+        // Автоматически генерируем сертификат
+        setTimeout(() => {
+            downloadCertificate(parseInt(amount));
+        }, 500);
+    }, 800);
+            
+        } else if (data.status === 'processing') {
+            // Платеж в обработке
+            document.body.removeChild(loadingDiv);
+            
+            const retryDiv = document.createElement('div');
+            retryDiv.style.cssText = loadingDiv.style.cssText;
+            retryDiv.innerHTML = `
+                <div style="font-size: 18px; color: #5a4470; margin-bottom: 10px;">Платіж обробляється...</div>
+                <div style="font-size: 14px; color: #8b7ba5; margin-bottom: 20px;">Перевірка через 3 секунди</div>
+            `;
+            document.body.appendChild(retryDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(retryDiv);
+                checkPaymentStatus();
+            }, 3000);
+            
+        } else {
+            // Оплата не прошла
+            alert('Платіж не завершено. Спробуйте ще раз.');
+            localStorage.removeItem(`payment_pending_${amount}`);
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        
+    } catch (error) {
+        document.body.removeChild(loadingDiv);
+        console.error('Status check error:', error);
+        alert('Помилка перевірки статусу. Перезавантажте сторінку.');
+    }
+}
+// ===== ГЕНЕРАЦИЯ ID СЕРТИФИКАТА =====
+// ===== ГЕНЕРАЦИЯ ID СЕРТИФИКАТА =====
+// ===== ГЕНЕРАЦИЯ И ПОКАЗ СЕРТИФИКАТА =====
+
+
+ function generateCertificateId() {
+    const timestamp = Date.now().toString(36);
+    const random = Math.random().toString(36).substring(2, 7);
+    return `${timestamp}-${random}`.toUpperCase();
+}
+// ===== ГЕНЕРАЦИЯ И ПОКАЗ СЕРТИФИКАТА =====
+async function downloadCertificate(amount) {
+    const statusMsg = document.getElementById('statusMessage');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.querySelector('.modal-description');
+    const btn = document.getElementById('modalActionBtn');
+    
+    statusMsg.className = 'status-message loading';
+    statusMsg.textContent = 'Генерація сертифікату...';
+    
+    // Скрываем поле имени
+    document.getElementById('userName').style.display = 'none';
+    
+    try {
+        const certId = generateCertificateId();
+        const userName = localStorage.getItem(`name_${amount}`) || 'Власник';
+        
+        // Создаем canvas для сертификата с ВЫСОКИМ РАЗРЕШЕНИЕМ
+        const scale = 3; // Увеличиваем разрешение в 3 раза
+        const canvas = document.createElement('canvas');
+        canvas.width = 800 * scale;
+        canvas.height = 600 * scale;
+        const ctx = canvas.getContext('2d');
+        
+        // Масштабируем контекст для четкости
+        ctx.scale(scale, scale);
+        
+        // Включаем сглаживание
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        
+        // ПЛАВНЫЙ градиент на весь сертификат (больше остановок)
+        const bgGradient = ctx.createLinearGradient(0, 0, 800, 600);
+        bgGradient.addColorStop(0, '#FFB6C1');      // розовый
+        bgGradient.addColorStop(0.15, '#FFC5D0');   // светло-розовый
+        bgGradient.addColorStop(0.33, '#ADD8E6');   // голубой
+        bgGradient.addColorStop(0.5, '#C4B5E8');    // светло-лиловый
+        bgGradient.addColorStop(0.66, '#DDA0DD');   // лиловый
+        bgGradient.addColorStop(0.83, '#B994D4');   // средне-фиолетовый
+        bgGradient.addColorStop(1, '#9370DB');      // фиолетовый
+        ctx.fillStyle = bgGradient;
+        ctx.fillRect(0, 0, 800, 600);
+        
+        // Желтоватый цвет для всего текста (светло-золотистый)
+        const textColor = '#FFF8DC'; // cornsilk - светлый желтоватый
+        
+        // Заголовок
+        ctx.fillStyle = textColor;
+        ctx.font = 'italic 36px Georgia, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('ПОДАРУНКОВИЙ СЕРТИФІКАТ', 400, 120);
+        
+        // Подзаголовок
+        ctx.font = '20px Georgia, serif';
+        ctx.fillText('на консультацію', 400, 170);
+        
+        // Имя получателя
+        ctx.font = 'italic 28px Georgia, serif';
+        ctx.fillText(userName, 400, 240);
+        
+        // Сумма
+        ctx.font = 'bold 84px Georgia, serif';
+        ctx.fillText(`${amount} ₴`, 400, 350);
+        
+        // Описание
+        ctx.font = '18px Georgia, serif';
+        ctx.fillText('Цей сертифікат дає право на консультацію', 400, 420);
+        ctx.fillText('з кармології, нумерології або регресивної терапії', 400, 450);
+        
+        // ID сертификата
+        ctx.font = '16px monospace';
+        ctx.fillText(`ID: ${certId}`, 400, 510);
+        
+        // Футер
+        ctx.font = '14px Georgia, serif';
+        ctx.fillText("Мар'яна | Кармолог | Регресолог", 400, 550);
+        ctx.fillText('@karmolog_mariana', 400, 575);
+        
+        // Конвертируем в PNG с МАКСИМАЛЬНЫМ качеством
+        canvas.toBlob(function(pngBlob) {
+            const pngUrl = URL.createObjectURL(pngBlob);
+            
+            // Меняем заголовок НАД сертификатом
+            modalTitle.textContent = '✓ Сертифікат створено!';
+            
+            // Показываем сертификат
+            modalImage.src = pngUrl;
+
+  // Добавляем шиммер поверх сертификата
+// Добавляем шиммер ТОЛЬКО на картинку сертификата
+const imageWrapper = document.createElement('div');
+imageWrapper.style.cssText = `
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+`;
+
+// Переносим картинку в wrapper
+const parent = modalImage.parentElement;
+parent.insertBefore(imageWrapper, modalImage);
+imageWrapper.appendChild(modalImage);
+modalImage.style.marginBottom = '0';
+// Создаём шиммер
+const shimmerWrapper = document.createElement('div');
+shimmerWrapper.style.cssText = `
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 12px;
+    z-index: 5;
+`;
+
+const shimmer = document.createElement('div');
+shimmer.style.cssText = `
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 60%;
+    height: 300%;
+    background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.15) 30%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.15) 70%,
+        transparent 100%
+    );
+    animation: shimmer 4s ease-in-out infinite;
+    transform: rotate(45deg);
+`;
+
+shimmerWrapper.appendChild(shimmer);
+imageWrapper.appendChild(shimmerWrapper);
+
+
+         
+            // Убираем описание и заменяем на кнопку
+            modalDescription.innerHTML = `
+                <a href="${pngUrl}" download="certificate_${certId}.png" 
+                   class="btn-gold" 
+                   style="display: block; text-decoration: none; margin-top: 10px; background: rgba(76, 175, 80, 0.1); border-color: #4caf50; color: #2e7d32;">
+                    Завантажити сертифікат
+                </a>
+            `;
+            
+            // Убираем сообщение о загрузке
+            statusMsg.style.display = 'none';
+            
+            // Меняем кнопку "Перейти к оплате" на "Купить ещё один"
+            btn.textContent = 'Купити ще один';
+            btn.disabled = false;
+            btn.className = 'btn-modal-action';
+            btn.onclick = function() {
+                // Сбрасываем состояние модалки
+                document.getElementById('userName').style.display = 'block';
+                document.getElementById('userName').value = '';
+                modalImage.src = 'https://github.com/Vdffrfr333434/karma2/blob/main/DiamondCard.webp?raw=true';
+                modalTitle.textContent = `Сертифікат на ${amount} ₴`;
+                modalDescription.innerHTML = 'Цей сертифікат можна використати для будь-якої консультації або сеансу';
+                statusMsg.style.display = 'none';
+                btn.textContent = 'Перейти до оплати';
+                btn.onclick = handlePayment;
+            };
+            
+        }, 'image/png', 1.0); // качество 1.0 = максимальное
+        
+    } catch (error) {
+        console.error('Error:', error);
+        statusMsg.className = 'status-message error';
+        statusMsg.textContent = 'Помилка: ' + error.message;
+    }
+}
+// ===== ОТПРАВКА PNG СЕРТИФИКАТА НА EMAIL =====
+// ===== ОТПРАВКА PDF СЕРТИФИКАТА НА EMAIL =====
+// ===== ОТПРАВКА PNG СЕРТИФИКАТА НА EMAIL =====
+async function sendCertificateToEmail(certId, amount, pngBlob) {
+    const userEmail = localStorage.getItem(`email_${amount}`);
+    
+    if (!userEmail) {
+        console.log('Email не найден');
+        return;
+    }
+    
+    try {
+        // Отправляем через Web3Forms
+        const formData = new FormData();
+        formData.append('access_key', 'cf1489dc-9d06-40a8-9437-e6a64e7ee02a');
+        formData.append('subject', `Подарунковий сертифікат №${certId}`);
+        formData.append('from_name', 'Мар\'яна | Кармолог');
+        formData.append('email', userEmail);
+        formData.append('message', `
+Вітаємо!
+
+Ваш подарунковий сертифікат успішно оплачено!
+
+💎 Сума: ${amount} грн
+🆔 ID сертифіката: ${certId}
+📅 Дата: ${new Date().toLocaleDateString('uk-UA')}
+
+Сертифікат у вкладенні (PNG-зображення високої якості). Збережіть його та пред'явіть при записі на консультацію.
+
+З повагою,
+Мар'яна
+        `);
+        
+        // Добавляем PNG файл
+        formData.append('file', pngBlob, `certificate_${certId}.png`);
+        
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log('✓ Сертифікат відправлено на:', userEmail);
+            localStorage.removeItem(`email_${amount}`);
+        } else {
+            console.error('Помилка відправки:', data.message);
+        }
+        
+    } catch (error) {
+        console.error('Помилка:', error);
+    }
+}
+
+// ===== ИНИЦИАЛИЗАЦИЯ =====
+
+// ===== ИНИЦИАЛИЗАЦИЯ =====
+window.addEventListener('load', () => {
+    checkPaymentStatus();
+});
+
+// Закрытие модалки по Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const certModal = document.getElementById('certModal');
+        const contactModal = document.getElementById('contactModal');
+        
+        if (certModal && certModal.classList.contains('active')) {
+            closeModal();
+        }
+        if (contactModal && contactModal.classList.contains('active')) {
+            closeContactModal();
+        }
+    }
+});
+  
+  
+</script>
+
+
+</html>
